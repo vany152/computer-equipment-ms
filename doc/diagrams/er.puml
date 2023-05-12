@@ -1,0 +1,48 @@
+﻿@startuml
+'https://plantuml.com/class-diagram
+
+hide methods
+
+entity "Категория комплектующих" as componentCategory {
+    Название
+}
+entity "Комплектующее" as component {
+    Название
+    Параметры : json
+    ..
+    Стоимость
+    Скидка
+    Гарантия производителя
+}
+component }o--|| componentCategory
+
+entity "Сборка" as configuration {
+    Гарантия магазина ????????????????????
+}
+configuration }o--|{ component
+
+entity "Покупатель" as customer {
+    Имя
+    Контактные данные : json
+    Дата регистрации
+}
+
+note "Для предоставления скидки\nстарым покупателям" as N1
+N1 .left. customer::Дата
+
+entity "Продажа" as sale {
+    Дата продажи
+    Скидка
+} 
+sale }|--|| customer
+
+entity "Позиция продажи" as salePosition {
+    Cтоимость
+    Скидка
+}
+salePosition }|--|| sale
+salePosition }o--|| configuration
+
+
+
+@enduml
