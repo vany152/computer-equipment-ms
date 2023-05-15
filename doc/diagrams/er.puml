@@ -6,18 +6,18 @@ hide methods
 entity "Категория комплектующих" as componentCategory {
     Название
 }
-entity "Комплектующее" as component {
+entity "Комплектующий" as component {
     Название
     Параметры : json
     ..
-    Стоимость
-    Скидка
+    Стоимость производителя
     Гарантия производителя
 }
 component }o--|| componentCategory
 
 entity "Сборка" as configuration {
-    Гарантия магазина ????????????????????
+    Гарантия магазина
+    Наценка
 }
 configuration }o--|{ component
 
@@ -27,22 +27,19 @@ entity "Покупатель" as customer {
     Дата регистрации
 }
 
-note "Для предоставления скидки\nстарым покупателям" as N1
-N1 .left. customer::Дата
-
 entity "Продажа" as sale {
     Дата продажи
     Скидка
+    Платежи : array
 } 
 sale }|--|| customer
 
 entity "Позиция продажи" as salePosition {
-    Cтоимость
+    Стоимость
     Скидка
+    Гарантия
 }
 salePosition }|--|| sale
 salePosition }o--|| configuration
-
-
 
 @enduml
