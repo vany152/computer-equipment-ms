@@ -1,0 +1,161 @@
+﻿@startuml
+'https://plantuml.com/class-diagram
+
+hide methods
+
+rectangle "schema 'public'" as public {
+    entity "component_categories" as public_component_categories {
+        <b><<PK>></b> id : int
+        ..
+        name : varchar(50)
+    }
+    
+    entity "component_manufacturers" as public_component_manufacturers {
+        <b><<PK>></b> id : int
+        ..
+        name : varchar(50)
+    }
+    
+    entity "components" as public_components {
+        <b><<PK>></b> id : int
+        ..
+        <<FK>> component_category_id : int
+        <<FK>> component_manufacturer_id : int
+        ..
+        name : varchar(250)
+        specifications : jsonb
+        ..
+        cost : numeric(15, 2)
+        warranty_period : interval
+    }
+    public_components --> public_component_categories
+    public_components --> public_component_manufacturers
+    
+    entity "computer_configurations" as public_computer_configurations {
+        <b><<PK>></b> id : int
+        ..
+        name : varchar(250)
+        warranty_period : interval
+        margin : numeric(15, 2)
+    }
+    
+    entity "components_computer_configurations" as public_components_computer_configurations {
+        <b><<PK>></b> <<FK>> component_id : int
+        <b><<PK>></b> <<FK>> computer_configuration : int
+    }
+    public_components_computer_configurations --> public_components
+    public_components_computer_configurations --> public_computer_configurations
+    
+    entity "customers" as public_customers {
+        <b><<PK>></b> id : int
+        ..
+        name : varchar(75)
+        contacts : jsonb
+        registration_date : date
+    }
+    
+    entity "sales" as public_sales {
+        <b><<PK>></b> id : int
+        ..
+        <<FK>> customer_id : int
+        ..
+        sale_moment : timestamptz
+        discount_percentage : smallint
+    } 
+    public_sales --> public_customers
+    
+    entity "sale_positions" as public_sale_positions {
+        <b><<PK>></b> id : int
+        ..
+        <<FK>> sale_id : int
+        <<FK>> computer_configuration_id : int
+        ..
+        cost : numeric (15, 2)
+        discount_percentage : smallint
+        warranty_period : interval
+    }
+    public_sale_positions --> public_sales
+    public_sale_positions -right-> public_computer_configurations
+    
+    entity "change_logs" as public_change_logs {
+        <b><<PK>></b> id : bigint
+        ..
+        moment : timestamptz
+        username : text
+        action : text
+        table : text
+        column : text
+        old_value : blob
+        new_value : blob
+    }
+}
+
+rectangle "schema 'deleted'" as deleted {
+    entity "component_categories" as deleted_component_categories {
+        <b><<PK>></b> id : int
+        ..
+        name : varchar(50)
+    }
+    
+    entity "component_manufacturers" as deleted_component_manufacturers {
+        <b><<PK>></b> id : int
+        ..
+        name : varchar(50)
+    }
+    
+    entity "components" as deleted_components {
+        <b><<PK>></b> id : int
+        ..
+        component_category_id : int
+        component_manufacturer_id : int
+        ..
+        name : varchar(250)
+        specifications : jsonb
+        ..
+        cost : numeric(15, 2)
+        warranty_period : interval
+    }
+    
+    entity "computer_configurations" as deleted_computer_configurations {
+        <b><<PK>></b> id : int
+        ..
+        name : varchar(250)
+        warranty_period : interval
+        margin : numeric(15, 2)
+    }
+    
+    entity "components_computer_configurations" as deleted_components_computer_configurations {
+        <b><<PK>></b> component_id : int
+        <b><<PK>></b> computer_configuration : int
+    }
+    
+    entity "customers" as deleted_customers {
+        <b><<PK>></b> id : int
+        ..
+        name : varchar(75)
+        contacts : jsonb
+        registration_date : date
+    }
+    
+    entity "sales" as deleted_sales {
+        <b><<PK>></b> id : int
+        ..
+        customer_id : int
+        ..
+        sale_moment : timestamptz
+        discount_percentage : smallint
+    } 
+    
+    entity "sale_positions" as deleted_sale_positions {
+        <b><<PK>></b> id : int
+        ..
+        sale_id : int
+        computer_configuration_id : int
+        ..
+        cost : numeric (15, 2)
+        discount_percentage : smallint
+        warranty_period : interval
+    }
+}
+
+@enduml

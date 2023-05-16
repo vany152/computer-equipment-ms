@@ -3,19 +3,18 @@
 
 hide methods
 
-entity "Категория комплектующих" as componentCategory {
-    Название
-}
 entity "Комплектующий" as component {
     Название
+    Категория
     Параметры : json
     ..
+    Производитель
     Стоимость производителя
     Гарантия производителя
 }
-component }o--|| componentCategory
 
 entity "Сборка" as configuration {
+    Название
     Гарантия магазина
     Наценка
 }
@@ -30,7 +29,6 @@ entity "Покупатель" as customer {
 entity "Продажа" as sale {
     Дата продажи
     Скидка
-    Платежи : array
 } 
 sale }|--|| customer
 
@@ -40,6 +38,6 @@ entity "Позиция продажи" as salePosition {
     Гарантия
 }
 salePosition }|--|| sale
-salePosition }o--|| configuration
+salePosition }|--|| configuration
 
 @enduml
