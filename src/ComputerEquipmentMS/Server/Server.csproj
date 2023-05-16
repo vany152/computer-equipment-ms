@@ -16,10 +16,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Initdb\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <None Remove="..\.dockerignore" />
     </ItemGroup>
 
