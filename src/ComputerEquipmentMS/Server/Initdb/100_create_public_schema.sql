@@ -138,17 +138,16 @@ create table component_manufacturers (
 );
 
 create table change_logs (
-    id        bigint,
+    id        bigserial,
     moment    timestamptz not null default current_timestamp,
 
     username  text        not null default current_user,
     action    text        not null,
     "table"   text        not null,
-    "column"  text        not null,
-    old_value bytea,
-    new_value bytea,
+    old_value text,
+    new_value text,
 
-    constraint logs_pk
+    constraint change_logs_pk
         primary key (id)
 );
 
@@ -159,36 +158,36 @@ alter table sales
     add constraint sales_customers_fk
         foreign key (customer_id)
             references customers (id)
-            on update cascade on delete no action;
+            on update cascade on delete cascade;
 
 alter table sale_positions
     add constraint sale_positions_sales_fk
         foreign key (sale_id)
             references sales (id)
-            on update cascade on delete no action,
+            on update cascade on delete cascade,
     add constraint sale_positions_computer_configurations_fk
         foreign key (computer_configuration_id)
             references computer_configurations (id)
-            on update cascade on delete no action;
+            on update cascade on delete cascade;
 
 alter table components_computer_configurations
     add constraint components_computer_configurations_components_fk
         foreign key (component_id)
             references components (id)
-            on update cascade on delete no action,
+            on update cascade on delete cascade,
     add constraint components_computer_configurations_computer_configurations_fk
         foreign key (computer_configuration_id)
             references computer_configurations (id)
-            on update cascade on delete no action;
+            on update cascade on delete cascade;
 
 alter table components
     add constraint components_component_categories_fk
         foreign key (component_category_id)
             references component_categories (id)
-            on update cascade on delete no action,
+            on update cascade on delete cascade,
     add constraint components_component_manufacturers_fk
         foreign key (component_manufacturer_id)
             references component_manufacturers (id)
-            on update cascade on delete no action;
+            on update cascade on delete cascade;
 
 end;
