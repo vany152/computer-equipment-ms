@@ -25,6 +25,15 @@ begin
 end;
 $$ language plpgsql;
 
+create or replace function can_value_be_percent(value smallint)
+    returns boolean
+as
+$$
+begin
+    return value between 0 and 100;
+end;
+$$ language plpgsql;
+
 
 
 -- create tables
@@ -50,7 +59,10 @@ create table sales (
     discount_percentage smallint    not null default 0,
 
     constraint sales_pk
-        primary key (id)
+        primary key (id),
+        
+    constraint value_must_be_percent
+        check ( can_value_be_percent(discount_percentage) )
 );
 
 create table sale_positions (
@@ -66,7 +78,10 @@ create table sale_positions (
         primary key (id),
 
     constraint non_negative_warranty_period
-        check ( not is_interval_negative(warranty_period) )
+        check ( not is_interval_negative(warranty_period) ),
+    
+    constraint value_must_be_percent
+        check ( can_value_be_percent(discount_percentage) )
 );
 
 create table computer_configurations (
