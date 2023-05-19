@@ -1,7 +1,7 @@
 begin;
 
 -- create "public" schema
-create schema public;
+create schema if not exists public;
 set search_path to public;
 
 
