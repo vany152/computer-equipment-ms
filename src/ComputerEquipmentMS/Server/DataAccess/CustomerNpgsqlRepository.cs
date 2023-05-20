@@ -8,16 +8,8 @@ namespace Server.DataAccess;
 public class CustomerNpgsqlRepository : AbstractNpgsqlRepository<Customer, int>
 {
     public CustomerNpgsqlRepository(string connectionString, string tableName = "customers")
-        : base(connectionString, tableName)
+        : base(connectionString, tableName, MapDynamicToCustomer)
     {
-    }
-
-    /// <inheritdoc/>
-    protected override void ExecuteQueryWithResult()
-    {
-        QueryResultItems = DbConnection
-            .Query(CurrentQueryString)
-            .Select(MapDynamicToCustomer);
     }
 
     /// <inheritdoc/>

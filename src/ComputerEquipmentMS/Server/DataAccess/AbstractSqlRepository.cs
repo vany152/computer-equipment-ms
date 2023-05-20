@@ -6,17 +6,28 @@ using Server.Models;
 
 namespace Server.DataAccess;
 
-public abstract class AbstractSqlRepository<TItem, TId> : INpgsqlRepository<TItem, TId>
+public abstract class AbstractSqlRepository<TItem, TId> : ISqlRepository<TItem, TId>
     where TItem : IIdentifiable<TId>
     where TId : struct
 {
+    private readonly DbConnection _dbConnection;
     protected readonly string TableName;
-    protected readonly DbConnection DbConnection;
-    protected IEnumerable<TItem> QueryResultItems = new List<TItem>();
+    private string _currentQueryString  = string.Empty;
+    private IEnumerable<TItem> _currentQueryResultItems = new List<TItem>();
 
-    private int _rowsAffectedByQuery;
+    /// <summary>
+    /// Amount of rows affected by executing SQL-query that does not return result
+    /// </summary>
+    private int _amountOfRowsAffectedByQuery;
 
-    protected string CurrentQueryString { get; private set; } = string.Empty;
+
+    /// <summary>
+    /// Function for mapping SQL-query result to TItem type with non-trivial mapping way
+    /// </summary>
+    /// <remarks>If null, SQL-query result maps directly to TItem type</remarks>
+    private readonly Func<dynamic, TItem>? _queryResultMappingFunction;
+    
+    
 
     /// <summary>
     /// Class constructor
@@ -25,6 +36,18 @@ public abstract class AbstractSqlRepository<TItem, TId> : INpgsqlRepository<TIte
     /// <param name="tableName">Database table name, which is related with this repository</param>
     /// <exception cref="NoNullAllowedException">Non of the arguments can be null or empty</exception>
     protected AbstractSqlRepository(DbConnection dbConnection, string tableName)
+        : this(dbConnection, tableName, null)
+    {
+    }
+
+    /// <summary>
+    /// Class constructor
+    /// </summary>
+    /// <param name="dbConnection">Database connection instance</param>
+    /// <param name="tableName">Database table name, which is related with this repository</param>
+    /// <param name="queryResultMappingFunction">Function that maps dynamic query result to TItem</param>
+    /// <exception cref="NoNullAllowedException">Non of the arguments can be null or empty</exception>
+    protected AbstractSqlRepository(DbConnection dbConnection, string tableName, Func<dynamic, TItem>? queryResultMappingFunction)
     {
         if (string.IsNullOrEmpty(tableName))
             throw new NoNullAllowedException("Table name cannot be null or empty");
@@ -32,17 +55,18 @@ public abstract class AbstractSqlRepository<TItem, TId> : INpgsqlRepository<TIte
         if (dbConnection is null)
             throw new NoNullAllowedException("Database connection instance cannot be null");
 
-        DbConnection = dbConnection;
+        _dbConnection = dbConnection;
         TableName = tableName;
+        _queryResultMappingFunction = queryResultMappingFunction;
     }
-    
+
     /// <inheritdoc/>
     public ICollection<TItem> GetAll()
     {
-        ConstructSelectAllQueryString();
+        ConstructGetAllQueryString();
         ExecuteQueryWithResult();
         
-        var itemList = QueryResultItems.ToList();
+        var itemList = _currentQueryResultItems.ToList();
         return itemList;
     }
 
@@ -53,10 +77,10 @@ public abstract class AbstractSqlRepository<TItem, TId> : INpgsqlRepository<TIte
     /// <inheritdoc/>
     public TItem? GetById(TId id)
     {
-        ConstructSelectByIdQueryString(id);
+        ConstructGetByIdQueryString(id);
         ExecuteQueryWithResult();
         
-        var desiredItem = QueryResultItems.SingleOrDefault();
+        var desiredItem = _currentQueryResultItems.SingleOrDefault();
         return desiredItem;
     }
 
@@ -66,7 +90,7 @@ public abstract class AbstractSqlRepository<TItem, TId> : INpgsqlRepository<TIte
         ConstructAddQueryString(item);
         ExecuteQueryWithResult();
 
-        var addSuccessful = QueryResultItems.Single();
+        var addSuccessful = _currentQueryResultItems.Single();
         return addSuccessful;
     }
 
@@ -76,7 +100,7 @@ public abstract class AbstractSqlRepository<TItem, TId> : INpgsqlRepository<TIte
         ConstructEditQueryString(item);
         ExecuteQueryWithoutResult();
 
-        var editSuccessful = _rowsAffectedByQuery > 0;
+        var editSuccessful = _amountOfRowsAffectedByQuery > 0;
         return editSuccessful;
     }
 
@@ -86,26 +110,45 @@ public abstract class AbstractSqlRepository<TItem, TId> : INpgsqlRepository<TIte
         ConstructRemoveQueryString(id);
         ExecuteQueryWithoutResult();
 
-        var removeSuccessful = _rowsAffectedByQuery > 0;
+        var removeSuccessful = _amountOfRowsAffectedByQuery > 0;
         return removeSuccessful;    
     }
     
     /// <inheritdoc/>
     public void Dispose()
     {
-        DbConnection.Dispose();
+        _dbConnection.Dispose();
         GC.SuppressFinalize(this);
     }
 
 
-    
+
     /// <summary>
     /// Executes SQL-query and stores result in QueryResultItems.<br/>
-    /// Query result must be convertable to TItem
     /// </summary>
-    /// <remarks>Needs to be overriden for TItem with non-trivial mapping</remarks>>
-    protected virtual void ExecuteQueryWithResult() => 
-        QueryResultItems = DbConnection.Query<TItem>(CurrentQueryString);
+    /// <remarks>
+    /// The QueryResultMappingFunction used if specified,
+    /// otherwise result is mapped directly to TItem
+    /// </remarks>
+    private void ExecuteQueryWithResult() =>
+        _currentQueryResultItems = _queryResultMappingFunction is not null
+            ? _dbConnection.Query(_currentQueryString).Select(_queryResultMappingFunction)
+            : _dbConnection.Query<TItem>(_currentQueryString);
+    
+    /// <summary>
+    /// Constructs select SQL-query string for retrieving all values from table 
+    /// </summary>
+    /// <returns>Constructed SQL-query string</returns>
+    protected virtual string ConstructAndReturnGetAllQueryString() =>
+        $"select * from {TableName}";
+    
+    /// <summary>
+    /// Constructs select SQL-query string for retrieving values with specified Id from table
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns>Constructed SQL-query string</returns>
+    protected virtual string ConstructAndReturnGetByIdQueryString(TId id) =>
+        $"{ConstructAndReturnGetAllQueryString()} where id = {id}";
     
     /// <summary>
     /// Constructs insert SQL-query string for specified Item 
@@ -129,23 +172,20 @@ public abstract class AbstractSqlRepository<TItem, TId> : INpgsqlRepository<TIte
     /// Executes SQL-query that 
     /// </summary>
     private void ExecuteQueryWithoutResult() =>
-        _rowsAffectedByQuery = DbConnection.Execute(CurrentQueryString);
+        _amountOfRowsAffectedByQuery = _dbConnection.Execute(_currentQueryString);
     
-    private void ConstructSelectAllQueryString() => 
-        CurrentQueryString = $"select * from {TableName}";
+    private void ConstructGetAllQueryString() => 
+        _currentQueryString = ConstructAndReturnGetAllQueryString();
     
-    private void ConstructSelectByIdQueryString(TId id)
-    {
-        ConstructSelectAllQueryString();
-        CurrentQueryString += $" where id = {id}";
-    }
+    private void ConstructGetByIdQueryString(TId id) => 
+        _currentQueryString = ConstructAndReturnGetByIdQueryString(id);
 
     private void ConstructAddQueryString(TItem item) => 
-        CurrentQueryString = ConstructAndReturnAddQueryString(item);
+        _currentQueryString = ConstructAndReturnAddQueryString(item);
     
     private void ConstructEditQueryString(TItem item) => 
-        CurrentQueryString = ConstructAndReturnEditQueryString(item);
+        _currentQueryString = ConstructAndReturnEditQueryString(item);
 
     private void ConstructRemoveQueryString(TId id) => 
-        CurrentQueryString = @$"delete from {TableName} where id = {id}";
+        _currentQueryString = @$"delete from {TableName} where id = {id}";
 }

@@ -9,7 +9,12 @@ public abstract class AbstractNpgsqlRepository<TItem, TId> : AbstractSqlReposito
     where TId : struct
 {
     protected AbstractNpgsqlRepository(string connectionString, string tableName) 
-        : base(new NpgsqlConnection(connectionString), tableName)
+        : base(new NpgsqlConnection(connectionString), tableName, null)
+    {
+    }
+
+    protected AbstractNpgsqlRepository(string connectionString, string tableName, Func<dynamic, TItem>? queryResultMappingFunction)
+        : base(new NpgsqlConnection(connectionString), tableName, queryResultMappingFunction )
     {
     }
 }
