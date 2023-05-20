@@ -1,13 +1,13 @@
 ﻿using System.Text.Json;
-using Dapper;
-using Npgsql;
 using Server.Models;
+
+using static Server.DataAccess.Constants.DbTableNames;
 
 namespace Server.DataAccess;
 
 public class CustomerNpgsqlRepository : AbstractNpgsqlRepository<Customer, int>
 {
-    public CustomerNpgsqlRepository(string connectionString, string tableName = "customers")
+    public CustomerNpgsqlRepository(string connectionString, string tableName = CustomersTableName)
         : base(connectionString, tableName, MapDynamicToCustomer)
     {
     }
@@ -17,10 +17,12 @@ public class CustomerNpgsqlRepository : AbstractNpgsqlRepository<Customer, int>
     {
         var serializedContacts = SerializeContacts(customer.Contacts);
         
-        var addQueryString = $@"
-            insert into {TableName} (name, contacts, registration_date)
-            values ('{customer.Name}', {serializedContacts}, '{customer.RegistrationDate:u}'::date)
-            returning *";
+        var addQueryString = 
+            $"""
+                insert into {TableName} (name, contacts, registration_date)
+                values ('{customer.Name}', {serializedContacts}, '{customer.RegistrationDate:u}'::date)
+                returning *
+            """;
 
         return addQueryString;
     }
@@ -30,12 +32,14 @@ public class CustomerNpgsqlRepository : AbstractNpgsqlRepository<Customer, int>
     {
         var serializedContacts = SerializeContacts(customer.Contacts);
         
-        var updateQueryString = @$"
-            update {TableName}
-            set name = '{customer.Name}',
-                contacts = {serializedContacts}::jsonb,
-                registration_date = '{customer.RegistrationDate:u}'::date
-            where id = {customer.Id}";
+        var updateQueryString = 
+            $"""
+                update {TableName}
+                set name = '{customer.Name}',
+                    contacts = {serializedContacts}::jsonb,
+                    registration_date = '{customer.RegistrationDate:u}'::date
+                where id = {customer.Id}
+            """;
 
         return updateQueryString;
     }
