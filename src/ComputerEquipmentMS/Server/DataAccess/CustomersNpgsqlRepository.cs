@@ -5,9 +5,9 @@ using static Server.DataAccess.Constants.DbTableNames;
 
 namespace Server.DataAccess;
 
-public class CustomerNpgsqlRepository : AbstractNpgsqlRepository<Customer, int>
+public class CustomersNpgsqlRepository : AbstractNpgsqlRepository<Customer, int>
 {
-    public CustomerNpgsqlRepository(string connectionString, string tableName = CustomersTableName)
+    public CustomersNpgsqlRepository(string connectionString, string tableName = CustomersTableName)
         : base(connectionString, tableName, MapDynamicToCustomer)
     {
     }
