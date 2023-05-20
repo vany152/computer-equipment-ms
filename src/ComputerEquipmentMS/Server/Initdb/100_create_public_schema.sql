@@ -125,6 +125,9 @@ create table components (
 
     constraint non_empty_name_check
         check ( not is_string_null_or_empty(name) ),
+        
+    constraint non_null_specifications
+        check ( specifications <> 'null'::jsonb ),
 
     constraint non_negative_warranty_period
         check ( not is_interval_negative(warranty_period) )
