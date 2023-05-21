@@ -78,15 +78,14 @@ rectangle "schema 'public'" as public {
     public_sale_positions -right-> public_computer_configurations
     
     entity "change_logs" as public_change_logs {
-        <b><<PK>></b> id : bigint
+        <b><<PK>></b> id : bigserial
         ..
         moment : timestamptz
         username : text
         action : text
         table : text
-        column : text
-        old_value : blob
-        new_value : blob
+        old_value : text
+        new_value : text
     }
 }
 
