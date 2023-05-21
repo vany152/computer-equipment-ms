@@ -15,7 +15,7 @@ public class SalesNpgsqlRepository : AbstractNpgsqlRepository<Sale, int>
     protected override string ConstructAndReturnAddQueryString(Sale sale) =>
         $"""    
             insert into {TableName} (customer_id, sale_moment, discount_percentage) 
-            values ({sale.CustomerId}, '{sale.SaleMoment:yyyy-MM-dd hh:mm:ss zz}'::timestamptz, {sale.DiscountPercentage})
+            values ({sale.CustomerId}, '{sale.SaleMoment}'::timestamptz, {sale.DiscountPercentage})
             returning *
         """;
 
@@ -24,7 +24,7 @@ public class SalesNpgsqlRepository : AbstractNpgsqlRepository<Sale, int>
         $"""
             update {TableName} 
             set customer_id = {sale.CustomerId},
-                sale_moment = '{sale.SaleMoment:yyyy-MM-dd hh:mm:ss zz}'::timestamptz,
+                sale_moment = '{sale.SaleMoment}'::timestamptz,
                 discount_percentage = {sale.DiscountPercentage}
             where id = {sale.Id};
         """;

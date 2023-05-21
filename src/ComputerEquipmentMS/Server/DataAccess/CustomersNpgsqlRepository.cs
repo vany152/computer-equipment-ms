@@ -20,7 +20,7 @@ public class CustomersNpgsqlRepository : AbstractNpgsqlRepository<Customer, int>
         var addQueryString = 
             $"""
                 insert into {TableName} (name, contacts, registration_date)
-                values ('{customer.Name}', {serializedContacts}, '{customer.RegistrationDate:u}'::date)
+                values ('{customer.Name}', {serializedContacts}, '{customer.RegistrationDate}'::date)
                 returning *
             """;
 
@@ -37,7 +37,7 @@ public class CustomersNpgsqlRepository : AbstractNpgsqlRepository<Customer, int>
                 update {TableName}
                 set name = '{customer.Name}',
                     contacts = {serializedContacts}::jsonb,
-                    registration_date = '{customer.RegistrationDate:u}'::date
+                    registration_date = '{customer.RegistrationDate}'::date
                 where id = {customer.Id}
             """;
 
@@ -63,7 +63,7 @@ public class CustomersNpgsqlRepository : AbstractNpgsqlRepository<Customer, int>
     private static Customer MapDynamicToCustomer(dynamic obj)
     {
         var deserializedContacts = DeserializeContacts(obj.contacts);
-
+        
         var customer = new Customer
         {
             Id = obj.id,
