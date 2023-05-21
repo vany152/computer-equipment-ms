@@ -42,5 +42,3 @@ begin
     return new_sale;
 end;
 $$ language plpgsql;
-
-select * from create_sale(1, current_timestamp, 0::smallint, '{1, 2}'::integer[], '{0, 5}'::smallint[]);
