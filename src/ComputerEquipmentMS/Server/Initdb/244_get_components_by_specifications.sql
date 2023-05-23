@@ -1,11 +1,11 @@
-create or replace function get_components_by_specifications(checking_specifications jsonb) 
+create or replace function get_components_by_specifications(_specifications jsonb) 
     returns setof components
 as $$
 begin
     return query (
         select * 
         from components c
-        where c.specifications @> checking_specifications
+        where c.specifications @> _specifications
     );
 end;
 $$ language plpgsql;

@@ -1,4 +1,4 @@
-create or replace function get_sales_of_configuration(configuration_id integer)
+create or replace function get_sales_of_configuration(_configuration_id integer)
     returns setof sale_position_info
 as $$
 begin
@@ -12,7 +12,7 @@ begin
             sp.warranty_period
         from sale_positions sp
             join sales s on s.id = sp.sale_id
-        where sp.computer_configuration_id = configuration_id
+        where sp.computer_configuration_id = _configuration_id
     );
 end;
 $$ language plpgsql;
