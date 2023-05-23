@@ -1,4 +1,4 @@
-create function create_component(
+create or replace function create_component(
     _component_category_id integer,
     _component_manufacturer_id integer,
     _name varchar,

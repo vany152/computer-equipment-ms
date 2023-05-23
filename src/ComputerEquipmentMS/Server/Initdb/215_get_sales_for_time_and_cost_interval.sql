@@ -2,7 +2,7 @@ create or replace function get_sales_for_time_and_cost_interval(
     "from" timestamptz, "to" timestamptz, 
     min_cost numeric(15, 2), max_cost numeric(15, 2)
     )
-    returns setof sales
+    returns setof sales_with_sale_position_ids
 as $$
 begin
     return query (

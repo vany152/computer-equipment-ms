@@ -1,3 +1,6 @@
+/*
+ * if _configuration_discounts is null, then discount on all sale positions will be 0
+ */
 create or replace function create_sale(
     _customer_id integer, 
     _sale_moment timestamptz, 
@@ -5,10 +8,10 @@ create or replace function create_sale(
     _configuration_ids integer[],
     _configuration_discounts smallint[]
     ) 
-    returns sales
+    returns sales_with_sale_position_ids
 as $$
     declare 
-        new_sale sales;
+        new_sale sales_with_sale_position_ids;
         
         number_of_configurations integer;
         number_of_discounts integer;
@@ -19,14 +22,20 @@ as $$
         current_configuration_cost numeric(15, 2);
 begin
     number_of_configurations = array_length(_configuration_ids, 1);
-    number_of_discounts = array_length(_configuration_discounts, 1);
-    if (number_of_configurations != number_of_discounts) then
-        raise exception 'number of configurations % is different from number of discounts %', number_of_configurations, number_of_discounts;
+
+    if (_configuration_discounts is not null) then
+        number_of_discounts = array_length(_configuration_discounts, 1);
+        
+        if (number_of_configurations != number_of_discounts) then
+            raise exception 'number of configurations % is different from number of discounts %', number_of_configurations, number_of_discounts;
+        end if;
+    else
+        _configuration_discounts = array_fill(0, array[number_of_configurations]);
     end if;
         
     insert into sales (customer_id, sale_moment, discount_percentage) 
     values (_customer_id, _sale_moment, _general_discount_percentage)
-    returning * into new_sale;
+    returning *, _configuration_ids into new_sale;
     
     for i in 1..number_of_configurations loop
         current_configuration_id = _configuration_ids[i];
