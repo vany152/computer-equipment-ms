@@ -1,4 +1,4 @@
-﻿namespace Server.Models;
+﻿namespace Server.Models.Domain;
 
 public class ComponentManufacturer : IIdentifiable<int>
 {

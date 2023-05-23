@@ -1,5 +1,5 @@
-select create_customer('Oleg', '{"phone": "8-800-555-35-35"}', '2021-05-30'::date);
-select create_customer('Anna', '{"email": "anna@gmail.com"}', '2020-01-02'::date);
+select create_customer('Oleg', '{"Phone": "8-800-555-35-35"}', '2021-05-30'::date);
+select create_customer('Anna', '{"Email": "anna@gmail.com"}', '2020-01-02'::date);
 
 select create_component_category('video cards');
 select create_component_category('processors');

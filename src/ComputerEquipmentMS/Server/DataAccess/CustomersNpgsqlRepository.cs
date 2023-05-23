@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using Server.Models;
-
+using Server.Models.Auxiliary;
+using Server.Models.Domain;
 using static Server.DataAccess.Constants.DbTableNames;
 
 namespace Server.DataAccess;
@@ -8,7 +9,7 @@ namespace Server.DataAccess;
 public class CustomersNpgsqlRepository : AbstractNpgsqlRepository<Customer, int>
 {
     public CustomersNpgsqlRepository(string connectionString, string tableName = CustomersTableName)
-        : base(connectionString, tableName, MapDynamicToCustomer)
+        : base(connectionString, tableName, DynamicToObjectMapper.MapDynamicToCustomer)
     {
     }
 
@@ -19,9 +20,7 @@ public class CustomersNpgsqlRepository : AbstractNpgsqlRepository<Customer, int>
         
         var addQueryString = 
             $"""
-                insert into {TableName} (name, contacts, registration_date)
-                values ('{customer.Name}', {serializedContacts}, '{customer.RegistrationDate}'::date)
-                returning *
+                select * from create_customer('{customer.Name}', {serializedContacts}, '{customer.RegistrationDate}'::date);
             """;
 
         return addQueryString;
@@ -59,24 +58,4 @@ public class CustomersNpgsqlRepository : AbstractNpgsqlRepository<Customer, int>
         var serializedContacts = $"'{JsonSerializer.Serialize(contacts)}'";
         return serializedContacts;
     }
-
-    private static Customer MapDynamicToCustomer(dynamic obj)
-    {
-        var deserializedContacts = DeserializeContacts(obj.contacts);
-        
-        var customer = new Customer
-        {
-            Id = obj.id,
-            Name = obj.name,
-            RegistrationDate = obj.registration_date,
-            Contacts = deserializedContacts
-        };
-
-        return customer;
-    }
-
-    private static Contacts? DeserializeContacts(string contacts) =>
-        string.IsNullOrEmpty(contacts)
-            ? null
-            : JsonSerializer.Deserialize<Contacts>(contacts);
 }

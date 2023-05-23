@@ -1,6 +1,7 @@
 ﻿using NodaTime;
+using Server.Models.Auxiliary;
 
-namespace Server.Models;
+namespace Server.Models.Domain;
 
 public class Customer : IIdentifiable<int>
 {

@@ -1,5 +1,5 @@
 ﻿using Server.Models;
-
+using Server.Models.Domain;
 using static Server.DataAccess.Constants.DbTableNames;
 
 namespace Server.DataAccess;
@@ -7,7 +7,7 @@ namespace Server.DataAccess;
 public class ComputerConfigurationsNpgsqlRepository : AbstractNpgsqlRepository<ComputerConfiguration, int>
 {
     public ComputerConfigurationsNpgsqlRepository(string connectionString, string tableName = ComputerConfigurationsTableName) 
-        : base(connectionString, tableName, MapDynamicToComputerConfiguration)
+        : base(connectionString, tableName, DynamicToObjectMapper.MapDynamicToComputerConfiguration)
     {
     }
 
@@ -35,23 +35,13 @@ public class ComputerConfigurationsNpgsqlRepository : AbstractNpgsqlRepository<C
 
     /// <inheritdoc/>
     protected override string ConstructAndReturnEditQueryString(ComputerConfiguration configuration) =>
-        $"""
-            update {TableName}
-            set name = '{configuration.Name}',
-                warranty_period = '{configuration.WarrantyPeriod}',
-                margin = {configuration.Margin}
-            where id = {configuration.Id}
+        $$"""
+            select * from edit_configuration(
+                 {{configuration.Id}},
+                '{{configuration.Name}}', 
+                '{{configuration.WarrantyPeriod}}', 
+                 {{configuration.Margin}}, 
+                '{{{string.Join(", ", configuration.ComponentIds)}}}'::integer[] 
+            );
         """;
-
-
-
-    private static ComputerConfiguration MapDynamicToComputerConfiguration(dynamic obj) =>
-        new()
-        {
-            Id = obj.id,
-            Name = obj.name,
-            WarrantyPeriod = obj.warranty_period,
-            Margin = obj.margin,
-            ComponentIds = obj.component_ids
-        };
 }

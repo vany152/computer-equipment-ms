@@ -1,6 +1,6 @@
 ﻿using NodaTime;
 
-namespace Server.Models;
+namespace Server.Models.Domain;
 
 public class Sale : IIdentifiable<int>
 {
@@ -11,4 +11,6 @@ public class Sale : IIdentifiable<int>
     public Instant SaleMoment  { get; set; }
 
     public short DiscountPercentage { get; set; }
+    
+    public required ICollection<int> SalePositionIds { get; set; }
 }

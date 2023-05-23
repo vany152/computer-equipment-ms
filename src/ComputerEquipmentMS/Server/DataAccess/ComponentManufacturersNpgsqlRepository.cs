@@ -1,5 +1,5 @@
 ﻿using Server.Models;
-
+using Server.Models.Domain;
 using static Server.DataAccess.Constants.DbTableNames;
 
 namespace Server.DataAccess;
@@ -7,7 +7,7 @@ namespace Server.DataAccess;
 public class ComponentManufacturersNpgsqlRepository : AbstractNpgsqlRepository<ComponentManufacturer, int>
 {
     public ComponentManufacturersNpgsqlRepository(string connectionString, string tableName = ComponentManufacturersTableName)
-        : base(connectionString, tableName, MapDynamicToComponentManufacturer)
+        : base(connectionString, tableName)
     {
     }
 
@@ -15,9 +15,7 @@ public class ComponentManufacturersNpgsqlRepository : AbstractNpgsqlRepository<C
     /// <inheritdoc/>
     protected override string ConstructAndReturnAddQueryString(ComponentManufacturer manufacturer) =>
         $"""
-            insert into {TableName} (name)
-            values ('{manufacturer.Name}')
-            returning *
+            select * from create_component_manufacturer('{manufacturer.Name}')
         """;
 
     /// <inheritdoc/>
@@ -27,13 +25,4 @@ public class ComponentManufacturersNpgsqlRepository : AbstractNpgsqlRepository<C
             set name = '{manufacturer.Name}'
             where id = {manufacturer.Id}
         """;
-
-
-
-    private static ComponentManufacturer MapDynamicToComponentManufacturer(dynamic obj) =>
-        new()
-        {
-            Id = obj.id,
-            Name = obj.name,
-        };
 }

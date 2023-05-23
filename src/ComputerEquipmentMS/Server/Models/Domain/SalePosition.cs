@@ -1,6 +1,6 @@
 ﻿using NodaTime;
 
-namespace Server.Models;
+namespace Server.Models.Domain;
 
 public class SalePosition : IIdentifiable<int>
 {

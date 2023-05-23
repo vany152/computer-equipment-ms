@@ -1,5 +1,5 @@
 ﻿using Server.Models;
-
+using Server.Models.Domain;
 using static Server.DataAccess.Constants.DbTableNames;
 
 namespace Server.DataAccess;

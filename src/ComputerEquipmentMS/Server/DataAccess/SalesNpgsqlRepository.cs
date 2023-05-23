@@ -1,5 +1,5 @@
 ﻿using Server.Models;
-
+using Server.Models.Domain;
 using static Server.DataAccess.Constants.DbTableNames;
 
 namespace Server.DataAccess;
@@ -7,16 +7,23 @@ namespace Server.DataAccess;
 public class SalesNpgsqlRepository : AbstractNpgsqlRepository<Sale, int>
 {
     public SalesNpgsqlRepository(string connectionString, string tableName = SalesTableName) 
-        : base(connectionString, tableName, MapDynamicToSale)
+        : base(connectionString, tableName, DynamicToObjectMapper.MapDynamicToSale)
     {
     }
 
+    protected override string ConstructAndReturnGetAllQueryString() =>
+        "select * from get_sales()";
+
     /// <inheritdoc/>
     protected override string ConstructAndReturnAddQueryString(Sale sale) =>
-        $"""    
-            insert into {TableName} (customer_id, sale_moment, discount_percentage) 
-            values ({sale.CustomerId}, '{sale.SaleMoment}'::timestamptz, {sale.DiscountPercentage})
-            returning *
+        $$"""    
+            select * from create_sale(
+                 {{sale.CustomerId}}, 
+                '{{sale.SaleMoment}}'::timestamptz, 
+                 {{sale.DiscountPercentage}},
+                 '{{{sale.SalePositionIds}}}'::integer[]
+                 null
+            )
         """;
 
     /// <inheritdoc/>
@@ -28,15 +35,4 @@ public class SalesNpgsqlRepository : AbstractNpgsqlRepository<Sale, int>
                 discount_percentage = {sale.DiscountPercentage}
             where id = {sale.Id};
         """;
-
-
-
-    private static Sale MapDynamicToSale(dynamic obj) =>
-        new ()
-        {
-            Id = obj.id,
-            CustomerId = obj.customer_id,
-            SaleMoment = obj.sale_moment,
-            DiscountPercentage = obj.discount_percentage
-        };
 }

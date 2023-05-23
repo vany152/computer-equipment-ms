@@ -1,5 +1,5 @@
 ﻿using Server.Models;
-
+using Server.Models.Domain;
 using static Server.DataAccess.Constants.DbTableNames;
 
 namespace Server.DataAccess;
@@ -7,16 +7,14 @@ namespace Server.DataAccess;
 public class ComponentCategoriesNpgsqlRepository : AbstractNpgsqlRepository<ComponentCategory, int>
 {
     public ComponentCategoriesNpgsqlRepository(string connectionString, string tableName = ComponentCategoriesTableName)
-        : base(connectionString, tableName, MapDynamicToComponentCategory)
+        : base(connectionString, tableName)
     {
     }
 
     /// <inheritdoc/>
     protected override string ConstructAndReturnAddQueryString(ComponentCategory category) =>
         $"""
-            insert into {TableName} (name)
-            values ('{category.Name}')
-            returning *
+            select * from create_component_category('{category.Name}')
         """;
 
     /// <inheritdoc/>
@@ -26,13 +24,4 @@ public class ComponentCategoriesNpgsqlRepository : AbstractNpgsqlRepository<Comp
             set name = '{category.Name}'
             where id = {category.Id}
         """;
-
-
-
-    private static ComponentCategory MapDynamicToComponentCategory(dynamic obj) =>
-        new()
-        {
-            Id = obj.id,
-            Name = obj.name,
-        };
 }
