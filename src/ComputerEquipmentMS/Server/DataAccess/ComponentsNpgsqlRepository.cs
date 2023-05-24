@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using Server.Models;
 using Server.Models.Auxiliary;
 using Server.Models.Domain;
 using static Server.DataAccess.Constants.DbTableNames;

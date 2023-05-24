@@ -1,7 +1,6 @@
 ﻿using System.Data;
 using System.Data.Common;
 using Dapper;
-using Npgsql;
 using Server.Models;
 
 namespace Server.DataAccess;
