@@ -36,12 +36,9 @@ public class NpgsqlStoredFunctionsExecutor : IDisposable
     public decimal CalculateConfigurationCost(int configurationId)
     {
         var queryString = $"select * from calculate_configuration_cost({configurationId})";
-        var cost = ExecuteQuery<decimal?>(queryString).SingleOrDefault();
+        var cost = ExecuteQuery<decimal>(queryString).SingleOrDefault();
 
-        if (cost is null)
-            throw new InvalidOperationException($"computer configuration with id = {configurationId} not found");
-
-        return cost.Value;
+        return cost;
     }
 
     public ICollection<SalePositionInfo> GetSalesOfConfiguration(int configurationId)
@@ -73,12 +70,9 @@ public class NpgsqlStoredFunctionsExecutor : IDisposable
     public decimal CalculateSaleCost(int saleId)
     {
         var queryString = $"select * from calculate_sale_cost({saleId})";
-        var cost = ExecuteQuery<decimal?>(queryString).SingleOrDefault();
+        var cost = ExecuteQuery<decimal>(queryString).SingleOrDefault();
 
-        if (cost is null)
-            throw new InvalidOperationException("sale not found");
-
-        return cost.Value;
+        return cost;
     }
 
     public ICollection<Sale> GetSalesForCostInterval(CostInterval interval)

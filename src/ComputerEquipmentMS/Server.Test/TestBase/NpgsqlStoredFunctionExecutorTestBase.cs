@@ -10,4 +10,11 @@ public abstract class NpgsqlStoredFunctionExecutorTestBase : TestBase
     {
         Executor = new NpgsqlStoredFunctionsExecutor(ConnectionString);
     }
+    
+    
+    
+    public sealed override Task InitializeAsync() => 
+        Container.ExecScriptAsync(scriptContent: ConstructFillDbWithTestBataScript());
+
+    protected abstract string ConstructFillDbWithTestBataScript();
 }
