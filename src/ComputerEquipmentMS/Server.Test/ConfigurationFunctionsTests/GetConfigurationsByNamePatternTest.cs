@@ -18,8 +18,8 @@ public class GetConfigurationsByNamePatternTest : ConfigurationFunctionsTestBase
     public static IEnumerable<object[]> NamePatternsForExistingConfigurations =>
         new List<object[]>
         {
-            new object[] { new Regex(@"config.*"), new [] {1, 2} },
-            new object[] { new Regex(@".*\d"), new [] {1, 2} },
+            new object[] { new Regex(@"config.*"), new [] {1, 2, 3} },
+            new object[] { new Regex(@".*\d"), new [] {1, 2, 3} },
             new object[] { new Regex(@"1"), new [] {1} },
         };
     
