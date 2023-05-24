@@ -6,7 +6,7 @@ as $$
         sale_position_ids integer[];
 begin
     for current_sale_position_id in
-        select sale_id
+        select id, sale_id
         from sale_positions
         where sale_id = _sale_id
     loop

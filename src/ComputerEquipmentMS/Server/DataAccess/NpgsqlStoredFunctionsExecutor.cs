@@ -3,14 +3,14 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using Dapper;
 using Npgsql;
-using Server.Models;
+using Server.DataAccess.Util;
 using Server.Models.Auxiliary;
 using Server.Models.Domain;
 using static Server.DataAccess.DynamicToObjectMapper; 
 
 namespace Server.DataAccess;
 
-public class NpgsqlStoredFunctionsExecutor
+public class NpgsqlStoredFunctionsExecutor : IDisposable
 {
     private readonly NpgsqlConnection _connection; 
     
@@ -19,7 +19,7 @@ public class NpgsqlStoredFunctionsExecutor
         if (string.IsNullOrEmpty(connectionString))
             throw new NoNullAllowedException("connection string cannot be null or empty");
 
-        _connection = new NpgsqlConnection(connectionString);
+        _connection = NpgsqlUtil.CreateNpgsqlConnectionWithNodaTime(connectionString);
     }
     
     /*
@@ -123,6 +123,22 @@ public class NpgsqlStoredFunctionsExecutor
         
         return sales;    
     }
+
+    public Sale? GetSale(int saleId)
+    {
+        var queryString = $"select * from get_sale({saleId})";
+        var sale = ExecuteQuery(queryString, MapDynamicToSale).SingleOrDefault();
+
+        return sale;
+    }
+    
+    public ICollection<Sale> GetSales()
+    {
+        var queryString = "select * from get_sales()";
+        var sale = ExecuteQuery(queryString, MapDynamicToSale);
+
+        return sale;
+    }    
     
     /*
      * "Customer" group
@@ -215,6 +231,12 @@ public class NpgsqlStoredFunctionsExecutor
         var components = ExecuteQuery(queryString, MapDynamicToComponent);
 
         return components;    
+    }
+    
+    public void Dispose()
+    {
+        _connection.Dispose();
+        GC.SuppressFinalize(this);
     }
     
     
