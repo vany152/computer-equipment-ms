@@ -1,4 +1,4 @@
-﻿namespace Server.Test.ComponentFunctionsTests;
+﻿namespace Server.Test.StoredFunctionsTests.ComponentFunctionsTests;
 
 public class GetComponentsByManufacturerTest : ComponentFunctionsTest
 {

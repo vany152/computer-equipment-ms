@@ -1,4 +1,4 @@
-﻿namespace Server.Test.CustomerFunctionsTests;
+﻿namespace Server.Test.StoredFunctionsTests.CustomerFunctionsTests;
 
 public class GetCustomersPurchasesTest : CustomerFunctionsTestBase
 {

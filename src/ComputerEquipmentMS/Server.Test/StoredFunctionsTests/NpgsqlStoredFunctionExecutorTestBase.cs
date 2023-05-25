@@ -1,6 +1,6 @@
 ﻿using Server.DataAccess;
 
-namespace Server.Test.TestBase;
+namespace Server.Test.StoredFunctionsTests;
 
 public abstract class NpgsqlStoredFunctionExecutorTestBase : TestBase
 {

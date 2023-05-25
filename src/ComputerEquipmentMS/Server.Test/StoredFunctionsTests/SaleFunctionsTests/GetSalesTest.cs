@@ -1,7 +1,7 @@
 ﻿using NodaTime;
 using Server.Models.Domain;
 
-namespace Server.Test.SaleFunctionsTests;
+namespace Server.Test.StoredFunctionsTests.SaleFunctionsTests;
 
 public class GetSalesTest : SaleFunctionTestBase
 {

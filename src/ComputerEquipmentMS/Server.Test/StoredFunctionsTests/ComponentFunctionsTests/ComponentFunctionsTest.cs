@@ -1,6 +1,4 @@
-﻿using Server.Test.TestBase;
-
-namespace Server.Test.ComponentFunctionsTests;
+﻿namespace Server.Test.StoredFunctionsTests.ComponentFunctionsTests;
 
 public class ComponentFunctionsTest : NpgsqlStoredFunctionExecutorTestBase
 {

@@ -1,13 +1,12 @@
-﻿using Server.Test.TestBase;
+﻿namespace Server.Test.StoredFunctionsTests.CustomerFunctionsTests;
 
-namespace Server.Test.ConfigurationFunctionsTests;
-
-public class ConfigurationFunctionsTestBase : NpgsqlStoredFunctionExecutorTestBase
+public class CustomerFunctionsTestBase : NpgsqlStoredFunctionExecutorTestBase
 {
     protected sealed override string ConstructFillDbWithTestBataScript() =>
         """
         select create_customer('Oleg', null, '2021-05-30'::date);
-        select create_customer('Anna', null, '2020-01-02'::date);
+        select create_customer('Anna', '{"Email": "annagmail@gmail.com"}'::jsonb, '2020-01-02'::date);
+        select create_customer('Alexander', '{"Phone": "8-800-555-35-35"}'::jsonb, '2022-07-15'::date);
 
         select create_component_category('video cards');
         select create_component_category('processors');
@@ -23,7 +22,6 @@ public class ConfigurationFunctionsTestBase : NpgsqlStoredFunctionExecutorTestBa
 
         select create_configuration('configuration 1', '1 year'::interval, 1000, '{1, 2}');
         select create_configuration('configuration 2', '2 years'::interval, 1500, '{1, 3}');
-        select create_configuration('configuration 3', '2 years'::interval, 500, '{1, 3}');
 
         select create_sale(1, '2021-05-30 12:00:00 +00'::timestamptz, 0::smallint, '{1}'::integer[], null);
         select create_sale(2, '2020-01-02 12:00:00 +00'::timestamptz, 5::smallint, '{1, 2}'::integer[], null);

@@ -1,7 +1,7 @@
 ﻿using NodaTime;
 using Server.Models.Auxiliary;
 
-namespace Server.Test.ConfigurationFunctionsTests;
+namespace Server.Test.StoredFunctionsTests.ConfigurationFunctionsTests;
 
 public class GetSalesOfConfigurationForTimeIntervalTest : ConfigurationFunctionsTestBase
 {

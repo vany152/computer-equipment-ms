@@ -1,7 +1,7 @@
 ﻿using NodaTime;
 using Server.Models.Auxiliary;
 
-namespace Server.Test.CustomerFunctionsTests;
+namespace Server.Test.StoredFunctionsTests.CustomerFunctionsTests;
 
 public class GetCustomerPurchasesForTimeInterval : CustomerFunctionsTestBase
 {

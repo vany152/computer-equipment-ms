@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace Server.Test.ComponentFunctionsTests;
+namespace Server.Test.StoredFunctionsTests.ComponentFunctionsTests;
 
 public class GetComponentsByNameTest : ComponentFunctionsTest
 {

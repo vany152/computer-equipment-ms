@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using Testcontainers.PostgreSql;
 
-namespace Server.Test.TestBase;
+namespace Server.Test;
 
 public abstract class TestBase : IAsyncLifetime
 {

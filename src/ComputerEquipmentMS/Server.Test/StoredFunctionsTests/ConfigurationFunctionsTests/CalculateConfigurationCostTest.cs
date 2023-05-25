@@ -1,4 +1,4 @@
-﻿namespace Server.Test.ConfigurationFunctionsTests;
+﻿namespace Server.Test.StoredFunctionsTests.ConfigurationFunctionsTests;
 
 public class CalculateConfigurationCostTest : ConfigurationFunctionsTestBase
 {

@@ -1,6 +1,6 @@
 ﻿using Server.Models.Auxiliary;
 
-namespace Server.Test.ComponentFunctionsTests;
+namespace Server.Test.StoredFunctionsTests.ComponentFunctionsTests;
 
 public class GetComponentsBySpecificationsTest : ComponentFunctionsTest
 {

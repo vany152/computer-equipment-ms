@@ -1,8 +1,6 @@
-﻿using Server.Test.TestBase;
+﻿namespace Server.Test.StoredFunctionsTests.ConfigurationFunctionsTests;
 
-namespace Server.Test.SaleFunctionsTests;
-
-public class SaleFunctionTestBase : NpgsqlStoredFunctionExecutorTestBase
+public class ConfigurationFunctionsTestBase : NpgsqlStoredFunctionExecutorTestBase
 {
     protected sealed override string ConstructFillDbWithTestBataScript() =>
         """
@@ -23,6 +21,7 @@ public class SaleFunctionTestBase : NpgsqlStoredFunctionExecutorTestBase
 
         select create_configuration('configuration 1', '1 year'::interval, 1000, '{1, 2}');
         select create_configuration('configuration 2', '2 years'::interval, 1500, '{1, 3}');
+        select create_configuration('configuration 3', '2 years'::interval, 500, '{1, 3}');
 
         select create_sale(1, '2021-05-30 12:00:00 +00'::timestamptz, 0::smallint, '{1}'::integer[], null);
         select create_sale(2, '2020-01-02 12:00:00 +00'::timestamptz, 5::smallint, '{1, 2}'::integer[], null);

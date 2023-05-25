@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace Server.Test.ConfigurationFunctionsTests;
+namespace Server.Test.StoredFunctionsTests.ConfigurationFunctionsTests;
 
 public class GetConfigurationsByNamePatternTest : ConfigurationFunctionsTestBase
 {

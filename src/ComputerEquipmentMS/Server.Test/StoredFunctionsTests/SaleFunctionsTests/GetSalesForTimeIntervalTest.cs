@@ -1,7 +1,7 @@
 ﻿using NodaTime;
 using Server.Models.Auxiliary;
 
-namespace Server.Test.SaleFunctionsTests;
+namespace Server.Test.StoredFunctionsTests.SaleFunctionsTests;
 
 public class GetSalesForTimeIntervalTest : SaleFunctionTestBase
 {

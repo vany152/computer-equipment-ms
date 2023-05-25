@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace Server.Test.CustomerFunctionsTests;
+namespace Server.Test.StoredFunctionsTests.CustomerFunctionsTests;
 
 public class GetCustomersByNameTest : CustomerFunctionsTestBase
 {

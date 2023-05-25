@@ -1,14 +1,11 @@
-﻿using Server.Test.TestBase;
+﻿namespace Server.Test.StoredFunctionsTests.SaleFunctionsTests;
 
-namespace Server.Test.CustomerFunctionsTests;
-
-public class CustomerFunctionsTestBase : NpgsqlStoredFunctionExecutorTestBase
+public class SaleFunctionTestBase : NpgsqlStoredFunctionExecutorTestBase
 {
     protected sealed override string ConstructFillDbWithTestBataScript() =>
         """
         select create_customer('Oleg', null, '2021-05-30'::date);
-        select create_customer('Anna', '{"Email": "annagmail@gmail.com"}'::jsonb, '2020-01-02'::date);
-        select create_customer('Alexander', '{"Phone": "8-800-555-35-35"}'::jsonb, '2022-07-15'::date);
+        select create_customer('Anna', null, '2020-01-02'::date);
 
         select create_component_category('video cards');
         select create_component_category('processors');
