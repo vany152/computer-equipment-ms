@@ -15,15 +15,7 @@ public class SalesNpgsqlRepository : AbstractNpgsqlRepository<Sale, int>
 
     /// <inheritdoc/>
     protected override string ConstructAndReturnAddQueryString(Sale sale) =>
-        $$"""    
-            select * from create_sale(
-                 {{sale.CustomerId}}, 
-                '{{sale.SaleMoment}}'::timestamptz, 
-                 {{sale.DiscountPercentage}},
-                 '{{{sale.SalePositionIds}}}'::integer[]
-                 null
-            )
-        """;
+        throw new NotImplementedException("This method cannot be implemented because of architecture restrictions");
 
     /// <inheritdoc/>
     protected override string ConstructAndReturnEditQueryString(Sale sale) =>
@@ -31,7 +23,7 @@ public class SalesNpgsqlRepository : AbstractNpgsqlRepository<Sale, int>
             update {TableName} 
             set customer_id = {sale.CustomerId},
                 sale_moment = '{sale.SaleMoment}'::timestamptz,
-                discount_percentage = {sale.DiscountPercentage}
+                discount_percentage = {sale.DiscountPercentage}::smallint
             where id = {sale.Id};
         """;
 }
