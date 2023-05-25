@@ -7,10 +7,7 @@ public abstract class RepositoryTestBase<TItem, TId> : TestBase
     where TItem : IIdentifiable<TId>
     where TId : struct 
 {
-    protected IRepository<TItem, TId> Repository;
+    public required IRepository<TItem, TId> Repository { get; init; }
 
-    protected RepositoryTestBase(IRepository<TItem, TId> repository)
-    {
-        Repository = repository;
-    }
+    protected abstract void FillDbWithTestData();
 }

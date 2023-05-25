@@ -19,7 +19,7 @@ public class CustomersNpgsqlRepository : AbstractNpgsqlRepository<Customer, int>
         
         var addQueryString = 
             $"""
-                select * from create_customer('{customer.Name}', {serializedContacts}, '{customer.RegistrationDate}'::date);
+                select * from create_customer('{customer.Name}', {serializedContacts}, '{customer.RegistrationDate:yyyy-MM-dd}'::date);
             """;
 
         return addQueryString;
@@ -35,7 +35,7 @@ public class CustomersNpgsqlRepository : AbstractNpgsqlRepository<Customer, int>
                 update {TableName}
                 set name = '{customer.Name}',
                     contacts = {serializedContacts}::jsonb,
-                    registration_date = '{customer.RegistrationDate}'::date
+                    registration_date = '{customer.RegistrationDate:yyyy-MM-dd}'::date
                 where id = {customer.Id}
             """;
 
