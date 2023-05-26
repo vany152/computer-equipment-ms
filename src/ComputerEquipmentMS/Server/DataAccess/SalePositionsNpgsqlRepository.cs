@@ -11,21 +11,8 @@ public class SalePositionsNpgsqlRepository : AbstractNpgsqlRepository<SalePositi
     }
 
     protected override string ConstructAndReturnAddQueryString(SalePosition salePosition) =>
-        $"""
-            insert into {TableName} (
-                sale_id, 
-                computer_configuration_id, 
-                cost, 
-                discount_percentage, 
-                warranty_period
-            ) values (
-                {salePosition.SaleId}, 
-                {salePosition.ConfigurationId}, 
-                {salePosition.Cost}, 
-                {salePosition.DiscountPercentage}, 
-                '{salePosition.WarrantyPeriod}'
-            ) returning *
-        """;
+        throw new NotImplementedException("This method cannot be implemented because of architecture restrictions");
+
 
     protected override string ConstructAndReturnEditQueryString(SalePosition salePosition) =>
         $"""
