@@ -17,7 +17,7 @@ public abstract class TestBase : IAsyncLifetime
             .Build();
         
         Container.StartAsync().Wait();
-        ConnectionString = Container.GetConnectionString();
+        ConnectionString = $"{Container.GetConnectionString()};Include Error Detail=true";
 
         InitDb().Wait();
     }

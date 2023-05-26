@@ -6,7 +6,7 @@ create or replace function edit_configuration(
     _new_component_ids integer[]
     ) returns computer_configurations_with_component_ids
 as $$
-    declare edited_configuration computer_configurations;
+    declare edited_configuration computer_configurations_with_component_ids;
 begin
     if (array_length(_new_component_ids, 1) < 1) then
         raise exception 'configuration cannot consist of from zero number components';
