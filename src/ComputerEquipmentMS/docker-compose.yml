@@ -4,7 +4,7 @@ services:
     server:
         container_name: computer_equipment_ms_server
         image: computer_equipment_ms_server:latest
-        build: ./Server
+        build: ./ComputerEquipmentMS
         networks:
             - computer_equipment_ms_network
     
