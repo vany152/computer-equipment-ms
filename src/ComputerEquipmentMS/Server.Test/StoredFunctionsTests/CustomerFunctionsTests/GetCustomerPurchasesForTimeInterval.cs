@@ -80,7 +80,7 @@ public class GetCustomerPurchasesForTimeInterval : CustomerFunctionsTestBase
     [MemberData(nameof(NonExistingCustomerIds))]
     public void GetPurchasesOfNonExistingCustomerShouldReturnEmptyCollection(int customerId, TimeInterval timeInterval) 
     {
-        var sales = Executor.GetCustomersPurchases(customerId);
+        var sales = Executor.GetCustomersPurchases(customerId, timeInterval);
         sales.Should().BeEmpty();
     }
     
