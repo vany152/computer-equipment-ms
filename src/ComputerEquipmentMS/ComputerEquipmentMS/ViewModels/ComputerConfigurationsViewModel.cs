@@ -2,9 +2,9 @@
 
 namespace ComputerEquipmentMS.ViewModels;
 
-public class ComputerConfigurationsViewModel : Collection<ComputerConfigurationViewModel>
+public class ComputerConfigurationsViewModel : Collection<ComputerConfigurationDetailsViewModel>
 {
-    public ComputerConfigurationsViewModel(IEnumerable<ComputerConfigurationViewModel> configurations)
+    public ComputerConfigurationsViewModel(IEnumerable<ComputerConfigurationDetailsViewModel> configurations)
         : base (configurations.ToList())
     {
         

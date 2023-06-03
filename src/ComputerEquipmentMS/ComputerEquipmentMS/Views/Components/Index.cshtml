@@ -21,6 +21,8 @@
                 <th>Спецификации</th>
                 <th>Стоимость закупки</th>
                 <th>Гарантия производителя</th>
+                <th/>
+                <th/>
             </tr>
         </thread>
         @foreach (var component in components)
@@ -33,7 +35,7 @@
                 <td>@component.Cost</td>
                 <td>@component.WarrantyPeriodMonths мес.</td>
                 <td style="text-align: right;">
-                    <form asp-controller="Components" style="display: flex">
+                    <form asp-controller="Components">
                         <button type="submit" class="btn btn-outline-secondary btn-sm" asp-action="Edit" asp-route-id="@component.Id" formmethod="get">Изменить</button>
                         <button type="submit" onclick="return confirmDeletion()" class="btn btn-outline-secondary btn-sm" asp-action="Remove" asp-route-id="@component.Id" formmethod="post">Удалить</button>
                     </form>

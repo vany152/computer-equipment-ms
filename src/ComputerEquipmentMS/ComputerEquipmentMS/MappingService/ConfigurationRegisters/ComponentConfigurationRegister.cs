@@ -7,7 +7,7 @@ using ComputerEquipmentMS.Models.Auxiliary;
 using ComputerEquipmentMS.Models.Domain;
 using ComputerEquipmentMS.ViewModels;
 using Mapster;
-using NodaTime;
+using static ComputerEquipmentMS.MappingService.ConfigurationRegisters.CommonFuncs;
 
 namespace ComputerEquipmentMS.MappingService.ConfigurationRegisters;
 
@@ -106,12 +106,6 @@ public class ComponentConfigurationRegister : IRegister
     
     private static ComponentCategory CreateComponentCategory(int id, string name) => 
         new() { Id = id, Name = name };
-
-    private static int WarrantyPeriodToMonths(Period warrantyPeriod) =>
-        warrantyPeriod.Years * 12 + warrantyPeriod.Months;
-
-    private static Period WarrantyPeriodFromMonths(int months) =>
-        Period.FromMonths(months);
 
     private static string SerializeSpecifications(ComponentSpecifications specifications)
     {

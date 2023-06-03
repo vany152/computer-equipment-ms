@@ -9,4 +9,10 @@ public class ComponentsViewModel : Collection<ComponentViewModel>
     {
         
     }
+
+    
+    // ReSharper disable once UnusedMember.Global
+    public ComponentsViewModel()
+    {
+    }
 }

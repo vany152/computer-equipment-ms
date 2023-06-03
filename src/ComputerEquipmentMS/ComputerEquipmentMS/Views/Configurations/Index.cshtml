@@ -1,5 +1,4 @@
-﻿@using static ComputerEquipmentMS.Views.CommonFuncs.Formatter
-@model ComputerEquipmentMS.ViewModels.ComputerConfigurationsViewModel
+﻿@model ComputerEquipmentMS.ViewModels.ComputerConfigurationsViewModel
 
 @{
     var configurations = Model;
@@ -26,14 +25,22 @@
         {
             <tr>
                 <td>@configuration.Name</td>
-                <td>@FormatPeriodToString(configuration.WarrantyPeriod)</td>
+                <td>@configuration.WarrantyPeriodMonths мес.</td>
                 <td>@configuration.Margin</td>
-                <td>
-                    <form asp-controller="Configurations" asp-action="Details" asp-route-id="@configuration.Id" method="get">
-                        <button type="submit" class="btn btn-outline-secondary btn-sm">Подробнее</button>
+                <td style="text-align: right;">
+                    <form asp-controller="Configurations">
+                        <button type="submit" class="btn btn-outline-secondary btn-sm" formmethod="get" asp-action="Details" asp-route-id="@configuration.Id">Подробнее</button>
+                        <button type="submit" class="btn btn-outline-secondary btn-sm" formmethod="get" asp-action="Edit" asp-route-id="@configuration.Id">Изменить</button>
+                        <button type="submit" onclick="return confirmDeletion()" class="btn btn-outline-secondary btn-sm" formmethod="post" asp-action="Remove" asp-route-id="@configuration.Id">Удалить</button>
                     </form>
                 </td>
             </tr>
         }
     </table>
 </div>
+
+<script lang="js">
+function confirmDeletion() {
+    return confirm("Вы действительно хотите удалить эту сборку?");
+}
+</script>

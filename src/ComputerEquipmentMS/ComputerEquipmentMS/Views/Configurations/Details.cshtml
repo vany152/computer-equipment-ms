@@ -1,5 +1,4 @@
-﻿@using static ComputerEquipmentMS.Views.CommonFuncs.Formatter
-@model ComputerEquipmentMS.ViewModels.ComputerConfigurationViewModel
+﻿@model ComputerEquipmentMS.ViewModels.ComputerConfigurationDetailsViewModel
 
 @{
     var configuration = Model;
@@ -7,7 +6,7 @@
 
 <h1 class="display-4">@configuration.Name</h1>
 <div name="warrantyPeriod" class="form-floating mb-3">
-    <input type="text" id="warrantyPeriodInput" placeholder="@FormatPeriodToString(configuration.WarrantyPeriod)" value="@FormatPeriodToString(configuration.WarrantyPeriod)" class="form-control">
+    <input type="text" id="warrantyPeriodInput" placeholder="@configuration.WarrantyPeriodMonths" value="@configuration.WarrantyPeriodMonths" class="form-control">
     <label for="warrantyPeriodInput">Гарантия</label>
 </div>
 <div name="margin" class="form-floating mb-3">

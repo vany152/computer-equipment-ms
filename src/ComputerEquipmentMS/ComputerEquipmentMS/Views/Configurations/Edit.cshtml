@@ -1,0 +1,121 @@
+﻿@using ComputerEquipmentMS.ViewModels
+@using System.Text.Json
+@model ComputerEquipmentMS.ViewModels.EditComputerConfigurationViewModel
+
+@{
+    var configuration = Model;
+    
+    var components = (ComponentsViewModel) ViewBag.Components;
+    var configurationComponentIds = GetConfigurationComponentIdsFromJson(configuration.ComponentIdsJson);
+    
+    ICollection<int> GetConfigurationComponentIdsFromJson(string json) =>
+        JsonSerializer.Deserialize<List<int>>(json) ?? new List<int>();
+
+    bool DoesComponentBelongToConfiguration(ComponentViewModel component) =>
+        configurationComponentIds.Contains(component.Id);
+}
+
+<h2 class="display-4">Создание компьютерной сборки</h2>
+
+<div>
+    <form asp-controller="Configurations" asp-action="Edit" method="post" onsubmit="return checkComponentsSelection();">
+        <div class="form-floating" style="margin-top: 20px">
+            <input type="text" id="nameInput" asp-for="Name" class="form-control" required>
+            <label for="nameInput">Название</label>
+        </div>
+        
+        <div class="form-floating" style="margin-top: 20px">
+            <input type="number" id="warrantyPeriodInput" asp-for="WarrantyPeriodMonths" class="form-control" required style="flex-grow: 1; flex-basis: 0">
+            <label for="warrantyPeriodInput">Гарантия производителя (в месяцах)</label>
+        </div>
+        
+        <div name="margin" class="form-floating mb-3" style="margin-top: 20px">
+            <input type="number" step="0.01" id="marginInput" asp-for="Margin" class="form-control" required>
+            <label for="marginInput">Надбавка</label>
+        </div>
+        
+        <div id="components">
+            <h4 class="display-6">Компоненты</h4>
+            <input id="componentIdsJsonCollector" type="text" asp-for="ComponentIdsJson" hidden>
+            <input id="componentIdsJsonCollectorNotEmpty" type="checkbox" hidden>
+            <table class="table table-hover">
+                <thread>
+                    <tr>
+                        <th/>
+                        <th>Название</th>
+                        <th>Категория</th>
+                        <th>Производитель</th>
+                        <th>Спецификации</th>
+                        <th>Стоимость закупки</th>
+                        <th>Гарантия производителя</th>
+                    </tr>
+                </thread>
+                @foreach (var component in components)
+                {
+                    <tr>
+                        <td>
+                            @if(DoesComponentBelongToConfiguration(component))
+                            {
+                                <input type="checkbox" id="checkboxComponent-@component.Id" class="form-check-input" style="height: 25px; width: 25px" checked>
+                            }
+                            else
+                            {
+                                <input type="checkbox" id="checkboxComponent-@component.Id" class="form-check-input" style="height: 25px; width: 25px">
+                            }
+                        </td>
+                        <td>@component.Name</td>
+                        <td>@component.ComponentCategory</td>
+                        <td>@component.ComponentManufacturer</td>
+                        <td style="white-space: pre">@component.Specifications</td>
+                        <td>@component.Cost</td>
+                        <td>@component.WarrantyPeriodMonths мес.</td>
+                    </tr>
+                }
+            </table>
+        </div>
+    
+        <div style="display: flex; width: 100%; margin-top: 20px">
+            <button type="submit" onclick="collectComponentIdsIntoCollector()" class="btn btn-light" style="flex-grow: 1; flex-basis: 0">Сохранить</button>
+            <button type="button" onclick="history.back()" class="btn btn-light" style="flex-grow: 1; flex-basis: 0; margin-left: 10px">Отменить</button>
+        </div>
+    </form>
+</div>
+
+<script lang="js">
+function collectComponentIdsIntoCollector() {
+    let componentCheckboxes = document.querySelectorAll('[id^="checkboxComponent-"]'); 
+    let checkedComponentIds = selectCheckedComponentIds(componentCheckboxes);
+    
+    let collector = document.getElementById("componentIdsJsonCollector");    
+    collector.value = JSON.stringify(checkedComponentIds);
+    
+    if (checkedComponentIds.length > 0) {
+        let collectorNotEmptyFlag = document.getElementById("componentIdsJsonCollectorNotEmpty");
+        collectorNotEmptyFlag.checked = true;
+    }
+}
+
+function selectCheckedComponentIds(componentCheckboxes) {
+    let ids = [];
+    Array.prototype.forEach.call(componentCheckboxes,
+        (checkbox) => {
+            if (checkbox.checked === true) {
+                let id = checkbox.id.replace("checkboxComponent-", "");
+                ids.push(Number(id))
+            }
+        });
+    
+    return ids;
+}
+
+function checkComponentsSelection() {
+    let collectorNotEmptyFlag = document.getElementById("componentIdsJsonCollectorNotEmpty");
+    
+    let componentsSelected = collectorNotEmptyFlag.checked
+    if (!componentsSelected) {
+        alert("Должен быть выбран хотя бы один компонент!");
+    }
+    
+    return componentsSelected;
+}
+</script>
