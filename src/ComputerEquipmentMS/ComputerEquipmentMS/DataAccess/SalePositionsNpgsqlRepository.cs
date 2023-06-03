@@ -1,20 +1,21 @@
-﻿using ComputerEquipmentMS.Models.Domain;
+﻿using ComputerEquipmentMS.DataAccess.Entities;
+using ComputerEquipmentMS.Models.Domain;
 using static ComputerEquipmentMS.DataAccess.Constants.DbTableNames;
 
 namespace ComputerEquipmentMS.DataAccess;
 
-public class SalePositionsNpgsqlRepository : AbstractNpgsqlRepository<SalePosition, int>
+public class SalePositionsNpgsqlRepository : AbstractNpgsqlRepository<SalePosition, SalePositionEntity, int>
 {
-    public SalePositionsNpgsqlRepository(string connectionString, string tableName = SalePositionsTableName) 
-        : base(connectionString, tableName, MapDynamicToSalePosition)
+    public SalePositionsNpgsqlRepository(IDbConnectionString connectionString, string tableName = SalePositionsTableName) 
+        : base(connectionString, tableName, DynamicToObjectMapper.MapDynamicToSalePosition)
     {
     }
 
-    protected override string ConstructAndReturnAddQueryString(SalePosition salePosition) =>
+    protected override string ConstructAndReturnAddQueryString(SalePositionEntity salePosition) =>
         throw new NotImplementedException("This method cannot be implemented because of architecture restrictions");
 
 
-    protected override string ConstructAndReturnEditQueryString(SalePosition salePosition) =>
+    protected override string ConstructAndReturnEditQueryString(SalePositionEntity salePosition) =>
         $"""
             update sale_positions
             set sale_id = {salePosition.SaleId},
@@ -24,15 +25,4 @@ public class SalePositionsNpgsqlRepository : AbstractNpgsqlRepository<SalePositi
                 warranty_period = '{salePosition.WarrantyPeriod}'
             where id = {salePosition.Id}
         """;
-
-    private static SalePosition MapDynamicToSalePosition(dynamic obj) =>
-        new()
-        {
-            Id = obj.id,
-            SaleId = obj.sale_id,
-            ConfigurationId = obj.computer_configuration_id,
-            Cost = obj.cost,
-            DiscountPercentage = obj.discount_percentage,
-            WarrantyPeriod = obj.warranty_period,
-        };
 }

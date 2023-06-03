@@ -2,17 +2,18 @@
 using System.Data.Common;
 using ComputerEquipmentMS.Models;
 using Dapper;
+using Mapster;
 
 namespace ComputerEquipmentMS.DataAccess;
 
-public abstract class AbstractSqlRepository<TItem, TId> : ISqlRepository<TItem, TId>
+public abstract class AbstractSqlRepository<TItem, TEntity, TId> : ISqlRepository<TItem, TId>
     where TItem : IIdentifiable<TId>
     where TId : struct
 {
     private readonly DbConnection _dbConnection;
     protected readonly string TableName;
     private string _currentQueryString  = string.Empty;
-    private IEnumerable<TItem> _currentQueryResultItems = new List<TItem>();
+    private IEnumerable<TEntity> _currentQueryResultItems = new List<TEntity>();
 
     /// <summary>
     /// Amount of rows affected by executing SQL-query that does not return result
@@ -24,7 +25,7 @@ public abstract class AbstractSqlRepository<TItem, TId> : ISqlRepository<TItem, 
     /// Function for mapping SQL-query result to TItem type with non-trivial mapping way
     /// </summary>
     /// <remarks>If null, SQL-query result maps directly to TItem type</remarks>
-    private readonly Func<dynamic, TItem>? _queryResultMappingFunction;
+    private readonly Func<dynamic, TEntity>? _queryResultMappingFunction;
     
     
 
@@ -46,7 +47,7 @@ public abstract class AbstractSqlRepository<TItem, TId> : ISqlRepository<TItem, 
     /// <param name="tableName">Database table name, which is related with this repository</param>
     /// <param name="queryResultMappingFunction">Function that maps dynamic query result to TItem</param>
     /// <exception cref="NoNullAllowedException">Non of the arguments can be null or empty</exception>
-    protected AbstractSqlRepository(DbConnection dbConnection, string tableName, Func<dynamic, TItem>? queryResultMappingFunction)
+    protected AbstractSqlRepository(DbConnection dbConnection, string tableName, Func<dynamic, TEntity>? queryResultMappingFunction)
     {
         if (string.IsNullOrEmpty(tableName))
             throw new NoNullAllowedException("Table name cannot be null or empty");
@@ -65,8 +66,8 @@ public abstract class AbstractSqlRepository<TItem, TId> : ISqlRepository<TItem, 
         ConstructGetAllQueryString();
         ExecuteQueryWithResult();
         
-        var itemList = _currentQueryResultItems.ToList();
-        return itemList;
+        var entityList = _currentQueryResultItems.ToList();
+        return entityList.Adapt<List<TItem>>();
     }
 
     /// <inheritdoc/>
@@ -79,24 +80,31 @@ public abstract class AbstractSqlRepository<TItem, TId> : ISqlRepository<TItem, 
         ConstructGetByIdQueryString(id);
         ExecuteQueryWithResult();
         
-        var desiredItem = _currentQueryResultItems.SingleOrDefault();
-        return desiredItem;
+        var desiredEntity = _currentQueryResultItems.SingleOrDefault();
+        return desiredEntity is not null
+            ? desiredEntity.Adapt<TItem>()
+            : default;
     }
 
     /// <inheritdoc/>
     public TItem Add(TItem item)
     {
-        ConstructAddQueryString(item);
+        var entity = item.Adapt<TEntity>();
+        ConstructAddQueryString(entity);
         ExecuteQueryWithResult();
 
-        var addSuccessful = _currentQueryResultItems.Single();
-        return addSuccessful;
+        var newEntity = _currentQueryResultItems.Single();
+        if (newEntity is null)
+            throw new NoNullAllowedException("cannot have null value after add to database");
+        
+        return newEntity.Adapt<TItem>();
     }
 
     /// <inheritdoc/>
     public bool Edit(TItem item)
     {
-        ConstructEditQueryString(item);
+        var entity = item.Adapt<TEntity>();
+        ConstructEditQueryString(entity);
         ExecuteQueryWithoutResult();
 
         var editSuccessful = _amountOfRowsAffectedByQuery > 0;
@@ -132,7 +140,7 @@ public abstract class AbstractSqlRepository<TItem, TId> : ISqlRepository<TItem, 
     private void ExecuteQueryWithResult() =>
         _currentQueryResultItems = _queryResultMappingFunction is not null
             ? _dbConnection.Query(_currentQueryString).Select(_queryResultMappingFunction)
-            : _dbConnection.Query<TItem>(_currentQueryString);
+            : _dbConnection.Query<TEntity>(_currentQueryString);
     
     /// <summary>
     /// Constructs select SQL-query string for retrieving all values from table 
@@ -155,7 +163,7 @@ public abstract class AbstractSqlRepository<TItem, TId> : ISqlRepository<TItem, 
     /// <param name="item">Item to insert to database</param>
     /// <returns>Constructed SQL-query string</returns>
     /// <remarks>Any returning by query values will be ignored</remarks>
-    protected abstract string ConstructAndReturnAddQueryString(TItem item);
+    protected abstract string ConstructAndReturnAddQueryString(TEntity item);
     
     /// <summary>
     /// Constructs and returns update SQL-query string for specified Item
@@ -163,7 +171,7 @@ public abstract class AbstractSqlRepository<TItem, TId> : ISqlRepository<TItem, 
     /// <param name="item">Item to update in database</param>
     /// <returns>Constructed SQL-query string</returns>
     /// <remarks>Any returning by query values will be ignored</remarks>
-    protected abstract string ConstructAndReturnEditQueryString(TItem item);
+    protected abstract string ConstructAndReturnEditQueryString(TEntity item);
 
 
 
@@ -179,10 +187,10 @@ public abstract class AbstractSqlRepository<TItem, TId> : ISqlRepository<TItem, 
     private void ConstructGetByIdQueryString(TId id) => 
         _currentQueryString = ConstructAndReturnGetByIdQueryString(id);
 
-    private void ConstructAddQueryString(TItem item) => 
+    private void ConstructAddQueryString(TEntity item) => 
         _currentQueryString = ConstructAndReturnAddQueryString(item);
     
-    private void ConstructEditQueryString(TItem item) => 
+    private void ConstructEditQueryString(TEntity item) => 
         _currentQueryString = ConstructAndReturnEditQueryString(item);
 
     private void ConstructRemoveQueryString(TId id) => 

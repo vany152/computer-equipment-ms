@@ -30,28 +30,30 @@ public class EditTests : ComponentsRepositoryTestBase
                 new Component
                 {
                     Id = 1,
-                    ComponentCategoryId = 3,
-                    ComponentManufacturerId = 2,
+                    ComponentCategory = new ComponentCategory { Id = 3, Name = "hard drives" },
+                    ComponentManufacturer = new ComponentManufacturer { Id = 2, Name = "intel" },
                     Name = "new name",
                     Specifications = new ComponentSpecifications { ["new spec"] = "val", ["mass"] = "50 kg" },
+                    PurchaseDate = default,
                     Cost = 10,
                     WarrantyPeriod = Period.FromYears(5),
                 },
                 new Component
                 {
                     Id = 1,
-                    ComponentCategoryId = 3,
-                    ComponentManufacturerId = 2,
+                    ComponentCategory = new ComponentCategory { Id = 3, Name = "hard drives" },
+                    ComponentManufacturer = new ComponentManufacturer { Id = 2, Name = "intel" },
                     Name = "new name",
                     Specifications = new ComponentSpecifications { ["new spec"] = "val", ["mass"] = "50 kg" },
+                    PurchaseDate = default,
                     Cost = 10,
                     WarrantyPeriod = Period.FromYears(5),
                 }, 
             },
         };
 
-    
-    
+
+
     [Theory]
     [MemberData(nameof(NonExistingComponents))]
     public void EditNonExistingComponentShouldReturnFalse(Component componentToEdit)
@@ -59,17 +61,53 @@ public class EditTests : ComponentsRepositoryTestBase
         var editSuccessful = Repository.Edit(componentToEdit);
         editSuccessful.Should().BeFalse();
     }
-    
+
     public static IEnumerable<object[]> NonExistingComponents =>
         new List<object[]>
         {
-            new object[] { new Component { Id = 15, Name = string.Empty, Specifications = new ComponentSpecifications(), WarrantyPeriod = Period.Zero }, },
-            new object[] { new Component { Id = 45, Name = string.Empty, Specifications = new ComponentSpecifications(), WarrantyPeriod = Period.Zero }, },
-            new object[] { new Component { Id = 54, Name = string.Empty, Specifications = new ComponentSpecifications(), WarrantyPeriod = Period.Zero }, },
+            new object[]
+            {
+                new Component
+                {
+                    Id = 15,
+                    Name = string.Empty,
+                    Specifications = new ComponentSpecifications(),
+                    WarrantyPeriod = Period.Zero,
+                    ComponentCategory = null,
+                    ComponentManufacturer = null,
+                    PurchaseDate = default,
+                },
+            },
+            new object[]
+            {
+                new Component
+                {
+                    Id = 45,
+                    Name = string.Empty,
+                    Specifications = new ComponentSpecifications(),
+                    WarrantyPeriod = Period.Zero,
+                    ComponentCategory = null,
+                    ComponentManufacturer = null,
+                    PurchaseDate = default
+                },
+            },
+            new object[] 
+            { 
+                new Component
+                {
+                    Id = 54,
+                    Name = string.Empty,
+                    Specifications = new ComponentSpecifications(),
+                    WarrantyPeriod = Period.Zero,
+                    ComponentCategory = null,
+                    ComponentManufacturer = null,
+                    PurchaseDate = default
+                }, 
+            },
         };
-    
-    
-    
+
+
+
     [Theory]
     [MemberData(nameof(EditComponentShouldNotAffectOtherComponentsTestData))]
     public void EditExistingComponentShouldNotAffectOtherComponent(Component componentToEdit, ICollection<Component> expectedComponents)
@@ -89,10 +127,11 @@ public class EditTests : ComponentsRepositoryTestBase
                 new Component
                 {
                     Id = 1,
-                    ComponentCategoryId = 3,
-                    ComponentManufacturerId = 2,
+                    ComponentCategory = new ComponentCategory { Id = 3, Name = "hard drives" },
+                    ComponentManufacturer = new ComponentManufacturer { Id = 2, Name = "intel" },
                     Name = "new name",
                     Specifications = new ComponentSpecifications { ["new spec"] = "val", ["mass"] = "50 kg" },
+                    PurchaseDate = default,
                     Cost = 10,
                     WarrantyPeriod = Period.FromYears(5),
                 },
@@ -101,30 +140,33 @@ public class EditTests : ComponentsRepositoryTestBase
                     new Component
                     {
                         Id = 1,
-                        ComponentCategoryId = 3,
-                        ComponentManufacturerId = 2,
+                        ComponentCategory = new ComponentCategory { Id = 3, Name = "hard drives" },
+                        ComponentManufacturer = new ComponentManufacturer { Id = 2, Name = "intel" },
                         Name = "new name",
                         Specifications = new ComponentSpecifications { ["new spec"] = "val", ["mass"] = "50 kg" },
+                        PurchaseDate = default,
                         Cost = 10,
                         WarrantyPeriod = Period.FromYears(5),
                     },
                     new Component
                     {
                         Id = 2,
-                        ComponentCategoryId = 2,
-                        ComponentManufacturerId = 2,
+                        ComponentCategory = new ComponentCategory { Id = 2, Name = "processors" },
+                        ComponentManufacturer = new ComponentManufacturer { Id = 2, Name = "intel" },
                         Name = "intel core i7 12700",
                         Specifications = new ComponentSpecifications { ["power"] = "100 wt", ["mass"] = "50 g" },
+                        PurchaseDate = Instant.FromUtc(2019, 10, 15, 12, 00, 00),
                         Cost = 30000,
                         WarrantyPeriod = Period.FromYears(1),
                     },
                     new Component
                     {
                         Id = 3,
-                        ComponentCategoryId = 3,
-                        ComponentManufacturerId = 3,
+                        ComponentCategory = new ComponentCategory { Id = 3, Name = "hard drives" },
+                        ComponentManufacturer = new ComponentManufacturer { Id = 3, Name = "samsung" },
                         Name = "samsung 980 evo ssd",
                         Specifications = new ComponentSpecifications { ["capacity"] = "980 gb", ["mass"] = "50 g", ["reading speed"] = "3500 mb/sec" },
+                        PurchaseDate = Instant.FromUtc(2019, 12, 25, 12, 00, 00),
                         Cost = 15000,
                         WarrantyPeriod = Period.FromYears(5),
                     },

@@ -1,0 +1,60 @@
+﻿@model ComputerEquipmentMS.ViewModels.CustomersViewModel
+
+@{
+    var customers = Model;
+}
+
+<h1 class="display-4">Покупатели</h1>
+
+<div>
+    <div style="text-align: right;">
+        <form method="get" asp-controller="Customers" asp-action="Create">
+            <button type="submit" class="btn btn-outline-dark">Добавить</button>
+        </form>
+    </div>
+
+    <table class="table table-hover">
+        <thread>
+            <tr>
+                <th hidden>Id</th>
+                <th>Имя</th>
+                <th>Контакты</th>
+                <th>Дата регистрации</th>
+                <th/>
+            </tr>
+        </thread>
+        <body>
+        @foreach (var customer in customers)
+        {
+            <form asp-controller="Customers">
+                <tr style="align-content: end">
+                    <td hidden>@customer.Id</td>
+                    <td>@customer.Name</td>
+                    <td>
+                        @if (customer.Phone is not null)
+                        {
+                            <div>Телефон: @customer.Phone</div>      
+                        }
+                        @if (customer.Email is not null)
+                        {
+                            <div>Email: @customer.Email</div>      
+                        }
+                    </td>
+                    <td>@customer.RegistrationDate</td>
+                    <td style="text-align: right;">
+                        <button type="submit" class="btn btn-outline-secondary btn-sm" formmethod="get" asp-action="Details" asp-route-id="@customer.Id">Подробнее</button>
+                        <button type="submit" class="btn btn-outline-secondary btn-sm" formmethod="get" asp-action="Edit" asp-route-id="@customer.Id">Изменить</button>
+                        <button type="submit" onclick="return confirmDeletion()" class="btn btn-outline-secondary btn-sm" formmethod="post" asp-action="Remove" asp-route-id="@customer.Id">Удалить</button>
+                    </td>
+                </tr>
+            </form>
+        }
+        </body>
+    </table>
+</div>
+
+<script lang="js">
+function confirmDeletion() {
+    return confirm('Вы действительно хотите удалить этого покупателя?');
+}
+</script>

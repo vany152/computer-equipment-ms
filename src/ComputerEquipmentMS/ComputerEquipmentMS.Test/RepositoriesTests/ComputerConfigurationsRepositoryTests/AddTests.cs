@@ -41,7 +41,7 @@ public class AddTests : ComputerConfigurationsRepositoryTestBase
                 new ComputerConfiguration
                 {
                     Name = "New configuration",
-                    ComponentIds = new [] { 1, 2 },
+                    Components = new [] { 1, 2 },
                     WarrantyPeriod = Period.FromYears(1),
                     Margin = 2000,
                 },
@@ -49,7 +49,7 @@ public class AddTests : ComputerConfigurationsRepositoryTestBase
                 {
                     Id = 1,
                     Name = "New configuration",
-                    ComponentIds = new [] { 1, 2 },
+                    Components = new [] { 1, 2 },
                     WarrantyPeriod = Period.FromYears(1),
                     Margin = 2000,
                 },
@@ -77,7 +77,7 @@ public class AddTests : ComputerConfigurationsRepositoryTestBase
                 new ComputerConfiguration
                 {
                     Name = "New configuration",
-                    ComponentIds = new [] { 1, 2 },
+                    Components = new [] { 1, 2 },
                     WarrantyPeriod = Period.FromYears(1),
                     Margin = 2000,
                 },
@@ -87,7 +87,7 @@ public class AddTests : ComputerConfigurationsRepositoryTestBase
                     {
                         Id = 1,
                         Name = "configuration 1",
-                        ComponentIds = new [] { 1, 2 },
+                        Components = new [] { 1, 2 },
                         WarrantyPeriod = Period.FromYears(1),
                         Margin = 1000,
                     },
@@ -95,7 +95,7 @@ public class AddTests : ComputerConfigurationsRepositoryTestBase
                     {
                         Id = 2,
                         Name = "configuration 2",
-                        ComponentIds = new [] { 1, 3 },
+                        Components = new [] { 1, 3 },
                         WarrantyPeriod = Period.FromYears(2),
                         Margin = 1500,
                     },
@@ -103,7 +103,7 @@ public class AddTests : ComputerConfigurationsRepositoryTestBase
                     {
                         Id = 3,
                         Name = "New configuration",
-                        ComponentIds = new [] { 1, 2 },
+                        Components = new [] { 1, 2 },
                         WarrantyPeriod = Period.FromYears(1),
                         Margin = 2000,
                     },

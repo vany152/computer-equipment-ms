@@ -1,11 +1,12 @@
-﻿using ComputerEquipmentMS.Models.Domain;
+﻿using ComputerEquipmentMS.DataAccess.Entities;
+using ComputerEquipmentMS.Models.Domain;
 using static ComputerEquipmentMS.DataAccess.Constants.DbTableNames;
 
 namespace ComputerEquipmentMS.DataAccess;
 
-public class SalesNpgsqlRepository : AbstractNpgsqlRepository<Sale, int>
+public class SalesNpgsqlRepository : AbstractNpgsqlRepository<Sale, SaleEntity, int>
 {
-    public SalesNpgsqlRepository(string connectionString, string tableName = SalesTableName) 
+    public SalesNpgsqlRepository(IDbConnectionString connectionString, string tableName = SalesTableName) 
         : base(connectionString, tableName, DynamicToObjectMapper.MapDynamicToSale)
     {
     }
@@ -14,11 +15,11 @@ public class SalesNpgsqlRepository : AbstractNpgsqlRepository<Sale, int>
         "select * from get_sales()";
 
     /// <inheritdoc/>
-    protected override string ConstructAndReturnAddQueryString(Sale sale) =>
+    protected override string ConstructAndReturnAddQueryString(SaleEntity sale) =>
         throw new NotImplementedException("This method cannot be implemented because of architecture restrictions");
 
     /// <inheritdoc/>
-    protected override string ConstructAndReturnEditQueryString(Sale sale) =>
+    protected override string ConstructAndReturnEditQueryString(SaleEntity sale) =>
         $"""
             update {TableName} 
             set customer_id = {sale.CustomerId},

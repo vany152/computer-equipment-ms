@@ -1,0 +1,50 @@
+﻿@using static ComputerEquipmentMS.Views.CommonFuncs.Formatter
+@model ComputerEquipmentMS.ViewModels.ComputerConfigurationViewModel
+
+@{
+    var configuration = Model;
+}
+
+<h1 class="display-4">@configuration.Name</h1>
+<div name="warrantyPeriod" class="form-floating mb-3">
+    <input type="text" id="warrantyPeriodInput" placeholder="@FormatPeriodToString(configuration.WarrantyPeriod)" value="@FormatPeriodToString(configuration.WarrantyPeriod)" class="form-control">
+    <label for="warrantyPeriodInput">Гарантия</label>
+</div>
+<div name="margin" class="form-floating mb-3">
+    <input type="text" id="marginInput" placeholder="@configuration.Margin" value="@configuration.Margin" class="form-control">
+    <label for="marginInput">Надбавка</label>
+</div>
+
+<div name="components">
+    <h6 class="display-6">Комплектующие</h6>
+    <table class="table table-hover">
+        <thread>
+            <tr>
+                <th>Название</th>
+                <th>Категория</th>
+                <th>Производитель</th>
+                <th>Спецификации</th>
+                <th>Стоимость закупки</th>
+                <th>Гарантия производителя</th>
+            </tr>
+        </thread>
+        @foreach (var component in configuration.Components)
+        {
+            <tr>
+                <td>@component.Name</td>
+                <td>@component.ComponentCategory</td>
+                <td>@component.ComponentManufacturer</td>
+                <td style="white-space: pre">@component.Specifications</td>
+                <td>@component.Cost</td>
+                <td>@component.WarrantyPeriodMonths мес.</td>
+            </tr>
+        }
+    </table>
+</div>
+
+<div>
+    <form method="get" asp-controller="Configurations" asp-action="Index" style="display: flex; width: 100%">
+        <button type="submit" class="btn btn-light" style="flex-grow: 1; flex-basis: 0">Все компьютерные сборки</button>
+        <button type="button" onclick="history.back()" class="btn btn-light" style="flex-grow: 1; margin-left: 1%; flex-basis: 0">Назад</button>
+    </form>
+</div>

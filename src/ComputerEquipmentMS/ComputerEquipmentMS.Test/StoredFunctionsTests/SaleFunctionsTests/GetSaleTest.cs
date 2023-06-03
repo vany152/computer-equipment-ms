@@ -25,7 +25,7 @@ public class GetSaleTest : SaleFunctionTestBase
                     SaleMoment = Instant.FromUtc(2021, 05, 30, 12, 00),
                     CustomerId = 1,
                     DiscountPercentage = 0,
-                    SalePositionIds = new []{1}
+                    SalePositions = new []{1}
                 }
             },
             new object?[] 
@@ -37,7 +37,7 @@ public class GetSaleTest : SaleFunctionTestBase
                     SaleMoment = Instant.FromUtc(2020, 01, 02, 12, 00),
                     CustomerId = 2,
                     DiscountPercentage = 5,
-                    SalePositionIds = new []{2, 3}
+                    SalePositions = new []{2, 3}
                 }
             },
             new object?[] 
@@ -49,7 +49,7 @@ public class GetSaleTest : SaleFunctionTestBase
                     SaleMoment = Instant.FromUtc(2022, 05, 30, 12, 00),
                     CustomerId = 1,
                     DiscountPercentage = 10,
-                    SalePositionIds = new []{4, 5, 6} 
+                    SalePositions = new []{4, 5, 6} 
                 }
             }
         };

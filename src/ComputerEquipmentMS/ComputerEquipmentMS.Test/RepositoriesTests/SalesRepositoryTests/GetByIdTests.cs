@@ -29,7 +29,7 @@ public class GetByIdTests : SalesRepositoryTestBase
                     CustomerId = 1,
                     SaleMoment = Instant.FromUtc(2021, 05, 30, 12, 00, 00),
                     DiscountPercentage = 0,
-                    SalePositionIds = new[] { 1 }
+                    SalePositions = new[] { 1 }
                 } 
             },
             new object[] 
@@ -40,7 +40,7 @@ public class GetByIdTests : SalesRepositoryTestBase
                     CustomerId = 2,
                     SaleMoment = Instant.FromUtc(2020, 01, 02, 12, 00, 00),
                     DiscountPercentage = 5,
-                    SalePositionIds = new[] { 2, 3 }
+                    SalePositions = new[] { 2, 3 }
                 } 
             },
             new object[] 
@@ -51,7 +51,7 @@ public class GetByIdTests : SalesRepositoryTestBase
                     CustomerId = 1,
                     SaleMoment = Instant.FromUtc(2022, 05, 30, 12, 00, 00),
                     DiscountPercentage = 10,
-                    SalePositionIds = new List<int>{ 4, 5, 6 }
+                    SalePositions = new List<int>{ 4, 5, 6 }
                 } 
             },
         };

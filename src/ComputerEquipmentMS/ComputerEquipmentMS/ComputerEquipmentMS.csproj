@@ -10,17 +10,22 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Dapper" Version="2.0.123"/>
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.5"/>
-        <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.2"/>
-        <PackageReference Include="NodaTime" Version="3.1.9"/>
-        <PackageReference Include="Npgsql" Version="8.0.0-preview.4"/>
-        <PackageReference Include="Npgsql.NodaTime" Version="8.0.0-preview.4"/>
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
+        <PackageReference Include="Dapper" Version="2.0.123" />
+        <PackageReference Include="Mapster" Version="7.4.0-pre06" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.5" />
+        <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.2" />
+        <PackageReference Include="NodaTime" Version="3.1.9" />
+        <PackageReference Include="Npgsql" Version="8.0.0-preview.4" />
+        <PackageReference Include="Npgsql.NodaTime" Version="8.0.0-preview.4" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     </ItemGroup>
 
     <ItemGroup>
-        <None Remove="..\.dockerignore"/>
+        <None Remove="..\.dockerignore" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Models\Extensions\" />
     </ItemGroup>
 
 </Project>

@@ -1,23 +1,24 @@
-﻿using ComputerEquipmentMS.Models.Domain;
+﻿using ComputerEquipmentMS.DataAccess.Entities;
+using ComputerEquipmentMS.Models.Domain;
 using static ComputerEquipmentMS.DataAccess.Constants.DbTableNames;
 
 namespace ComputerEquipmentMS.DataAccess;
 
-public class ComponentCategoriesNpgsqlRepository : AbstractNpgsqlRepository<ComponentCategory, int>
+public class ComponentCategoriesNpgsqlRepository : AbstractNpgsqlRepository<ComponentCategory, ComponentCategoryEntity, int>
 {
-    public ComponentCategoriesNpgsqlRepository(string connectionString, string tableName = ComponentCategoriesTableName)
+    public ComponentCategoriesNpgsqlRepository(IDbConnectionString connectionString, string tableName = ComponentCategoriesTableName)
         : base(connectionString, tableName)
     {
     }
 
     /// <inheritdoc/>
-    protected override string ConstructAndReturnAddQueryString(ComponentCategory category) =>
+    protected override string ConstructAndReturnAddQueryString(ComponentCategoryEntity category) =>
         $"""
             select * from create_component_category('{category.Name}')
         """;
 
     /// <inheritdoc/>
-    protected override string ConstructAndReturnEditQueryString(ComponentCategory category) =>
+    protected override string ConstructAndReturnEditQueryString(ComponentCategoryEntity category) =>
         $"""
             update {TableName}
             set name = '{category.Name}'

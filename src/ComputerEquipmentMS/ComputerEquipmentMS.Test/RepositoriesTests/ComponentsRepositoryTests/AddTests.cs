@@ -37,20 +37,22 @@ public class AddTests : ComponentsRepositoryTestBase
             {
                 new Component
                 {
-                    ComponentCategoryId = 2,
-                    ComponentManufacturerId = 2,
+                    ComponentCategory = new ComponentCategory { Id = 2, Name = "processors" },
+                    ComponentManufacturer = new ComponentManufacturer { Id = 2, Name = "intel" },
                     Name = "new component",
                     Specifications = new ComponentSpecifications { ["spec"] = "value" },
+                    PurchaseDate = Instant.FromUtc(2023, 06, 01, 12, 00, 00),
                     Cost = 15000,
                     WarrantyPeriod = Period.FromYears(1),
                 },
                 new Component
                 {
                     Id = 1,
-                    ComponentCategoryId = 2,
-                    ComponentManufacturerId = 2,
+                    ComponentCategory = new ComponentCategory { Id = 2, Name = "processors" },
+                    ComponentManufacturer = new ComponentManufacturer { Id = 2, Name = "intel" },
                     Name = "new component",
                     Specifications = new ComponentSpecifications { ["spec"] = "value" },
+                    PurchaseDate = Instant.FromUtc(2023, 06, 01, 12, 00, 00),
                     Cost = 15000,
                     WarrantyPeriod = Period.FromYears(1),
                 }
@@ -77,10 +79,11 @@ public class AddTests : ComponentsRepositoryTestBase
             {
                 new Component
                 {
-                    ComponentCategoryId = 2,
-                    ComponentManufacturerId = 2,
+                    ComponentCategory = new ComponentCategory { Id = 2, Name = "processors" },
+                    ComponentManufacturer = new ComponentManufacturer { Id = 2, Name = "intel" },
                     Name = "new component",
                     Specifications = new ComponentSpecifications { ["spec"] = "value" },
+                    PurchaseDate = Instant.FromUtc(2023, 06, 01, 12, 00, 00),
                     Cost = 15000,
                     WarrantyPeriod = Period.FromYears(1),
                 },
@@ -89,40 +92,44 @@ public class AddTests : ComponentsRepositoryTestBase
                     new Component
                     {
                         Id = 1,
-                        ComponentCategoryId = 1,
-                        ComponentManufacturerId = 1,
+                        ComponentCategory = new ComponentCategory { Id = 1, Name = "video cards" },
+                        ComponentManufacturer = new ComponentManufacturer { Id = 1, Name = "nvidia" },
                         Name = "rtx 4090",
                         Specifications = new ComponentSpecifications { ["fans"] = "3", ["mass"] = "2 kg" },
+                        PurchaseDate = Instant.FromUtc(2019, 09, 10, 12, 00, 00),
                         Cost = 90000,
                         WarrantyPeriod = Period.FromYears(1),
                     },
                     new Component
                     {
                         Id = 2,
-                        ComponentCategoryId = 2,
-                        ComponentManufacturerId = 2,
+                        ComponentCategory = new ComponentCategory { Id = 2, Name = "processors" },
+                        ComponentManufacturer = new ComponentManufacturer { Id = 2, Name = "intel" },
                         Name = "intel core i7 12700",
                         Specifications = new ComponentSpecifications { ["power"] = "100 wt", ["mass"] = "50 g" },
+                        PurchaseDate = Instant.FromUtc(2019, 10, 15, 12, 00, 00),
                         Cost = 30000,
                         WarrantyPeriod = Period.FromYears(1),
                     },
                     new Component
                     {
                         Id = 3,
-                        ComponentCategoryId = 3,
-                        ComponentManufacturerId = 3,
+                        ComponentCategory = new ComponentCategory { Id = 3, Name = "hard drives" },
+                        ComponentManufacturer = new ComponentManufacturer { Id = 3, Name = "samsung" },
                         Name = "samsung 980 evo ssd",
                         Specifications = new ComponentSpecifications { ["capacity"] = "980 gb", ["mass"] = "50 g", ["reading speed"] = "3500 mb/sec" },
+                        PurchaseDate = Instant.FromUtc(2019, 12, 25, 12, 00, 00),
                         Cost = 15000,
                         WarrantyPeriod = Period.FromYears(5),
                     },
                     new Component
                     {
                         Id = 4,
-                        ComponentCategoryId = 2,
-                        ComponentManufacturerId = 2,
+                        ComponentCategory = new ComponentCategory { Id = 2, Name = "processors" },
+                        ComponentManufacturer = new ComponentManufacturer { Id = 2, Name = "intel" },
                         Name = "new component",
                         Specifications = new ComponentSpecifications { ["spec"] = "value" },
+                        PurchaseDate = Instant.FromUtc(2023, 06, 01, 12, 00, 00),
                         Cost = 15000,
                         WarrantyPeriod = Period.FromYears(1),
                     },

@@ -4,10 +4,10 @@ namespace ComputerEquipmentMS.Models.Domain;
 
 public class SalePositionInfo
 {
-    public int SalePositionId;
-    public Instant SaleMoment;
-    public decimal StartingCost;
-    public decimal FinalCost;
-    public short DiscountPercentage;
-    public required Period WarrantyPeriod;
+    public int SalePositionId { get; set; }
+    public Instant SaleMoment { get; set; }
+    public decimal StartingCost { get; set; }
+    public decimal FinalCost { get; set; }
+    public short DiscountPercentage { get; set; }
+    public required Period WarrantyPeriod { get; set; }
 }

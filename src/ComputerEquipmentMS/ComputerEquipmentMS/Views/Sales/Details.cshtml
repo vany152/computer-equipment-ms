@@ -1,0 +1,68 @@
+﻿@using static ComputerEquipmentMS.Views.CommonFuncs.Formatter
+@using static ComputerEquipmentMS.Views.CommonFuncs.Converter
+@model ComputerEquipmentMS.ViewModels.SaleViewModel
+
+@{
+    var sale = Model;
+    var salePositions = sale.SalePositions; 
+}
+
+<h1 class="display-4">Детали продажи</h1>
+
+<div>
+    <table class="table table-hover">
+        <thread>
+            <tr>
+                <th>Дата продажи</th>
+                <th>Время продажи</th>
+                <th>Начальная цена</th>
+                <th>Скидка, %</th>
+                <th>Конечная цена</th>
+            </tr>
+        </thread>
+        <tr>
+            <td>@LocalDateFromInstant(sale.SaleMoment)</td>
+            <td>@FormatInstantToTime(sale.SaleMoment)</td>
+            <td>@sale.StartingCost</td>
+            <td>@sale.DiscountPercentage</td>
+            <td>@sale.FinalCost</td>
+        </tr>
+    </table>
+</div>
+
+<div>
+    <h5 class="display-6">Позиции продажи</h5>
+    <table class="table table-hover">
+        <thread>
+            <tr>
+                <th>Сборка</th>
+                <th>Начальная цена</th>
+                <th>Скидка, %</th>
+                <th>Конечная цена</th>
+                <th>Гарантийный период</th>
+            </tr>
+        </thread>
+        @foreach (var salePosition in salePositions)
+        {
+            <tr>
+                <td>
+                    <a asp-controller="Configurations" asp-action="Details" asp-route-id="@salePosition.Configuration.Id">
+                        @salePosition.Configuration.Name
+                    </a>
+                </td>
+                <td>@salePosition.StartingCost</td>
+                <td>@salePosition.DiscountPercentage</td>
+                <td>@salePosition.FinalCost</td>
+                <td>@FormatPeriodToString(@salePosition.WarrantyPeriod)</td>
+            </tr>
+        }
+    </table>
+</div>
+
+<div>
+    <form method="get" asp-controller="Sales" asp-action="Index" style="display: flex; width: 100%">
+        <button type="submit" class="btn btn-light" style="flex-grow: 1; flex-basis: 0">Все продажи</button>
+        <button type="button" onclick="history.back()" class="btn btn-light" style="flex-grow: 1; margin-left: 1%; flex-basis: 0">Назад</button>
+    </form>
+</div>
+

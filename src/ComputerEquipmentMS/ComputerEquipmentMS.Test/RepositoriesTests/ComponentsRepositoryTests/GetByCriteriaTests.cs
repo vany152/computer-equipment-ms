@@ -36,7 +36,7 @@ public class GetByCriteriaTests : ComponentsRepositoryTestBase
     [MemberData(nameof(GetComponentsByCategoryIdData))]
     public void GetByCategoryIdShouldReturnCorrectComponentIds(int id, IEnumerable<int> expectedComponentIds)
     {
-        var components = Repository.GetByCriteria(component => component.ComponentCategoryId == id);
+        var components = Repository.GetByCriteria(component => component.ComponentCategory == id);
         var componentIds = GetComponentIds(components);
         componentIds.Should().BeEquivalentTo(expectedComponentIds);
     }
@@ -55,7 +55,7 @@ public class GetByCriteriaTests : ComponentsRepositoryTestBase
     [MemberData(nameof(GetComponentsByManufacturerIdData))]
     public void GetByManufacturerIdShouldReturnCorrectComponentIds(int id, IEnumerable<int> expectedComponentIds)
     {
-        var components = Repository.GetByCriteria(component => component.ComponentManufacturerId == id);
+        var components = Repository.GetByCriteria(component => component.ComponentManufacturer == id);
         var componentIds = GetComponentIds(components);
         componentIds.Should().BeEquivalentTo(expectedComponentIds);
     }

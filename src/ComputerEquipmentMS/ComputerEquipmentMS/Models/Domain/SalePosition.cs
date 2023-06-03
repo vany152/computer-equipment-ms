@@ -8,7 +8,7 @@ public class SalePosition : IIdentifiable<int>
 
     public int SaleId { get; set; }
     
-    public int ConfigurationId { get; set; }
+    public required ComputerConfiguration Configuration { get; set; }
 
     public decimal Cost { get; set; }
     public short DiscountPercentage { get; set; }

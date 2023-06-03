@@ -1,17 +1,17 @@
 ﻿using System.Runtime.Serialization;
 using System.Text.Json;
-using ComputerEquipmentMS.Models.Auxiliary;
-using ComputerEquipmentMS.Models.Domain;
+using ComputerEquipmentMS.DataAccess.Entities;
+using ComputerEquipmentMS.DataAccess.Entities.Auxiliary;
 
 namespace ComputerEquipmentMS.DataAccess;
 
 public static class DynamicToObjectMapper
 {
-    public static Component MapDynamicToComponent(dynamic obj)
+    public static ComponentEntity MapDynamicToComponent(dynamic obj)
     {
         var deserializedSpecifications = DeserializeSpecifications(obj.specifications);
         
-        var component = new Component
+        var component = new ComponentEntity
         {
             Id = obj.id,
             ComponentCategoryId = obj.component_category_id,
@@ -25,16 +25,16 @@ public static class DynamicToObjectMapper
         return component;
     }
     
-    private static ComponentSpecifications DeserializeSpecifications(string specifications)
+    private static ComponentSpecificationsEntity DeserializeSpecifications(string specifications)
     {
-        var deserializedSpecifications = JsonSerializer.Deserialize<ComponentSpecifications>(specifications);
+        var deserializedSpecifications = JsonSerializer.Deserialize<ComponentSpecificationsEntity>(specifications);
         if (deserializedSpecifications is null)
             throw new SerializationException("cannot deserialize component specifications");
 
         return deserializedSpecifications;
     }
     
-    public static ComputerConfiguration MapDynamicToComputerConfiguration(dynamic obj) =>
+    public static ComputerConfigurationEntity MapDynamicToComputerConfiguration(dynamic obj) =>
         new()
         {
             Id = obj.id,
@@ -44,7 +44,7 @@ public static class DynamicToObjectMapper
             ComponentIds = obj.component_ids
         };
 
-    public static SalePositionInfo MapDynamicToSalePositionInfo(dynamic obj) =>
+    public static SalePositionInfoEntity MapDynamicToSalePositionInfo(dynamic obj) =>
         new()
         {
             SalePositionId = obj.sale_position_id,
@@ -55,7 +55,7 @@ public static class DynamicToObjectMapper
             WarrantyPeriod = obj.warranty_period,
         };
     
-    public static Sale MapDynamicToSale(dynamic obj) =>
+    public static SaleEntity MapDynamicToSale(dynamic obj) =>
         new ()
         {
             Id = obj.id,
@@ -65,11 +65,11 @@ public static class DynamicToObjectMapper
             SalePositionIds = obj.sale_position_ids
         };
     
-    public static Customer MapDynamicToCustomer(dynamic obj)
+    public static CustomerEntity MapDynamicToCustomer(dynamic obj)
     {
         var deserializedContacts = DeserializeContacts(obj.contacts);
         
-        var customer = new Customer
+        var customer = new CustomerEntity
         {
             Id = obj.id,
             Name = obj.name,
@@ -80,8 +80,21 @@ public static class DynamicToObjectMapper
         return customer;
     }
 
-    private static Contacts? DeserializeContacts(string contacts) =>
+    public static SalePositionEntity MapDynamicToSalePosition(dynamic obj) =>
+        new()
+        {
+            Id = obj.id,
+            SaleId = obj.sale_id,
+            ConfigurationId = obj.computer_configuration_id,
+            Cost = obj.cost,
+            DiscountPercentage = obj.discount_percentage,
+            WarrantyPeriod = obj.warranty_period,
+        };
+
+    
+    
+    private static ContactsEntity? DeserializeContacts(string contacts) =>
         string.IsNullOrEmpty(contacts)
             ? null
-            : JsonSerializer.Deserialize<Contacts>(contacts);
+            : JsonSerializer.Deserialize<ContactsEntity>(contacts);
 }

@@ -1,19 +1,20 @@
 ﻿using System.Text.Json;
-using ComputerEquipmentMS.Models.Auxiliary;
+using ComputerEquipmentMS.DataAccess.Entities;
+using ComputerEquipmentMS.DataAccess.Entities.Auxiliary;
 using ComputerEquipmentMS.Models.Domain;
 using static ComputerEquipmentMS.DataAccess.Constants.DbTableNames;
 
 namespace ComputerEquipmentMS.DataAccess;
 
-public class ComponentsNpgsqlRepository : AbstractNpgsqlRepository<Component, int>
+public class ComponentsNpgsqlRepository : AbstractNpgsqlRepository<Component, ComponentEntity, int>
 {
-    public ComponentsNpgsqlRepository(string connectionString, string tableName = ComponentsTableName) 
-        : base(connectionString, tableName, DynamicToObjectMapper.MapDynamicToComponent)
+    public ComponentsNpgsqlRepository(IDbConnectionString connectionString, string tableName = ComponentsTableName) 
+        : base(connectionString, tableName, obj => DynamicToObjectMapper.MapDynamicToComponent(obj))
     {
     }
 
     /// <inheritdoc/>
-    protected override string ConstructAndReturnAddQueryString(Component component)
+    protected override string ConstructAndReturnAddQueryString(ComponentEntity component)
     {
         var serializedSpecifications = SerializeSpecifications(component.Specifications);
 
@@ -24,7 +25,7 @@ public class ComponentsNpgsqlRepository : AbstractNpgsqlRepository<Component, in
                      {component.ComponentManufacturerId}, 
                     '{component.Name}',
                     '{serializedSpecifications}'::jsonb,
-                     {component.Cost},
+                     {component.Cost}::numeric,
                     '{component.WarrantyPeriod}'::interval
                 )
             """;
@@ -33,7 +34,7 @@ public class ComponentsNpgsqlRepository : AbstractNpgsqlRepository<Component, in
     }
 
     /// <inheritdoc/>
-    protected override string ConstructAndReturnEditQueryString(Component component)
+    protected override string ConstructAndReturnEditQueryString(ComponentEntity component)
     {
         var serializedSpecifications = SerializeSpecifications(component.Specifications);
         
@@ -44,7 +45,7 @@ public class ComponentsNpgsqlRepository : AbstractNpgsqlRepository<Component, in
                     component_manufacturer_id = {component.ComponentManufacturerId},
                     name = '{component.Name}',
                     specifications = '{serializedSpecifications}'::jsonb,
-                    cost = {component.Cost},
+                    cost = {component.Cost}::numeric,
                     warranty_period = '{component.WarrantyPeriod}'::interval
                 where id = {component.Id}
             """;
@@ -54,6 +55,6 @@ public class ComponentsNpgsqlRepository : AbstractNpgsqlRepository<Component, in
 
     
 
-    private static string SerializeSpecifications(ComponentSpecifications specifications) =>
+    private static string SerializeSpecifications(ComponentSpecificationsEntity specifications) =>
         JsonSerializer.Serialize(specifications);
 }

@@ -1,0 +1,79 @@
+﻿@using ComputerEquipmentMS.Models.Auxiliary
+@using ComputerEquipmentMS.ViewModels
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model ComputerEquipmentMS.ViewModels.ComponentViewModel
+
+@{
+    var component = Model;
+    var specifications = (ComponentSpecifications) ViewBag.Specifications;
+
+    var componentCategories = (ICollection<ComponentCategoryViewModel>) ViewBag.ComponentCategories;
+    var componentManufacturers = (ICollection<ComponentManufacturerViewModel>) ViewBag.ComponentManufacturers;
+    
+    var componentCategoriesSelectList = new SelectList(componentCategories, nameof(ComponentCategoryViewModel.Id), nameof(ComponentCategoryViewModel.Name));
+    var componentManufacturersSelectList = new SelectList(componentManufacturers, nameof(ComponentManufacturerViewModel.Id), nameof(ComponentManufacturerViewModel.Name));
+    
+    var specificationsShown = 0;
+}
+
+<h2 class="display-4">Добавление комплектующего</h2>
+
+<div>
+    <form asp-controller="Components" asp-action="Edit" method="post">
+        <div class="form-floating" style="margin-top: 20px">
+            <select class="form-select" id="categorySelect" asp-for="ComponentCategoryId" asp-items="@componentCategoriesSelectList"></select>
+            <label for="categorySelect">Категория</label>
+        </div>
+        
+        <div class="form-floating" style="margin-top: 20px">
+            <select class="form-select" id="manufacturerSelect" asp-for="ComponentManufacturerId" asp-items="@componentManufacturersSelectList"></select>
+            <label for="manufacturerSelect">Производитель</label>
+        </div>
+
+        <div class="form-floating" style="margin-top: 20px">
+            <input type="text" id="nameInput" asp-for="Name" class="form-control" required>
+            <label for="nameInput">Название</label>
+        </div>
+
+        <div id="specificationsSection" style="margin-top: 20px">
+            <input type="text" id="specificationsCollector" asp-for="Specifications" hidden>
+            @foreach (var (specificationType, specificationValue) in specifications)
+            {
+                <div id="newSpecificationSection-@specificationType" style="display: flex; width: 100%;">
+                    <div class="form-floating" style="flex-grow: 1; flex-basis: 45%">
+                        <input type="text" id="specificationTypeInput-@specificationType" class="form-control" placeholder="@specificationType" value="@specificationType" required>
+                        <label for="specificationTypeInput-@specificationType">Тип спецификации</label>
+                    </div>
+                    <div class="form-floating" style="flex-grow: 1; flex-basis: 45%; margin-left: 10px">
+                        <input type="text" id="specificationValueInput-@specificationType" class="form-control" placeholder="@specificationValue" value="@specificationValue" required>
+                        <label for="specificationValueInput-@specificationType">Значение</label>
+                    </div>
+                    @if (specificationsShown < 1)
+                    {
+                        <button type="button" class="btn btn-outline-dark btn-sm" onclick="addSpecificationSection()" style="flex-grow: 1; flex-basis: 10%; margin-left: 10px">Добавить</button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-outline-dark btn-sm" onclick="removeSpecificationSection('newSpecificationSection-@specificationType')" style="flex-grow: 1; flex-basis: 10%; margin-left: 10px">Удалить</button>    
+                    }
+                </div>
+                specificationsShown++;
+            }
+        </div>
+
+        <div class="form-floating" style="margin-top: 20px">
+            <input type="number" step="0.01" id="costInput" asp-for="Cost" class="form-control" required>
+            <label for="costInput">Стоимость закупки</label>
+        </div>
+
+        <div class="form-floating" style="margin-top: 20px">
+            <input type="number" id="warrantyPeriodInput" asp-for="WarrantyPeriodMonths" class="form-control" required style="flex-grow: 1; flex-basis: 0">
+            <label for="warrantyPeriodInput">Гарантия производителя (в месяцах)</label>
+        </div>
+        
+        <div style="display: flex; width: 100%; margin-top: 20px">
+            <button type="submit" onclick="collectSpecificationsIntoCollector()" class="btn btn-light" style="flex-grow: 1; flex-basis: 0">Сохранить</button>
+            <button type="button" onclick="history.back()" class="btn btn-light" style="flex-grow: 1; flex-basis: 0; margin-left: 10px">Отменить</button>
+        </div>
+    </form>
+</div>

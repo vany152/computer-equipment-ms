@@ -1,0 +1,19 @@
+.display-5 {
+    font-size: 2.5rem;
+    font-weight: 300;
+    line-height: 1.2;
+}
+
+input:invalid {
+    border-color: red;
+}
+
+
+
+.form-floating > .form-control::placeholder {
+    color: revert;
+}
+
+.form-floating > .form-control:not(:focus)::placeholder {
+    color: transparent;
+}

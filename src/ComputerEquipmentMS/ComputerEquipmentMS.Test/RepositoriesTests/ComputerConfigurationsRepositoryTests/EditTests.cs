@@ -29,7 +29,7 @@ public class EditTests : ComputerConfigurationsRepositoryTestBase
                 {
                     Id = 1,
                     Name = "new configurations name",
-                    ComponentIds = new [] { 1, 3 },
+                    Components = new [] { 1, 3 },
                     WarrantyPeriod = Period.FromDays(1),
                     Margin = 5,
                 },
@@ -37,7 +37,7 @@ public class EditTests : ComputerConfigurationsRepositoryTestBase
                 {
                     Id = 1,
                     Name = "new configurations name",
-                    ComponentIds = new [] { 1, 3 },
+                    Components = new [] { 1, 3 },
                     WarrantyPeriod = Period.FromDays(1),
                     Margin = 5,
                 }, 
@@ -48,7 +48,7 @@ public class EditTests : ComputerConfigurationsRepositoryTestBase
                 {
                     Id = 2,
                     Name = "qwerty",
-                    ComponentIds = new [] { 1 },
+                    Components = new [] { 1 },
                     WarrantyPeriod = Period.FromYears(50),
                     Margin = 50000,
                 }, 
@@ -56,7 +56,7 @@ public class EditTests : ComputerConfigurationsRepositoryTestBase
                 {
                     Id = 2,
                     Name = "qwerty",
-                    ComponentIds = new [] { 1 },
+                    Components = new [] { 1 },
                     WarrantyPeriod = Period.FromYears(50),
                     Margin = 50000,
                 }, 
@@ -76,9 +76,9 @@ public class EditTests : ComputerConfigurationsRepositoryTestBase
     public static IEnumerable<object[]> NonExistingConfigurations =>
         new List<object[]>
         {
-            new object[] { new ComputerConfiguration { Id = 15, Name = string.Empty, WarrantyPeriod = Period.Zero, ComponentIds = Array.Empty<int>() }, },
-            new object[] { new ComputerConfiguration { Id = 45, Name = string.Empty, WarrantyPeriod = Period.Zero, ComponentIds = Array.Empty<int>() }, },
-            new object[] { new ComputerConfiguration { Id = 54, Name = string.Empty, WarrantyPeriod = Period.Zero, ComponentIds = Array.Empty<int>() }, },
+            new object[] { new ComputerConfiguration { Id = 15, Name = string.Empty, WarrantyPeriod = Period.Zero, Components = Array.Empty<int>() }, },
+            new object[] { new ComputerConfiguration { Id = 45, Name = string.Empty, WarrantyPeriod = Period.Zero, Components = Array.Empty<int>() }, },
+            new object[] { new ComputerConfiguration { Id = 54, Name = string.Empty, WarrantyPeriod = Period.Zero, Components = Array.Empty<int>() }, },
         };
     
     
@@ -102,7 +102,7 @@ public class EditTests : ComputerConfigurationsRepositoryTestBase
                 {
                     Id = 1,
                     Name = "new configurations name",
-                    ComponentIds = new [] { 1, 3 },
+                    Components = new [] { 1, 3 },
                     WarrantyPeriod = Period.FromDays(1),
                     Margin = 5,
                 },
@@ -112,7 +112,7 @@ public class EditTests : ComputerConfigurationsRepositoryTestBase
                     {
                         Id = 1,
                         Name = "new configurations name",
-                        ComponentIds = new [] { 1, 3 },
+                        Components = new [] { 1, 3 },
                         WarrantyPeriod = Period.FromDays(1),
                         Margin = 5,
                     },
@@ -120,7 +120,7 @@ public class EditTests : ComputerConfigurationsRepositoryTestBase
                     {
                         Id = 2,
                         Name = "configuration 2",
-                        ComponentIds = new [] { 1, 3 },
+                        Components = new [] { 1, 3 },
                         WarrantyPeriod = Period.FromYears(2),
                         Margin = 1500,
                     },
@@ -132,7 +132,7 @@ public class EditTests : ComputerConfigurationsRepositoryTestBase
                 {
                     Id = 2,
                     Name = "qwerty",
-                    ComponentIds = new [] { 1 },
+                    Components = new [] { 1 },
                     WarrantyPeriod = Period.FromYears(50),
                     Margin = 50000,
                 },
@@ -142,7 +142,7 @@ public class EditTests : ComputerConfigurationsRepositoryTestBase
                     {
                         Id = 1,
                         Name = "configuration 1",
-                        ComponentIds = new [] { 1, 2 },
+                        Components = new [] { 1, 2 },
                         WarrantyPeriod = Period.FromYears(1),
                         Margin = 1000,
                     },
@@ -150,7 +150,7 @@ public class EditTests : ComputerConfigurationsRepositoryTestBase
                     {
                         Id = 2,
                         Name = "qwerty",
-                        ComponentIds = new [] { 1 },
+                        Components = new [] { 1 },
                         WarrantyPeriod = Period.FromYears(50),
                         Margin = 50000,
                     },

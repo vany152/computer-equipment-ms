@@ -9,5 +9,5 @@ public class ComputerConfiguration : IIdentifiable<int>
     public required string Name { get; set; }
     public required Period WarrantyPeriod { get; set; }
     public decimal Margin { get; set; }
-    public required ICollection<int> ComponentIds { get; set; }
+    public required ICollection<Component> Components { get; set; }
 }

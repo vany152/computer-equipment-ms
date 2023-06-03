@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using ComputerEquipmentMS.DataAccess;
 using Testcontainers.PostgreSql;
 
 namespace ComputerEquipmentMS.Test;
@@ -6,7 +7,7 @@ namespace ComputerEquipmentMS.Test;
 public abstract class TestBase : IAsyncLifetime
 {
     protected readonly PostgreSqlContainer Container;
-    protected string ConnectionString { get; }
+    protected IDbConnectionString ConnectionString { get; }
 
     protected TestBase()
     {
@@ -17,7 +18,7 @@ public abstract class TestBase : IAsyncLifetime
             .Build();
         
         Container.StartAsync().Wait();
-        ConnectionString = $"{Container.GetConnectionString()};Include Error Detail=true";
+        ConnectionString = new DbConnectionString($"{Container.GetConnectionString()};Include Error Detail=true");
 
         InitDb().Wait();
     }

@@ -69,7 +69,7 @@ public class RemoveTests : SalePositionsRepositoryTestBase
                     {
                         Id = 2,
                         SaleId = 2,
-                        ConfigurationId = 1,
+                        Configuration = 1,
                         Cost = 121_000,
                         DiscountPercentage = 0,
                         WarrantyPeriod = Period.FromYears(1),
@@ -78,7 +78,7 @@ public class RemoveTests : SalePositionsRepositoryTestBase
                     {
                         Id = 3,
                         SaleId = 2,
-                        ConfigurationId = 2,
+                        Configuration = 2,
                         Cost = 106_500,
                         DiscountPercentage = 0,
                         WarrantyPeriod = Period.FromYears(2),
@@ -87,7 +87,7 @@ public class RemoveTests : SalePositionsRepositoryTestBase
                     {
                         Id = 4,
                         SaleId = 3,
-                        ConfigurationId = 1,
+                        Configuration = 1,
                         Cost = 121_000,
                         DiscountPercentage = 5,
                         WarrantyPeriod = Period.FromYears(1),
@@ -96,7 +96,7 @@ public class RemoveTests : SalePositionsRepositoryTestBase
                     {
                         Id = 5,
                         SaleId = 3,
-                        ConfigurationId = 2,
+                        Configuration = 2,
                         Cost = 106_500,
                         DiscountPercentage = 0,
                         WarrantyPeriod = Period.FromYears(2),
@@ -105,7 +105,7 @@ public class RemoveTests : SalePositionsRepositoryTestBase
                     {
                         Id = 6,
                         SaleId = 3,
-                        ConfigurationId = 2,
+                        Configuration = 2,
                         Cost = 106_500,
                         DiscountPercentage = 15,
                         WarrantyPeriod = Period.FromYears(2),
@@ -121,7 +121,7 @@ public class RemoveTests : SalePositionsRepositoryTestBase
                     {
                         Id = 1,
                         SaleId = 1,
-                        ConfigurationId = 1,
+                        Configuration = 1,
                         Cost = 121_000,
                         DiscountPercentage = 0,
                         WarrantyPeriod = Period.FromYears(1),
@@ -130,7 +130,7 @@ public class RemoveTests : SalePositionsRepositoryTestBase
                     {
                         Id = 3,
                         SaleId = 2,
-                        ConfigurationId = 2,
+                        Configuration = 2,
                         Cost = 106_500,
                         DiscountPercentage = 0,
                         WarrantyPeriod = Period.FromYears(2),
@@ -139,7 +139,7 @@ public class RemoveTests : SalePositionsRepositoryTestBase
                     {
                         Id = 4,
                         SaleId = 3,
-                        ConfigurationId = 1,
+                        Configuration = 1,
                         Cost = 121_000,
                         DiscountPercentage = 5,
                         WarrantyPeriod = Period.FromYears(1),
@@ -148,7 +148,7 @@ public class RemoveTests : SalePositionsRepositoryTestBase
                     {
                         Id = 5,
                         SaleId = 3,
-                        ConfigurationId = 2,
+                        Configuration = 2,
                         Cost = 106_500,
                         DiscountPercentage = 0,
                         WarrantyPeriod = Period.FromYears(2),
@@ -157,7 +157,7 @@ public class RemoveTests : SalePositionsRepositoryTestBase
                     {
                         Id = 6,
                         SaleId = 3,
-                        ConfigurationId = 2,
+                        Configuration = 2,
                         Cost = 106_500,
                         DiscountPercentage = 15,
                         WarrantyPeriod = Period.FromYears(2),
@@ -173,7 +173,7 @@ public class RemoveTests : SalePositionsRepositoryTestBase
                     {
                         Id = 1,
                         SaleId = 1,
-                        ConfigurationId = 1,
+                        Configuration = 1,
                         Cost = 121_000,
                         DiscountPercentage = 0,
                         WarrantyPeriod = Period.FromYears(1),
@@ -182,7 +182,7 @@ public class RemoveTests : SalePositionsRepositoryTestBase
                     {
                         Id = 2,
                         SaleId = 2,
-                        ConfigurationId = 1,
+                        Configuration = 1,
                         Cost = 121_000,
                         DiscountPercentage = 0,
                         WarrantyPeriod = Period.FromYears(1),
@@ -191,7 +191,7 @@ public class RemoveTests : SalePositionsRepositoryTestBase
                     {
                         Id = 4,
                         SaleId = 3,
-                        ConfigurationId = 1,
+                        Configuration = 1,
                         Cost = 121_000,
                         DiscountPercentage = 5,
                         WarrantyPeriod = Period.FromYears(1),
@@ -200,7 +200,7 @@ public class RemoveTests : SalePositionsRepositoryTestBase
                     {
                         Id = 5,
                         SaleId = 3,
-                        ConfigurationId = 2,
+                        Configuration = 2,
                         Cost = 106_500,
                         DiscountPercentage = 0,
                         WarrantyPeriod = Period.FromYears(2),
@@ -209,7 +209,7 @@ public class RemoveTests : SalePositionsRepositoryTestBase
                     {
                         Id = 6,
                         SaleId = 3,
-                        ConfigurationId = 2,
+                        Configuration = 2,
                         Cost = 106_500,
                         DiscountPercentage = 15,
                         WarrantyPeriod = Period.FromYears(2),

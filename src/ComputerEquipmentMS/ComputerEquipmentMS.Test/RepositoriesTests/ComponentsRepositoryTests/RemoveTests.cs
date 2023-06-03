@@ -69,8 +69,8 @@ public class RemoveTests : ComponentsRepositoryTestBase
                     new Component
                     {
                         Id = 2,
-                        ComponentCategoryId = 2,
-                        ComponentManufacturerId = 2,
+                        ComponentCategory = 2,
+                        ComponentManufacturer = 2,
                         Name = "intel core i7 12700",
                         Specifications = new ComponentSpecifications { ["power"] = "100 wt", ["mass"] = "50 g" },
                         Cost = 30000,
@@ -79,8 +79,8 @@ public class RemoveTests : ComponentsRepositoryTestBase
                     new Component
                     {
                         Id = 3,
-                        ComponentCategoryId = 3,
-                        ComponentManufacturerId = 3,
+                        ComponentCategory = 3,
+                        ComponentManufacturer = 3,
                         Name = "samsung 980 evo ssd",
                         Specifications = new ComponentSpecifications { ["capacity"] = "980 gb", ["mass"] = "50 g", ["reading speed"] = "3500 mb/sec" },
                         Cost = 15000,
@@ -96,8 +96,8 @@ public class RemoveTests : ComponentsRepositoryTestBase
                     new Component
                     {
                         Id = 1,
-                        ComponentCategoryId = 1,
-                        ComponentManufacturerId = 1,
+                        ComponentCategory = 1,
+                        ComponentManufacturer = 1,
                         Name = "rtx 4090",
                         Specifications = new ComponentSpecifications { ["fans"] = "3", ["mass"] = "2 kg" },
                         Cost = 90000,
@@ -106,8 +106,8 @@ public class RemoveTests : ComponentsRepositoryTestBase
                     new Component
                     {
                         Id = 3,
-                        ComponentCategoryId = 3,
-                        ComponentManufacturerId = 3,
+                        ComponentCategory = 3,
+                        ComponentManufacturer = 3,
                         Name = "samsung 980 evo ssd",
                         Specifications = new ComponentSpecifications { ["capacity"] = "980 gb", ["mass"] = "50 g", ["reading speed"] = "3500 mb/sec" },
                         Cost = 15000,
@@ -123,8 +123,8 @@ public class RemoveTests : ComponentsRepositoryTestBase
                     new Component
                     {
                         Id = 1,
-                        ComponentCategoryId = 1,
-                        ComponentManufacturerId = 1,
+                        ComponentCategory = 1,
+                        ComponentManufacturer = 1,
                         Name = "rtx 4090",
                         Specifications = new ComponentSpecifications { ["fans"] = "3", ["mass"] = "2 kg" },
                         Cost = 90000,
@@ -133,8 +133,8 @@ public class RemoveTests : ComponentsRepositoryTestBase
                     new Component
                     {
                         Id = 2,
-                        ComponentCategoryId = 2,
-                        ComponentManufacturerId = 2,
+                        ComponentCategory = 2,
+                        ComponentManufacturer = 2,
                         Name = "intel core i7 12700",
                         Specifications = new ComponentSpecifications { ["power"] = "100 wt", ["mass"] = "50 g" },
                         Cost = 30000,

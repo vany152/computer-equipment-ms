@@ -1,12 +1,13 @@
-﻿using ComputerEquipmentMS.Models.Domain;
+﻿using ComputerEquipmentMS.DataAccess.Entities;
+using ComputerEquipmentMS.Models.Domain;
 using static ComputerEquipmentMS.DataAccess.Constants.DbTableNames;
 
 namespace ComputerEquipmentMS.DataAccess;
 
-public class ComputerConfigurationsNpgsqlRepository : AbstractNpgsqlRepository<ComputerConfiguration, int>
+public class ComputerConfigurationsNpgsqlRepository : AbstractNpgsqlRepository<ComputerConfiguration, ComputerConfigurationEntity, int>
 {
-    public ComputerConfigurationsNpgsqlRepository(string connectionString, string tableName = ComputerConfigurationsTableName) 
-        : base(connectionString, tableName, DynamicToObjectMapper.MapDynamicToComputerConfiguration)
+    public ComputerConfigurationsNpgsqlRepository(IDbConnectionString connectionString, string tableName = ComputerConfigurationsTableName) 
+        : base(connectionString, tableName, obj => DynamicToObjectMapper.MapDynamicToComputerConfiguration(obj))
     {
     }
 
@@ -22,7 +23,7 @@ public class ComputerConfigurationsNpgsqlRepository : AbstractNpgsqlRepository<C
         """;
 
     /// <inheritdoc/>
-    protected override string ConstructAndReturnAddQueryString(ComputerConfiguration configuration) =>
+    protected override string ConstructAndReturnAddQueryString(ComputerConfigurationEntity configuration) =>
         $$"""
             select * from create_configuration(
                 '{{configuration.Name}}', 
@@ -33,7 +34,7 @@ public class ComputerConfigurationsNpgsqlRepository : AbstractNpgsqlRepository<C
         """;
 
     /// <inheritdoc/>
-    protected override string ConstructAndReturnEditQueryString(ComputerConfiguration configuration) =>
+    protected override string ConstructAndReturnEditQueryString(ComputerConfigurationEntity configuration) =>
         $$"""
             select * from edit_configuration(
                  {{configuration.Id}},

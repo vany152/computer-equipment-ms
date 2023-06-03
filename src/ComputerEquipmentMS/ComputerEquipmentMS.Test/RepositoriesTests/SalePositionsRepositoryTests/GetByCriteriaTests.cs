@@ -59,7 +59,7 @@ public class GetByCriteriaTests : SalePositionsRepositoryTestBase
     [MemberData(nameof(GetSalePositionsByComputerConfigurationIdData))]
     public void GetByComputerConfigurationIdShouldReturnCorrectSalePositionIds(int configurationId, IEnumerable<int> expectedSalePositionIds)
     {
-        var salePositions = Repository.GetByCriteria(sp => sp.ConfigurationId == configurationId);
+        var salePositions = Repository.GetByCriteria(sp => sp.Configuration == configurationId);
         var salePositionIds = GetSalePositionIds(salePositions);
         salePositionIds.Should().BeEquivalentTo(expectedSalePositionIds);
     }

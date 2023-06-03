@@ -1,10 +1,12 @@
 ﻿using System.Data;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using ComputerEquipmentMS.DataAccess.Entities;
 using ComputerEquipmentMS.DataAccess.Util;
 using ComputerEquipmentMS.Models.Auxiliary;
 using ComputerEquipmentMS.Models.Domain;
 using Dapper;
+using Mapster;
 using Npgsql;
 using static ComputerEquipmentMS.DataAccess.DynamicToObjectMapper; 
 
@@ -14,12 +16,12 @@ public class NpgsqlStoredFunctionsExecutor : IDisposable
 {
     private readonly NpgsqlConnection _connection; 
     
-    public NpgsqlStoredFunctionsExecutor(string connectionString)
+    public NpgsqlStoredFunctionsExecutor(IDbConnectionString connectionString)
     {
-        if (string.IsNullOrEmpty(connectionString))
+        if (string.IsNullOrEmpty(connectionString.Value))
             throw new NoNullAllowedException("connection string cannot be null or empty");
 
-        _connection = NpgsqlUtil.CreateNpgsqlConnectionWithNodaTime(connectionString);
+        _connection = NpgsqlUtil.CreateNpgsqlConnectionWithNodaTime(connectionString.Value);
     }
     
     /*
@@ -28,7 +30,7 @@ public class NpgsqlStoredFunctionsExecutor : IDisposable
     public ICollection<ComputerConfiguration> GetConfigurationsByNamePattern(Regex namePattern)
     {
         var queryString = $"select * from get_configurations_by_name_pattern('{namePattern}')";
-        var configurations = ExecuteQuery(queryString, MapDynamicToComputerConfiguration);
+        var configurations = ExecuteQuery<ComputerConfiguration, ComputerConfigurationEntity>(queryString, MapDynamicToComputerConfiguration);
 
         return configurations;
     }
@@ -36,7 +38,7 @@ public class NpgsqlStoredFunctionsExecutor : IDisposable
     public decimal CalculateConfigurationCost(int configurationId)
     {
         var queryString = $"select * from calculate_configuration_cost({configurationId})";
-        var cost = ExecuteQuery<decimal>(queryString).SingleOrDefault();
+        var cost = ExecuteQuery<decimal, decimal>(queryString).SingleOrDefault();
 
         return cost;
     }
@@ -44,7 +46,7 @@ public class NpgsqlStoredFunctionsExecutor : IDisposable
     public ICollection<SalePositionInfo> GetSalesOfConfiguration(int configurationId)
     {
         var queryString = $"select * from get_sales_of_configuration({configurationId})";
-        var sales = ExecuteQuery(queryString, MapDynamicToSalePositionInfo);
+        var sales = ExecuteQuery<SalePositionInfo, SalePositionInfoEntity>(queryString, MapDynamicToSalePositionInfo);
 
         return sales;
     }
@@ -59,7 +61,7 @@ public class NpgsqlStoredFunctionsExecutor : IDisposable
                     '{interval.To}'::timestamptz
                 )  
             """;
-        var sales = ExecuteQuery(queryString, MapDynamicToSalePositionInfo);
+        var sales = ExecuteQuery<SalePositionInfo, SalePositionInfoEntity>(queryString, MapDynamicToSalePositionInfo);
         
         return sales;
     }
@@ -70,7 +72,7 @@ public class NpgsqlStoredFunctionsExecutor : IDisposable
     public decimal CalculateSaleCost(int saleId)
     {
         var queryString = $"select * from calculate_sale_cost({saleId})";
-        var cost = ExecuteQuery<decimal>(queryString).SingleOrDefault();
+        var cost = ExecuteQuery<decimal, decimal>(queryString).SingleOrDefault();
 
         return cost;
     }
@@ -83,7 +85,7 @@ public class NpgsqlStoredFunctionsExecutor : IDisposable
                     {interval.MinCost}::numeric, 
                     {interval.MaxCost}::numeric)
             """;
-        var sales = ExecuteQuery(queryString, MapDynamicToSale);
+        var sales = ExecuteQuery<Sale, SaleEntity>(queryString, MapDynamicToSale);
 
         return sales;
     }
@@ -97,7 +99,7 @@ public class NpgsqlStoredFunctionsExecutor : IDisposable
                     '{interval.To}'::timestamptz
                 )
             """;
-        var sales = ExecuteQuery(queryString, MapDynamicToSale);
+        var sales = ExecuteQuery<Sale, SaleEntity>(queryString, MapDynamicToSale);
         
         return sales;    
     }
@@ -113,7 +115,7 @@ public class NpgsqlStoredFunctionsExecutor : IDisposable
                      {costInterval.MaxCost}::numeric
                 )
             """;
-        var sales = ExecuteQuery(queryString, MapDynamicToSale);
+        var sales = ExecuteQuery<Sale, SaleEntity>(queryString, MapDynamicToSale);
         
         return sales;    
     }
@@ -121,7 +123,7 @@ public class NpgsqlStoredFunctionsExecutor : IDisposable
     public Sale? GetSale(int saleId)
     {
         var queryString = $"select * from get_sale({saleId})";
-        var sale = ExecuteQuery(queryString, MapDynamicToSale).SingleOrDefault();
+        var sale = ExecuteQuery<Sale, SaleEntity>(queryString, MapDynamicToSale).SingleOrDefault();
 
         return sale;
     }
@@ -129,7 +131,7 @@ public class NpgsqlStoredFunctionsExecutor : IDisposable
     public ICollection<Sale> GetSales()
     {
         var queryString = "select * from get_sales()";
-        var sale = ExecuteQuery(queryString, MapDynamicToSale);
+        var sale = ExecuteQuery<Sale, SaleEntity>(queryString, MapDynamicToSale);
 
         return sale;
     }    
@@ -140,11 +142,7 @@ public class NpgsqlStoredFunctionsExecutor : IDisposable
     public ICollection<Customer> GetCustomersByNamePattern(Regex namePattern)
     {
         var queryString = $"select * from get_customers_by_name_pattern('{namePattern}')";
-        var customers = 
-            _connection
-                .Query(queryString)
-                .Select(MapDynamicToCustomer)
-                .ToList();
+        var customers = ExecuteQuery<Customer, CustomerEntity>(queryString, MapDynamicToCustomer);
 
         return customers;
     }
@@ -155,11 +153,7 @@ public class NpgsqlStoredFunctionsExecutor : IDisposable
             $$"""
                 select * from get_customers_by_contact('{"{{contactType}}": "{{contact}}"}'::jsonb)
             """;
-        var customers = 
-            _connection
-                .Query(queryString)
-                .Select(MapDynamicToCustomer)
-                .ToList();
+        var customers = ExecuteQuery<Customer, CustomerEntity>(queryString, MapDynamicToCustomer);
 
         return customers;
     }
@@ -167,7 +161,7 @@ public class NpgsqlStoredFunctionsExecutor : IDisposable
     public ICollection<Sale> GetCustomersPurchases(int id)
     {
         var queryString = $"select * from get_customers_purchases({id})";
-        var purchases = ExecuteQuery(queryString, MapDynamicToSale);
+        var purchases = ExecuteQuery<Sale, SaleEntity>(queryString, MapDynamicToSale);
 
         return purchases;
     }
@@ -182,7 +176,7 @@ public class NpgsqlStoredFunctionsExecutor : IDisposable
                     '{interval.To}'::timestamptz
                 )
             """;
-        var purchases = ExecuteQuery(queryString, MapDynamicToSale);
+        var purchases = ExecuteQuery<Sale, SaleEntity>(queryString, MapDynamicToSale);
 
         return purchases;    
     }
@@ -193,11 +187,7 @@ public class NpgsqlStoredFunctionsExecutor : IDisposable
     public ICollection<Component> GetComponentsByName(Regex namePattern)
     {
         var queryString = $"select * from get_components_by_name_pattern('{namePattern}')";
-        var components = 
-            _connection
-                .Query(queryString)
-                .Select(MapDynamicToComponent)
-                .ToList();
+        var components = ExecuteQuery<Component, ComponentEntity>(queryString, MapDynamicToComponent);
 
         return components;    
     }
@@ -205,7 +195,7 @@ public class NpgsqlStoredFunctionsExecutor : IDisposable
     public ICollection<Component> GetComponentsByCategory(int categoryId)
     {
         var queryString = $"select * from get_components_by_category({categoryId})";
-        var components = ExecuteQuery(queryString, MapDynamicToComponent);
+        var components = ExecuteQuery<Component, ComponentEntity>(queryString, MapDynamicToComponent);
 
         return components;      
     }
@@ -213,7 +203,7 @@ public class NpgsqlStoredFunctionsExecutor : IDisposable
     public ICollection<Component> GetComponentsByManufacturer(int manufacturerId)
     {
         var queryString = $"select * from get_components_by_manufacturer({manufacturerId})";
-        var components = ExecuteQuery(queryString, MapDynamicToComponent);
+        var components = ExecuteQuery<Component, ComponentEntity>(queryString, MapDynamicToComponent);
 
         return components;      
     }
@@ -222,7 +212,7 @@ public class NpgsqlStoredFunctionsExecutor : IDisposable
     {
         var serializedSpecifications = JsonSerializer.Serialize(specifications);
         var queryString = $"select * from get_components_by_specifications('{serializedSpecifications}'::jsonb)";
-        var components = ExecuteQuery(queryString, MapDynamicToComponent);
+        var components = ExecuteQuery<Component, ComponentEntity>(queryString, MapDynamicToComponent);
 
         return components;    
     }
@@ -235,13 +225,15 @@ public class NpgsqlStoredFunctionsExecutor : IDisposable
     
     
 
-    private ICollection<T> ExecuteQuery<T>(string queryString, Func<dynamic, T>? mapFunction = null) =>
-        mapFunction is not null
+    private ICollection<TItem> ExecuteQuery<TItem, TEntity>(string queryString, Func<dynamic, TEntity>? mapFunction = null)
+    {
+        var entities = mapFunction is not null
             ? _connection
                 .Query(queryString)
                 .Select(mapFunction)
-                .ToList()
             : _connection
-                .Query<T>(queryString)
-                .ToList();
+                .Query<TEntity>(queryString);
+        
+        return entities.Adapt<List<TItem>>();
+    }
 }
