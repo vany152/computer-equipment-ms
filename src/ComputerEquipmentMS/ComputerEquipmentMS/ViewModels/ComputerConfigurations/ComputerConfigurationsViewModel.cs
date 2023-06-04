@@ -7,6 +7,9 @@ public class ComputerConfigurationsViewModel : Collection<ComputerConfigurationD
     public ComputerConfigurationsViewModel(IEnumerable<ComputerConfigurationDetailsViewModel> configurations)
         : base (configurations.ToList())
     {
-        
+    }
+
+    public ComputerConfigurationsViewModel()
+    {
     }
 }

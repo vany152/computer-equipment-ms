@@ -8,4 +8,8 @@ public class SalesViewModel : Collection<SaleDetailsViewModel>
         : base(sales.ToList())
     {
     }
+
+    public SalesViewModel()
+    {
+    }
 }
