@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace ComputerEquipmentMS.ViewModels;
+namespace ComputerEquipmentMS.ViewModels.Sales;
 
 public class SalesViewModel : Collection<SaleDetailsViewModel>
 {

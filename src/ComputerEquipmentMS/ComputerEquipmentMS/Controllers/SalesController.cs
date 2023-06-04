@@ -1,6 +1,8 @@
 ﻿using ComputerEquipmentMS.DataAccess;
 using ComputerEquipmentMS.Models.Domain;
-using ComputerEquipmentMS.ViewModels;
+using ComputerEquipmentMS.ViewModels.ComputerConfigurations;
+using ComputerEquipmentMS.ViewModels.Customers;
+using ComputerEquipmentMS.ViewModels.Sales;
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using NodaTime;

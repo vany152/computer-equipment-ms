@@ -1,4 +1,4 @@
-﻿namespace ComputerEquipmentMS.ViewModels;
+﻿namespace ComputerEquipmentMS.ViewModels.SalePositions;
 
 public class CreateSalePositionViewModel : SalePositionViewModelBase
 {

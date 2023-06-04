@@ -1,6 +1,6 @@
 ﻿using NodaTime;
 
-namespace ComputerEquipmentMS.ViewModels;
+namespace ComputerEquipmentMS.ViewModels.Sales;
 
 public class SaleInfoViewModel : SaleViewModelBase
 {

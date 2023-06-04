@@ -1,4 +1,7 @@
-﻿namespace ComputerEquipmentMS.ViewModels;
+﻿using ComputerEquipmentMS.ViewModels.Customers;
+using ComputerEquipmentMS.ViewModels.SalePositions;
+
+namespace ComputerEquipmentMS.ViewModels.Sales;
 
 public class SaleDetailsViewModel : SaleInfoViewModel
 {

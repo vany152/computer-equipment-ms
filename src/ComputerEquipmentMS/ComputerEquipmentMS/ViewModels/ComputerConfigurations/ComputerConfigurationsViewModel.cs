@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace ComputerEquipmentMS.ViewModels;
+namespace ComputerEquipmentMS.ViewModels.ComputerConfigurations;
 
 public class ComputerConfigurationsViewModel : Collection<ComputerConfigurationDetailsViewModel>
 {

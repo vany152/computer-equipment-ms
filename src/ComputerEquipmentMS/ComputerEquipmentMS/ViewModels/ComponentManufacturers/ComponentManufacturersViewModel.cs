@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace ComputerEquipmentMS.ViewModels;
+namespace ComputerEquipmentMS.ViewModels.ComponentManufacturers;
 
 public class ComponentManufacturersViewModel : Collection<ComponentManufacturerViewModel>
 {

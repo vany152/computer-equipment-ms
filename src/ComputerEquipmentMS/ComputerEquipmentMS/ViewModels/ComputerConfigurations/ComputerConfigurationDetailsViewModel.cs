@@ -1,4 +1,6 @@
-﻿namespace ComputerEquipmentMS.ViewModels;
+﻿using ComputerEquipmentMS.ViewModels.Components;
+
+namespace ComputerEquipmentMS.ViewModels.ComputerConfigurations;
 
 public class ComputerConfigurationDetailsViewModel : ComputerConfigurationInfoViewModel
 {

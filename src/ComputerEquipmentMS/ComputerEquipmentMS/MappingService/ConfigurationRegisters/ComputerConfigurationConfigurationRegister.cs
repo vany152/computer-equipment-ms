@@ -3,7 +3,7 @@ using System.Text.Json;
 using ComputerEquipmentMS.DataAccess;
 using ComputerEquipmentMS.DataAccess.Entities;
 using ComputerEquipmentMS.Models.Domain;
-using ComputerEquipmentMS.ViewModels;
+using ComputerEquipmentMS.ViewModels.ComputerConfigurations;
 using Mapster;
 using static ComputerEquipmentMS.MappingService.ConfigurationRegisters.CommonFuncs;
 

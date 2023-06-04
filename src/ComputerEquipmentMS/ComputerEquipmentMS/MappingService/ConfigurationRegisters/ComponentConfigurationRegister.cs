@@ -5,7 +5,7 @@ using ComputerEquipmentMS.DataAccess;
 using ComputerEquipmentMS.DataAccess.Entities;
 using ComputerEquipmentMS.Models.Auxiliary;
 using ComputerEquipmentMS.Models.Domain;
-using ComputerEquipmentMS.ViewModels;
+using ComputerEquipmentMS.ViewModels.Components;
 using Mapster;
 using static ComputerEquipmentMS.MappingService.ConfigurationRegisters.CommonFuncs;
 

@@ -1,6 +1,6 @@
 ﻿using ComputerEquipmentMS.Models.Auxiliary;
 using ComputerEquipmentMS.Models.Domain;
-using ComputerEquipmentMS.ViewModels;
+using ComputerEquipmentMS.ViewModels.Customers;
 using Mapster;
 using NodaTime;
 

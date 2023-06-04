@@ -2,7 +2,7 @@
 using ComputerEquipmentMS.DataAccess;
 using ComputerEquipmentMS.DataAccess.Entities;
 using ComputerEquipmentMS.Models.Domain;
-using ComputerEquipmentMS.ViewModels;
+using ComputerEquipmentMS.ViewModels.SalePositions;
 using Mapster;
 using NodaTime;
 using static ComputerEquipmentMS.MappingService.ConfigurationRegisters.CommonFuncs;

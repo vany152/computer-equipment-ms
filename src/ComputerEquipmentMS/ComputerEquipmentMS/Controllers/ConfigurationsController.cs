@@ -1,6 +1,7 @@
 ﻿using ComputerEquipmentMS.DataAccess;
 using ComputerEquipmentMS.Models.Domain;
-using ComputerEquipmentMS.ViewModels;
+using ComputerEquipmentMS.ViewModels.Components;
+using ComputerEquipmentMS.ViewModels.ComputerConfigurations;
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
 

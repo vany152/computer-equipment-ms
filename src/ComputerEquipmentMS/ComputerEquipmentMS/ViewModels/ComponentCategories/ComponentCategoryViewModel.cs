@@ -1,4 +1,4 @@
-﻿namespace ComputerEquipmentMS.ViewModels;
+﻿namespace ComputerEquipmentMS.ViewModels.ComponentCategories;
 
 public class ComponentCategoryViewModel
 {
