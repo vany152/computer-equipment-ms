@@ -6,7 +6,7 @@ public class CalculateSaleCostFunctionTest : SaleFunctionTestBase
     [MemberData(nameof(TestData))]
     public void SaleCostShouldBeCorrect(int saleId, decimal expectedCost)
     {
-        var result = Executor.CalculateSaleCost(saleId);
+        var result = Executor.CalculateFinalSaleCost(saleId);
         result.Should().Be(expectedCost);
     }
 

@@ -47,7 +47,7 @@ public class ConfigurationsController : Controller
     [HttpPost]
     public IActionResult Create(CreateComputerConfigurationViewModel configurationViewModel)
     {
-        var configuration = configurationViewModel.Adapt<ComputerConfiguration>(); // todo adapt
+        var configuration = configurationViewModel.Adapt<ComputerConfiguration>();
         _configurationRepository.Add(configuration);
 
         return RedirectToAction(nameof(Index));

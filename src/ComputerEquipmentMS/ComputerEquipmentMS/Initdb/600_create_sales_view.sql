@@ -3,7 +3,7 @@ create view sales_view as
            c.name as customer,
            s.sale_moment as sale_moment,
            s.discount_percentage as additional_discount_percentage,
-           calculate_sale_cost(s.id) as sale_final_cost,
+           calculate_final_sale_cost(s.id) as sale_final_cost,
            sp.id as sale_position_id,
            cc.name as configuration,
            get_configurations_component_ids(cc.id) as configurations_component_ids,

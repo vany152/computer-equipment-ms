@@ -1,0 +1,36 @@
+﻿@using ComputerEquipmentMS.ViewModels
+@model ComputerEquipmentMS.ViewModels.ComponentCategoryViewModel
+
+@{
+    var manufacturer = Model;
+
+    var components = (ComponentsViewModel) ViewBag.Components;
+}
+
+<h2 class="display-4">@manufacturer.Name</h2>
+
+<div>
+    <h2 class="display-6">Компоненты от производителя "@manufacturer.Name"</h2>
+    
+    <table class="table table-hover">
+        <thread>
+            <tr>
+                <th>Название</th>
+                <th>Категория</th>
+                <th>Спецификации</th>
+                <th>Стоимость закупки</th>
+                <th>Гарантия производителя</th>
+            </tr>
+        </thread>
+        @foreach (var component in components)
+        {
+            <tr>
+                <td>@component.Name</td>
+                <td>@component.ComponentCategory</td>
+                <td style="white-space: pre">@component.Specifications</td>
+                <td>@component.Cost</td>
+                <td>@component.WarrantyPeriodMonths мес.</td>
+            </tr>
+        }
+    </table>
+</div>

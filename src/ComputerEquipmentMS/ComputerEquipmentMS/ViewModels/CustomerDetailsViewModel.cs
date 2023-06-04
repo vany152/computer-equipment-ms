@@ -1,10 +1,7 @@
 ﻿namespace ComputerEquipmentMS.ViewModels;
 
-public class CustomerViewModel
+public class CustomerDetailsViewModel : CustomerInfoViewModel
 {
-    public int Id { get; set; }
-    
-    public string Name { get; set; } = string.Empty;
     public string? Phone { get; set; }
     public string? Email { get; set; }
 

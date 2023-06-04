@@ -1,0 +1,17 @@
+﻿@model ComputerEquipmentMS.ViewModels.ComponentCategoryViewModel
+
+<h2 class="display-4">Добавить категорию комплектующих</h2>
+
+<div>
+    <form asp-controller="ComponentCategories" asp-action="Create" method="post">
+        <div class="form-floating" style="margin-top: 20px">
+            <input type="text" id="nameInput" asp-for="Name" class="form-control" required>
+            <label for="nameInput">Название</label>
+        </div>
+
+        <div style="display: flex; width: 100%; margin-top: 20px">
+            <button type="submit" class="btn btn-light" style="flex-grow: 1; flex-basis: 0">Сохранить</button>
+            <button type="button" onclick="history.back()" class="btn btn-light" style="flex-grow: 1; flex-basis: 0; margin-left: 10px">Отменить</button>
+        </div>
+    </form>
+</div>

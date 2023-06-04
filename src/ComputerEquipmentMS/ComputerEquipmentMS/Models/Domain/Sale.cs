@@ -5,8 +5,8 @@ namespace ComputerEquipmentMS.Models.Domain;
 public class Sale : IIdentifiable<int>
 {
     public int Id { get; set; }
-
-    public int CustomerId { get; set; }
+    
+    public required Customer Customer { get; set; }
     
     public Instant SaleMoment  { get; set; }
     

@@ -12,22 +12,22 @@ public class CustomerConfigurationRegister : IRegister
     public void Register(TypeAdapterConfig config)
     {
         config
-            .NewConfig<CustomerViewModel, Customer>()
-            .Map(customer => customer.RegistrationDate, viewModel => LocalDate.FromDateOnly(viewModel.RegistrationDate))
-            .Map(customer => customer.Contacts, viewModel => AdaptCustomerViewModelContactsToCustomerContacts(viewModel));
+            .NewConfig<Customer, CustomerDetailsViewModel>()
+            .Include<Customer, CustomerWithPurchasesViewModel>()
+            .Map(vm => vm.RegistrationDate, c => c.RegistrationDate.ToDateOnly())
+            .Map(vm => vm.Email, c => GetEmail(c.Contacts))
+            .Map(vm => vm.Phone, c => GetPhone(c.Contacts));
         
         // cannot use .TwoWays() because of exception, so there is another configuration
         config
-            .NewConfig<Customer, CustomerViewModel>()
-            .Include<Customer, CustomerWithPurchasesViewModel>()
-            .Map(vm => vm.RegistrationDate, customer => customer.RegistrationDate.ToDateOnly())
-            .Map(vm => vm.Email, customer => GetEmail(customer.Contacts))
-            .Map(vm => vm.Phone, customer => GetPhone(customer.Contacts));
+            .NewConfig<CustomerDetailsViewModel, Customer>()
+            .Map(c => c.RegistrationDate, vm => LocalDate.FromDateOnly(vm.RegistrationDate))
+            .Map(c => c.Contacts, vm => AdaptCustomerViewModelContactsToCustomerContacts(vm));   
     }
     
     
 
-    private static Contacts? AdaptCustomerViewModelContactsToCustomerContacts(CustomerViewModel customerViewModel)
+    private static Contacts? AdaptCustomerViewModelContactsToCustomerContacts(CustomerDetailsViewModel customerViewModel)
     {
         var email = customerViewModel.Email;
         var phone = customerViewModel.Phone;
@@ -48,6 +48,8 @@ public class CustomerConfigurationRegister : IRegister
         return contacts;
     }
 
-    private static string? GetEmail(Contacts? contacts) => contacts?.GetValueOrDefault(ContactType.Email);
-    private static string? GetPhone(Contacts? contacts) => contacts?.GetValueOrDefault(ContactType.Phone);
+    private static string? GetEmail(Contacts? contacts) => 
+        contacts?.GetValueOrDefault(ContactType.Email);
+    private static string? GetPhone(Contacts? contacts) => 
+        contacts?.GetValueOrDefault(ContactType.Phone);
 }

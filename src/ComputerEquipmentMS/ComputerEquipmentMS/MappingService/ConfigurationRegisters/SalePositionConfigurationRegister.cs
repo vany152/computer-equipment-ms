@@ -4,6 +4,8 @@ using ComputerEquipmentMS.DataAccess.Entities;
 using ComputerEquipmentMS.Models.Domain;
 using ComputerEquipmentMS.ViewModels;
 using Mapster;
+using NodaTime;
+using static ComputerEquipmentMS.MappingService.ConfigurationRegisters.CommonFuncs;
 
 namespace ComputerEquipmentMS.MappingService.ConfigurationRegisters;
 
@@ -30,13 +32,39 @@ public class SalePositionConfigurationRegister : IRegister
     
     public void Register(TypeAdapterConfig config)
     {
+        // entity
         config
             .NewConfig<SalePositionEntity, SalePosition>()
             .Map(sp => sp.Configuration, entity => GetComputerConfigurationById(entity.ConfigurationId));
         config
-            .NewConfig<SalePosition, SalePositionViewModel>()
+            .NewConfig<SalePosition, SalePositionDetailsViewModel>()
             .Map(vm => vm.StartingCost, sp => sp.Cost)
             .Map(vm => vm.FinalCost, sp => CalculateFinalCost(sp.Cost, sp.DiscountPercentage));
+        
+        // viewModelBase & createViewModel
+        config
+            .NewConfig<SalePosition, SalePositionViewModelBase>()
+            .Include<SalePosition, CreateSalePositionViewModel>()
+            .Map(vm => vm.ComputerConfigurationId, sp => sp.Configuration.Id);
+        
+        config
+            .NewConfig<SalePositionViewModelBase, SalePosition>()
+            .Include<CreateSalePositionViewModel, SalePosition>()
+            .Map(sp => sp.Configuration, vm => CreateEmptyConfigurationFromId(vm.ComputerConfigurationId));        
+
+        // detailsViewModel
+        config
+            .NewConfig<SalePosition, SalePositionDetailsViewModel>()
+            .Inherits<SalePosition, SalePositionViewModelBase>()
+            .Map(vm => vm.ComputerConfigurationName, sp => sp.Configuration.Name)
+            .Map(vm => vm.StartingCost, sp => sp.Cost)
+            .Map(vm => vm.FinalCost, sp => CommonFuncs.CalculateFinalCost(sp.Cost, sp.DiscountPercentage));
+
+        config
+            .NewConfig<SalePositionDetailsViewModel, SalePosition>()
+            .Inherits<SalePositionViewModelBase, SalePosition>()
+            .Map(sp => sp.Configuration.Name, vm => vm.ComputerConfigurationName)
+            .Map(sp => sp.Cost, vm => vm.StartingCost);
     }
 
 
@@ -59,6 +87,14 @@ public class SalePositionConfigurationRegister : IRegister
         return configuration;
     }
     
-    private static decimal CalculateFinalCost(decimal startingCost, short discountPercentage) =>
-        startingCost - (startingCost * discountPercentage) / 100;
+
+
+    private static ComputerConfiguration CreateEmptyConfigurationFromId(int id) =>
+        new()
+        {
+            Id = id,
+            Name = string.Empty,
+            WarrantyPeriod = Period.Zero,
+            Components = Array.Empty<Component>()
+        };
 }

@@ -5,7 +5,7 @@ begin
     return query (
         select *, get_sale_position_ids_for_sale(s.id)
         from sales s
-        where calculate_sale_cost(s.id) between _min_cost and _max_cost
+        where calculate_final_sale_cost(s.id) between _min_cost and _max_cost
     );
 end;
 $$ language plpgsql;

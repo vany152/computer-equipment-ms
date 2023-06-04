@@ -13,6 +13,7 @@ var builderServices = builder.Services;
 builderServices.AddControllersWithViews();
 AddRepositories();
 AddStoredFunctionsExecutor();
+builderServices.AddSingleton<NpgsqlStoredFunctionsExecutor>();
 // builderServices.RegisterMapsterConfiguration();
 
 var app = builder.Build();

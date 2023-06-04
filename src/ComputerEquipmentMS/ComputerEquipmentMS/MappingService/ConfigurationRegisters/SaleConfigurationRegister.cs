@@ -1,9 +1,12 @@
 ﻿using System.Data;
+using System.Text.Json;
 using ComputerEquipmentMS.DataAccess;
 using ComputerEquipmentMS.DataAccess.Entities;
 using ComputerEquipmentMS.Models.Domain;
 using ComputerEquipmentMS.ViewModels;
 using Mapster;
+using NodaTime;
+using static ComputerEquipmentMS.MappingService.ConfigurationRegisters.CommonFuncs;
 
 namespace ComputerEquipmentMS.MappingService.ConfigurationRegisters;
 
@@ -11,6 +14,7 @@ namespace ComputerEquipmentMS.MappingService.ConfigurationRegisters;
 public class SaleConfigurationRegister : IRegister
 {
     private readonly IRepository<SalePosition, int> _salePositionsRepository;
+    private readonly IRepository<Customer, int> _customersRepository;
     private readonly NpgsqlStoredFunctionsExecutor _functionsExecutor;
 
     public SaleConfigurationRegister()
@@ -25,22 +29,38 @@ public class SaleConfigurationRegister : IRegister
             throw new NoNullAllowedException("Service Provider was not registered as static");
         
         var salePositionsRepository = GetSalePositionsRepository(services);
+        var customersRepository = GetCustomersRepository(services);
         var executor = GetFunctionsExecutor(services);
 
         _salePositionsRepository = salePositionsRepository;
+        _customersRepository = customersRepository;
         _functionsExecutor = executor;
     }
     
     public void Register(TypeAdapterConfig config)
     {
+        // entity
         config
             .NewConfig<SaleEntity, Sale>()
             .Map(sale => sale.SalePositions, entity => GetSalePositions(entity.SalePositionIds))
-            .Map(sale => sale.StartingCost, entity => _functionsExecutor.CalculateSaleCost(entity.Id));
+            .Map(sale => sale.StartingCost, entity => _functionsExecutor.CalculateStartingSaleCost(entity.Id))
+            .Map(sale => sale.Customer, entity => GetCustomer(entity.CustomerId));
 
         config
-            .NewConfig<Sale, SaleViewModel>()
-            .Map(viewModel => viewModel.FinalCost, sale => CalculateFinalCost(sale.StartingCost, sale.DiscountPercentage));
+            .NewConfig<Sale, SaleEntity>()
+            .Map(entity => entity.SalePositionIds, sale => GetSalePositionIds(sale.SalePositions))
+            .Map(entity => entity.CustomerId, sale => sale.Customer.Id);
+        
+        // viewModel
+        config
+            .NewConfig<Sale, SaleInfoViewModel>()
+            .Include<Sale, SaleDetailsViewModel>()
+            .Map(vm => vm.FinalCost, sale => CalculateFinalCost(sale.StartingCost, sale.DiscountPercentage));
+
+        config
+            .NewConfig<CreateSaleViewModel, Sale>()
+            .Map(sale => sale.Customer.Id, vm => vm.CustomerId)
+            .Map(sale => sale.SalePositions, vm => CreateSalePositions(vm.ComputerConfigurationIdsWithDiscountsJson));
     }
     
     
@@ -53,7 +73,18 @@ public class SaleConfigurationRegister : IRegister
 
         return salePositionsRepository;
     }
+    
+    private static IRepository<Customer, int> GetCustomersRepository(IServiceProvider services)
+    {
+        var customersRepository = services.GetService<IRepository<Customer, int>>();
+        if (customersRepository is null)
+            throw new NoNullAllowedException("Repository for Customers was not registered as DI service");
 
+        return customersRepository;
+    }
+    
+    
+    
     private static NpgsqlStoredFunctionsExecutor GetFunctionsExecutor(IServiceProvider services)
     {
         var executor = services.GetService<NpgsqlStoredFunctionsExecutor>();
@@ -82,6 +113,43 @@ public class SaleConfigurationRegister : IRegister
         return salePositions;
     }
 
-    private static decimal CalculateFinalCost(decimal startingCost, short discountPercentage) =>
-        startingCost - (startingCost * discountPercentage) / 100;
+    private Customer GetCustomer(int id)
+    {
+        var customer = _customersRepository.GetById(id);
+        if (customer is null)
+            throw new NoNullAllowedException($"could not get customer with id = {id} from repository");
+
+        return customer;
+    }
+
+    private static ICollection<int> GetSalePositionIds(ICollection<SalePosition> salePositions) =>
+        salePositions.Select(sp => sp.Id).ToList();
+
+    private static ICollection<SalePosition> CreateSalePositions(string configurationIdsWithDiscountsJson)
+    {
+        var salePositions = new List<SalePosition>();
+        
+        var configurationIdsWithDiscounts = JsonSerializer.Deserialize<Dictionary<int, short>>(configurationIdsWithDiscountsJson);
+        if (configurationIdsWithDiscounts is null)
+            throw new InvalidOperationException("cannot parse json: json is not a dictionary of int : short");
+            
+        foreach (var (id, discount) in configurationIdsWithDiscounts)
+        {
+            var newSalePosition = new SalePosition
+            {
+                DiscountPercentage = discount, 
+                WarrantyPeriod = Period.Zero, 
+                Configuration = new ComputerConfiguration
+                {
+                    Id = id,
+                    Name = string.Empty,
+                    Components = new List<Component>(),
+                    WarrantyPeriod = Period.Zero
+                }
+            };
+            salePositions.Add(newSalePosition);
+        }
+        
+        return salePositions;
+    }
 }

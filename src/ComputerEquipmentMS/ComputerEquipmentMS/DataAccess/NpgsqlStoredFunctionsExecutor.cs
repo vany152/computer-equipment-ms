@@ -69,9 +69,52 @@ public class NpgsqlStoredFunctionsExecutor : IDisposable
     /*
      * "Sale" group
      */
-    public decimal CalculateSaleCost(int saleId)
+    public Sale CreateSale(Sale newSale)
     {
-        var queryString = $"select * from calculate_sale_cost({saleId})";
+        var queryString = 
+            $$"""
+            select * from create_sale(
+                 {{newSale.Customer.Id}},
+                '{{newSale.SaleMoment}}'::timestamptz,
+                 {{newSale.DiscountPercentage}}::smallint,
+                '{{{GetConfigurationIdsAsString()}}}'::integer[],
+                '{{{GetConfigurationDiscountsAsString()}}}'::smallint[]
+            )
+            """;
+        var sale = ExecuteQuery<Sale, SaleEntity>(queryString, MapDynamicToSale).Single();
+
+        return sale;
+
+
+
+        string GetConfigurationIdsAsString()
+        {
+            var configurationIds = newSale.SalePositions.Select(sp => sp.Configuration.Id);
+            var idsJson = string.Join(",", configurationIds);
+
+            return idsJson;
+        }
+        
+        string GetConfigurationDiscountsAsString()
+        {
+            var configurationDiscounts = newSale.SalePositions.Select(sp => sp.DiscountPercentage);
+            var discountsJson = string.Join(",", configurationDiscounts);
+
+            return discountsJson;
+        }
+    }
+
+    public decimal CalculateStartingSaleCost(int saleId)
+    {
+        var queryString = $"select * from calculate_starting_sale_cost({saleId})";
+        var cost = ExecuteQuery<decimal, decimal>(queryString).SingleOrDefault();
+
+        return cost;
+    }
+
+    public decimal CalculateFinalSaleCost(int saleId)
+    {
+        var queryString = $"select * from calculate_final_sale_cost({saleId})";
         var cost = ExecuteQuery<decimal, decimal>(queryString).SingleOrDefault();
 
         return cost;

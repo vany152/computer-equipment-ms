@@ -1,6 +1,6 @@
 ﻿namespace ComputerEquipmentMS.ViewModels;
 
-public class CustomerWithPurchasesViewModel : CustomerViewModel
+public class CustomerWithPurchasesViewModel : CustomerDetailsViewModel
 {
-    public required ICollection<SaleViewModel> Purchases;
+    public required ICollection<SaleDetailsViewModel> Purchases;
 }

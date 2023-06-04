@@ -1,6 +1,6 @@
 ﻿@using static ComputerEquipmentMS.Views.CommonFuncs.Formatter
 @using static ComputerEquipmentMS.Views.CommonFuncs.Converter
-@model ComputerEquipmentMS.ViewModels.SaleViewModel
+@model ComputerEquipmentMS.ViewModels.SaleDetailsViewModel
 
 @{
     var sale = Model;
@@ -13,6 +13,7 @@
     <table class="table table-hover">
         <thread>
             <tr>
+                <th>Покупатель</th>
                 <th>Дата продажи</th>
                 <th>Время продажи</th>
                 <th>Начальная цена</th>
@@ -21,6 +22,9 @@
             </tr>
         </thread>
         <tr>
+            <td>
+                <a asp-controller="Customers" asp-action="Details" asp-route-id="@sale.Customer.Id">@sale.Customer.Name</a>
+            </td>
             <td>@LocalDateFromInstant(sale.SaleMoment)</td>
             <td>@FormatInstantToTime(sale.SaleMoment)</td>
             <td>@sale.StartingCost</td>
@@ -46,8 +50,8 @@
         {
             <tr>
                 <td>
-                    <a asp-controller="Configurations" asp-action="Details" asp-route-id="@salePosition.Configuration.Id">
-                        @salePosition.Configuration.Name
+                    <a asp-controller="Configurations" asp-action="Details" asp-route-id="@salePosition.ComputerConfigurationId">
+                        @salePosition.ComputerConfigurationName
                     </a>
                 </td>
                 <td>@salePosition.StartingCost</td>

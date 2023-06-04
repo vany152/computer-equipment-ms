@@ -27,7 +27,7 @@ public class CustomersController : Controller
     {
         var customers = _customersRepository.GetAll();
 
-        var customerViewModels = customers.Adapt<List<CustomerViewModel>>();
+        var customerViewModels = customers.Adapt<List<CustomerDetailsViewModel>>();
         var customersViewModel = new CustomersViewModel(customerViewModels); 
         
         return View(customersViewModel);
@@ -42,7 +42,7 @@ public class CustomersController : Controller
     }
     
     [HttpPost]
-    public IActionResult Create(CustomerViewModel newCustomerVm)
+    public IActionResult Create(CustomerDetailsViewModel newCustomerVm)
     {
         var newCustomer = newCustomerVm.Adapt<Customer>();
         
@@ -62,7 +62,7 @@ public class CustomersController : Controller
             return NotFound();
         
         var purchases = _functionsExecutor.GetCustomersPurchases(id);
-        var purchaseVms = purchases.Adapt<List<SaleViewModel>>();
+        var purchaseVms = purchases.Adapt<List<SaleDetailsViewModel>>();
         
         var customerVm = customer.Adapt<CustomerWithPurchasesViewModel>();
         customerVm.Purchases = purchaseVms;
@@ -79,12 +79,12 @@ public class CustomersController : Controller
         if (customer is null)
             return NotFound();
 
-        var customerVm = customer.Adapt<CustomerViewModel>();
+        var customerVm = customer.Adapt<CustomerDetailsViewModel>();
         return View(customerVm);
     }
     
     [HttpPost]
-    public IActionResult Edit(CustomerViewModel customerViewModel)
+    public IActionResult Edit(CustomerDetailsViewModel customerViewModel)
     {
         var customer = customerViewModel.Adapt<Customer>();
 

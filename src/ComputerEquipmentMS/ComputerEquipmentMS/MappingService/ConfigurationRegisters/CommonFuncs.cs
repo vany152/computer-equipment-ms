@@ -9,4 +9,7 @@ public static class CommonFuncs
 
     public static Period WarrantyPeriodFromMonths(int months) =>
         Period.FromMonths(months);
+    
+    public static decimal CalculateFinalCost(decimal startingCost, short discountPercentage) =>
+        startingCost - (startingCost * discountPercentage) / 100;
 }

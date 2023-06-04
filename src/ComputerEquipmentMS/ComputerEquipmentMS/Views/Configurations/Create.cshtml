@@ -70,10 +70,8 @@ function collectComponentIdsIntoCollector() {
     let collector = document.getElementById("componentIdsJsonCollector");    
     collector.value = JSON.stringify(checkedComponentIds);
     
-    if (checkedComponentIds.length > 0) {
-        let collectorNotEmptyFlag = document.getElementById("componentIdsJsonCollectorNotEmpty");
-        collectorNotEmptyFlag.checked = true;
-    }
+    let collectorNotEmptyFlag = document.getElementById("componentIdsJsonCollectorNotEmpty");
+    collectorNotEmptyFlag.checked = checkedComponentIds.length > 0;
 }
 
 function selectCheckedComponentIds(componentCheckboxes) {

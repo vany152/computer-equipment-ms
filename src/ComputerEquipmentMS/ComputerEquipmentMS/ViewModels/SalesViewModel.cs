@@ -2,9 +2,9 @@
 
 namespace ComputerEquipmentMS.ViewModels;
 
-public class SalesViewModel : Collection<SaleViewModel>
+public class SalesViewModel : Collection<SaleDetailsViewModel>
 {
-    public SalesViewModel(IEnumerable<SaleViewModel> sales)
+    public SalesViewModel(IEnumerable<SaleDetailsViewModel> sales)
         : base(sales.ToList())
     {
     }

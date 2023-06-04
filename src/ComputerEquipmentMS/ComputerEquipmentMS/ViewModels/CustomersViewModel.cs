@@ -2,10 +2,14 @@
 
 namespace ComputerEquipmentMS.ViewModels;
 
-public class CustomersViewModel : Collection<CustomerViewModel>
+public class CustomersViewModel : Collection<CustomerDetailsViewModel>
 {
-    public CustomersViewModel(IEnumerable<CustomerViewModel> customers)
+    public CustomersViewModel(IEnumerable<CustomerDetailsViewModel> customers)
         : base(customers.ToList())
+    {
+    }
+
+    public CustomersViewModel()
     {
     }
 }
