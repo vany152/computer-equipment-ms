@@ -13,24 +13,24 @@
     <h2 class="display-6">Компоненты из категории "@category.Name"</h2>
     
     <table class="table table-hover">
-            <thread>
-                <tr>
-                    <th>Название</th>
-                    <th>Производитель</th>
-                    <th>Спецификации</th>
-                    <th>Стоимость закупки</th>
-                    <th>Гарантия производителя</th>
-                </tr>
-            </thread>
-            @foreach (var component in components)
-            {
-                <tr>
-                    <td>@component.Name</td>
-                    <td>@component.ComponentManufacturer</td>
-                    <td style="white-space: pre">@component.Specifications</td>
-                    <td>@component.Cost</td>
-                    <td>@component.WarrantyPeriodMonths мес.</td>
-                </tr>
-            }
-        </table>
+        <thread>
+            <tr>
+                <th>Название</th>
+                <th>Производитель</th>
+                <th>Спецификации</th>
+                <th>Стоимость закупки</th>
+                <th>Гарантия производителя</th>
+            </tr>
+        </thread>
+        @foreach (var component in components)
+        {
+            <tr>
+                <td>@component.Name</td>
+                <td>@component.ComponentManufacturer</td>
+                <td style="white-space: pre">@component.Specifications</td>
+                <td>@component.Cost</td>
+                <td>@component.WarrantyPeriodMonths мес.</td>
+            </tr>
+        }
+    </table>
 </div>
