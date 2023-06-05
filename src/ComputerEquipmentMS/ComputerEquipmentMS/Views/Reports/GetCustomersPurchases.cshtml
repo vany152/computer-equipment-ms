@@ -1,39 +1,39 @@
-﻿@using static ComputerEquipmentMS.Views.CommonFuncs.Converter;
-@using static ComputerEquipmentMS.Views.CommonFuncs.Formatter;
-@using ComputerEquipmentMS.ViewModels.ComputerConfigurations
-@using Microsoft.AspNetCore.Mvc.TagHelpers
-@model List<ComputerEquipmentMS.ViewModels.SalePositions.SalePositionInfoViewModel>;
+﻿@using static ComputerEquipmentMS.Views.CommonFuncs.Formatter
+@using static ComputerEquipmentMS.Views.CommonFuncs.Converter
+@using ComputerEquipmentMS.ViewModels.Customers
+@model ComputerEquipmentMS.ViewModels.Sales.SalesViewModel;
 
 @{
     var sales = Model;
 
     var fromDate = (DateOnly)ViewBag.From;
     var untilDate = (DateOnly)ViewBag.Until;
-    var currentConfigurationId = (int)ViewBag.CurrentConfigurationId;
-    if (currentConfigurationId == 0) currentConfigurationId = 1; 
+    var currentCustomerId = (int)ViewBag.CurrentCustomerId;
+    if (currentCustomerId == 0) currentCustomerId = 1; 
 
-    var configurations = (ComputerConfigurationsViewModel) ViewBag.Configurations;
+    var customers = (CustomersViewModel) ViewBag.Customers;
+
 }
 
-<h2 class="display-4">Продажи компьютерной сборок</h2>
+<h2 class="display-4">Покупки клиента</h2>
 
 <div id="sales">
-    <form asp-controller="Reports" asp-action="GetComputerConfigurationsSales" method="get" style="display: flex; width: 100%; margin-top: 20px">
+    <form asp-controller="Reports" asp-action="GetCustomersPurchases" method="get" style="display: flex; width: 100%; margin-top: 20px">
         <div class="form-floating" style="flex-grow: 1; flex-basis: 40%">
-            <select id="configurationIdSelect" name="configurationId" class="form-select">
-                @foreach (var configuration in configurations)
+            <select id="configurationIdSelect" name="customerId" class="form-select">
+                @foreach (var customer in customers)
                 {
-                    if (configuration.Id == currentConfigurationId)
+                    if (customer.Id == currentCustomerId)
                     {
-                        <option value="@configuration.Id" selected>@configuration.Name</option>    
+                        <option value="@customer.Id" selected>@customer.Name</option>    
                     }
                     else
                     {
-                        <option value="@configuration.Id">@configuration.Name</option>
+                        <option value="@customer.Id">@customer.Name</option>
                     }
                 }
             </select>
-            <label for="configurationIdSelect">Компьютерная сборка</label>
+            <label for="configurationIdSelect">Клиент</label>
         </div>
         <div class="form-floating" style="flex-grow: 1; flex-basis: 25%; margin-left: 5px">
             <input id="fromDateInput" name="from" type="date" class="form-control" value="@fromDate.ToString("yyyy-MM-dd")">
@@ -68,7 +68,7 @@
                     <td>@sale.DiscountPercentage</td>
                     <td>@sale.FinalCost.ToString("F")</td>
                     <td>
-                        <form asp-controller="Sales" asp-action="Details" asp-route-id="@sale.SaleId" method="get" style="text-align: right">
+                        <form asp-controller="Sales" asp-action="Details" asp-route-id="@sale.Id" method="get" style="text-align: right">
                             <button type="submit" class="btn btn-outline-secondary btn-sm">Подробнее</button>
                         </form>
                     </td>
@@ -78,10 +78,12 @@
     }
     else
     {
-        <h2 class="display-6" style="margin-top: 20px">Ни одной продажи не найдено</h2>
+        <h2 class="display-6" style="margin-top: 20px">Ни одной покупки не найдено</h2>
     }
     
     <form asp-controller="Reports" asp-action="Index" method="post">
         <button type="submit" class="btn btn-light" style="display: inline-block; width: 100%; margin-top: 20px">К списку отчетов</button>
     </form>
 </div>
+
+

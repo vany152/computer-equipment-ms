@@ -5,6 +5,7 @@ begin
     return query (
         select 
             sp.id, 
+            s.id,
             s.sale_moment, 
             sp.cost as starting_cost, 
             sp.cost * (1 - sp.discount_percentage / 100::numeric) as final_cost, 

@@ -48,6 +48,7 @@ public static class DynamicToObjectMapper
         new()
         {
             SalePositionId = obj.sale_position_id,
+            SaleId = obj.sale_id,
             SaleMoment = obj.sale_moment,
             StartingCost = obj.starting_cost,
             FinalCost = obj.final_cost,
