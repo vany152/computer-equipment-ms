@@ -33,7 +33,7 @@
                 <td>@sale.StartingCost</td>
                 <td>@sale.DiscountPercentage</td>
                 <td>@sale.FinalCost</td>
-                <td>
+                <td style="text-align: right;">
                     <form asp-controller="Sales" asp-action="Details" asp-route-id="@sale.Id" method="get">
                         <button type="submit" class="btn btn-outline-secondary btn-sm">Подробнее</button>
                     </form>
