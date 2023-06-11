@@ -8,23 +8,21 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ComputerEquipmentMS.Controllers;
 
-public class ComponentsController : Controller
+public class ComponentsController : ControllerBase
 {
     private readonly IRepository<Component, int> _componentsRepository;
     private readonly IRepository<ComponentCategory, int> _componentCategoriesRepository;
     private readonly IRepository<ComponentManufacturer, int> _componentManufacturersRepository;
-    private readonly ILogger<ComponentsController> _logger;
 
     public ComponentsController(
         IRepository<Component, int> componentsRepository, 
         IRepository<ComponentCategory, int> componentCategoriesRepository, 
         IRepository<ComponentManufacturer, int> componentManufacturersRepository, 
-        ILogger<ComponentsController> logger)
+        ILogger<ComponentsController> logger) : base(logger)
     {
         _componentsRepository = componentsRepository;
         _componentCategoriesRepository = componentCategoriesRepository;
         _componentManufacturersRepository = componentManufacturersRepository;
-        _logger = logger;
     }
 
     public IActionResult Index()
@@ -58,7 +56,6 @@ public class ComponentsController : Controller
     public IActionResult Create(ComponentViewModel componentVm)
     {
         var component = componentVm.Adapt<Component>();
-
         _componentsRepository.Add(component);
 
         return RedirectToAction(nameof(Index));
@@ -70,8 +67,7 @@ public class ComponentsController : Controller
     public IActionResult Edit(int id)
     {
         var component = _componentsRepository.GetById(id);
-        if (component is null)
-            return NotFound();
+        if (component is null) return HandleError($"cannot find {nameof(Component)} with id = {id}");
 
         ViewBag.Specifications = component.Specifications;
         var componentVm = component.Adapt<ComponentViewModel>();
@@ -94,11 +90,9 @@ public class ComponentsController : Controller
         var component = componentViewModel.Adapt<Component>();
 
         var editResult = _componentsRepository.Edit(component);
-        if (editResult)
-            return RedirectToAction(nameof(Index));
-        
-        _logger.LogError("error while updating component: component with id {Id} was not updated", component.Id);
-        return NotFound();
+        return editResult 
+            ? RedirectToAction(nameof(Index)) 
+            : HandleError($"error while updating {nameof(Component)}: element with id {component.Id} was not updated");
     }
     
     
@@ -107,10 +101,8 @@ public class ComponentsController : Controller
     public IActionResult Remove(int id)
     {
         var result = _componentsRepository.Remove(id);
-        if (result)
-            return RedirectToAction(nameof(Index));
-        
-        _logger.LogError("error while removing component: component with id {Id} was not removed", id);
-        return NotFound();
+        return result 
+            ? RedirectToAction(nameof(Index)) 
+            : HandleError($"error while removing {nameof(Component)}: element with id {id} was not removing");
     }
 }

@@ -8,20 +8,18 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ComputerEquipmentMS.Controllers;
 
-public class ComponentManufacturersController : Controller
+public class ComponentManufacturersController : ControllerBase
 {
     private readonly IRepository<ComponentManufacturer, int> _componentManufacturersRepository;
     private readonly NpgsqlStoredFunctionsExecutor _executor;
-    private readonly ILogger<ComponentManufacturersController> _logger;
 
     public ComponentManufacturersController(
         IRepository<ComponentManufacturer, int> componentManufacturersRepository,
         NpgsqlStoredFunctionsExecutor executor,
-        ILogger<ComponentManufacturersController> logger)
+        ILogger<ComponentManufacturersController> logger) : base(logger)
     {
         _componentManufacturersRepository = componentManufacturersRepository;
         _executor = executor;
-        _logger = logger;
     }
     
     
@@ -41,7 +39,7 @@ public class ComponentManufacturersController : Controller
     public IActionResult Details(int id)
     {
         var manufacturer = _componentManufacturersRepository.GetById(id);
-        if (manufacturer is null) return NotFound();
+        if (manufacturer is null) return HandleError($"cannot find {nameof(ComponentManufacturer)} with id = {id}");
 
         var components = _executor.GetComponentsByManufacturer(id);
         var componentsVm = components.Adapt<ComponentsViewModel>();
@@ -85,10 +83,9 @@ public class ComponentManufacturersController : Controller
     {
         var manufacturer = manufacturerViewModel.Adapt<ComponentManufacturer>();
         var editResult = _componentManufacturersRepository.Edit(manufacturer);
-        if (editResult) return RedirectToAction(nameof(Index));
-        
-        _logger.LogError("error while editing component manufacturer: component manufacturer with id {Id} was not edited", manufacturer.Id);
-        return NotFound();
+        return editResult 
+            ? RedirectToAction(nameof(Index)) 
+            : HandleError($"error while editing {nameof(ComponentManufacturer)}: element with id {manufacturer.Id} was not edited");
     }
     
     
@@ -97,9 +94,8 @@ public class ComponentManufacturersController : Controller
     public IActionResult Remove(int id)
     {
         var removeResult = _componentManufacturersRepository.Remove(id);
-        if (removeResult) return RedirectToAction(nameof(Index));
-        
-        _logger.LogError("error while removing component manufacturer: component manufacturer with id {Id} was not removed", id);
-        return NotFound();
+        return removeResult 
+            ? RedirectToAction(nameof(Index)) 
+            : HandleError($"error while removing {nameof(ComponentManufacturer)}: element with id {id} was not removing");
     }
 }

@@ -7,20 +7,18 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ComputerEquipmentMS.Controllers;
 
-public class ComponentCategoriesController : Controller
+public class ComponentCategoriesController : ControllerBase
 {
     private readonly IRepository<ComponentCategory, int> _componentCategoriesRepository;
     private readonly NpgsqlStoredFunctionsExecutor _executor;
-    private readonly ILogger<ComponentCategoriesController> _logger;
 
     public ComponentCategoriesController(
         IRepository<ComponentCategory, int> componentCategoriesRepository,
         NpgsqlStoredFunctionsExecutor executor,
-        ILogger<ComponentCategoriesController> logger)
+        ILogger<ComponentCategoriesController> logger) : base(logger)
     {
         _componentCategoriesRepository = componentCategoriesRepository;
         _executor = executor;
-        _logger = logger;
     }
     
     
@@ -40,7 +38,7 @@ public class ComponentCategoriesController : Controller
     public IActionResult Details(int id)
     {
         var category = _componentCategoriesRepository.GetById(id);
-        if (category is null) return NotFound();
+        if (category is null) return HandleError($"cannot find {nameof(ComponentCategory)} with id = {id}");
 
         var components = _executor.GetComponentsByCategory(id);
         var componentsVm = components.Adapt<ComponentsViewModel>();
@@ -73,7 +71,7 @@ public class ComponentCategoriesController : Controller
     public IActionResult Edit(int id)
     {
         var category = _componentCategoriesRepository.GetById(id);
-        if (category is null) return NotFound();
+        if (category is null) return HandleError($"cannot find {nameof(ComponentCategory)} with id = {id}");
 
         var categoryVm = category.Adapt<ComponentCategoryViewModel>();
         return View(categoryVm);
@@ -84,10 +82,9 @@ public class ComponentCategoriesController : Controller
     {
         var category = categoryViewModel.Adapt<ComponentCategory>();
         var editResult = _componentCategoriesRepository.Edit(category);
-        if (editResult) return RedirectToAction(nameof(Index));
-        
-        _logger.LogError("error while editing component category: component category with id {Id} was not edited", category.Id);
-        return NotFound();
+        return editResult 
+            ? RedirectToAction(nameof(Index)) 
+            : HandleError($"error while editing {nameof(ComponentCategory)}: element with id {category.Id} was not edited");
     }
     
     
@@ -96,9 +93,8 @@ public class ComponentCategoriesController : Controller
     public IActionResult Remove(int id)
     {
         var removeResult = _componentCategoriesRepository.Remove(id);
-        if (removeResult) return RedirectToAction(nameof(Index));
-        
-        _logger.LogError("error while removing component category: component category with id {Id} was not removed", id);
-        return NotFound();
+        return removeResult 
+            ? RedirectToAction(nameof(Index)) 
+            : HandleError($"error while removing {nameof(ComponentCategory)}: element with id {id} was not removed");
     }
 }

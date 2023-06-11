@@ -8,20 +8,18 @@ using NodaTime;
 
 namespace ComputerEquipmentMS.Controllers;
 
-public class CustomersController : Controller
+public class CustomersController : ControllerBase
 {
     private readonly IRepository<Customer, int> _customersRepository;
     private readonly NpgsqlStoredFunctionsExecutor _functionsExecutor;
-    private readonly ILogger<CustomersController> _logger;
 
     public CustomersController(
         IRepository<Customer, int> customersRepository,
         NpgsqlStoredFunctionsExecutor functionsExecutor,
-        ILogger<CustomersController> logger)
+        ILogger<CustomersController> logger) : base(logger)
     {
         _customersRepository = customersRepository;
         _functionsExecutor = functionsExecutor;
-        _logger = logger;
     }
     
     public IActionResult Index()
@@ -59,9 +57,8 @@ public class CustomersController : Controller
     public IActionResult Details(int id)
     {
         var customer = _customersRepository.GetById(id);
-        if (customer is null)
-            return NotFound();
-        
+        if (customer is null) return HandleError($"cannot find {nameof(Customer)} with id = {id}");
+
         var purchases = _functionsExecutor.GetCustomersPurchases(id);
         var purchaseVms = purchases.Adapt<List<SaleDetailsViewModel>>();
         
@@ -91,9 +88,10 @@ public class CustomersController : Controller
 
         var result = _customersRepository.Edit(customer);
         if (result) return RedirectToAction(nameof(Index));
-        
-        _logger.LogError("error while editing customer: customer with id {Id} was not edited", customer.Id);
-        return NotFound();
+
+        return result
+            ? RedirectToAction(nameof(Index))
+            : HandleError($"error while editing customer: customer with id {customer.Id} was not edited");
     }
     
     
@@ -102,9 +100,8 @@ public class CustomersController : Controller
     public IActionResult Remove(int id)
     {
         var result = _customersRepository.Remove(id);
-        if (result) return RedirectToAction(nameof(Index));
-        
-        _logger.LogError("error while removing customer: customer with id {Id} was not removed", id);
-        return NotFound();
+        return result 
+            ? RedirectToAction(nameof(Index)) 
+            : HandleError($"error while removing customer: customer with id {id}d}} was not removed");
     }
 }

@@ -29,7 +29,7 @@ public class AuthController : Controller
     public async Task<IActionResult> Login(string userName, string password, string returnUrl = "/")
     {
         var connectionSuccessful = await TryConnectToDatabase(userName, password);
-        if (!connectionSuccessful) return Unauthorized();
+        if (!connectionSuccessful) return View(model: "Неверные учетные данные");
 
         await AddUser(userName);
 

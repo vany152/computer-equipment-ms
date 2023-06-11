@@ -7,19 +7,17 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ComputerEquipmentMS.Controllers;
 
-public class ConfigurationsController : Controller
+public class ConfigurationsController : ControllerBase
 {
     private readonly IRepository<ComputerConfiguration, int> _configurationRepository;
     private readonly IRepository<Component, int> _componentRepository;
-    private readonly ILogger<ConfigurationsController> _logger;
 
     public ConfigurationsController(
         IRepository<ComputerConfiguration, int> configurationRepository,
         IRepository<Component, int> componentRepository,
-        ILogger<ConfigurationsController> logger)
+        ILogger<ConfigurationsController> logger) : base(logger)
     {
         _configurationRepository = configurationRepository;
-        _logger = logger;
         _componentRepository = componentRepository;
     }
 
@@ -60,8 +58,7 @@ public class ConfigurationsController : Controller
     public IActionResult Details(int id)
     {
         var config = _configurationRepository.GetById(id);
-        if (config is null)
-            return NotFound();
+        if (config is null) return HandleError($"cannot find {nameof(ComputerConfiguration)} category with id = {id}");
         
         var configViewModel = config.Adapt<ComputerConfigurationDetailsViewModel>();
         return View(configViewModel);
@@ -73,9 +70,8 @@ public class ConfigurationsController : Controller
     public IActionResult Edit(int id)
     {
         var configuration = _configurationRepository.GetById(id);
-        if (configuration is null)
-            return NotFound();
-        
+        if (configuration is null) return HandleError($"error while updating {nameof(ComputerConfiguration)}: element with id {id} was not updated");
+
         var components = _componentRepository.GetAll();
         var componentVms = components.Adapt<ComponentsViewModel>();
         ViewBag.Components = componentVms;
@@ -88,8 +84,11 @@ public class ConfigurationsController : Controller
     public IActionResult Edit(EditComputerConfigurationViewModel configViewModel)
     {
         var configuration = configViewModel.Adapt<ComputerConfiguration>();
-        _configurationRepository.Edit(configuration);
-        return RedirectToAction(nameof(Index));
+        var editResult = _configurationRepository.Edit(configuration);
+
+        return editResult
+            ? RedirectToAction(nameof(Index))
+            : HandleError($"error while editing {nameof(ComputerConfiguration)}: element with id {configuration.Id} was not edited");
     }
 
 
@@ -97,10 +96,8 @@ public class ConfigurationsController : Controller
     public IActionResult Remove(int id)
     {
         var removeResult = _configurationRepository.Remove(id);
-        if (removeResult)
-            return RedirectToAction(nameof(Index));
-
-        _logger.LogError("error while removing computer configuration: computer configuration with id {Id} was not removed", id);
-        return NotFound();
+        return removeResult 
+            ? RedirectToAction(nameof(Index)) 
+            : HandleError($"error while removing {nameof(ComputerConfiguration)}: element with id {id} was not removed");
     }
 }

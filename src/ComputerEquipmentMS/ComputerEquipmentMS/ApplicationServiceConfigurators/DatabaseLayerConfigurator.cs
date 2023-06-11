@@ -7,7 +7,7 @@ public static class DatabaseLayerConfigurator
 {
     public static void AddConnectionString(this IServiceCollection services, WebApplicationBuilder builder)
     {
-        var connectionString = AddDefaultDbConnectionString(builder);
+        var connectionString = GetDefaultDbConnectionString(builder);
         services.AddSingleton(connectionString);
     }
 
@@ -27,7 +27,7 @@ public static class DatabaseLayerConfigurator
 
 
 
-    private static IDbConnectionString AddDefaultDbConnectionString(WebApplicationBuilder builder)
+    private static IDbConnectionString GetDefaultDbConnectionString(WebApplicationBuilder builder)
     {
         var connectionString = builder.Configuration.GetConnectionString("DefaultDbConnection");
         if (connectionString is null)

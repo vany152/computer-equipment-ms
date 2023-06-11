@@ -9,26 +9,24 @@ using NodaTime;
 
 namespace ComputerEquipmentMS.Controllers;
 
-public class SalesController : Controller
+public class SalesController : ControllerBase
 {
     private readonly IRepository<Sale, int> _salesRepository;
     private readonly IRepository<ComputerConfiguration, int> _configurationsRepository;
     private readonly IRepository<Customer, int> _customersRepository;
     private readonly NpgsqlStoredFunctionsExecutor _executor;
-    private readonly ILogger<SalesController> _logger;
 
     public SalesController(
         IRepository<Sale, int> salesRepository,
         IRepository<ComputerConfiguration, int> configurationsRepository,
         IRepository<Customer, int> customersRepository,
         NpgsqlStoredFunctionsExecutor executor,
-        ILogger<SalesController> logger)
+        ILogger<SalesController> logger) : base(logger)
     {
         _salesRepository = salesRepository;
         _configurationsRepository = configurationsRepository;
         _customersRepository = customersRepository;
         _executor = executor;
-        _logger = logger;
     }
     
     public IActionResult Index()
@@ -45,10 +43,9 @@ public class SalesController : Controller
     public IActionResult Details(int id)
     {
         var sale = _salesRepository.GetById(id);
-        if (sale is null)
-            return NotFound();
+        if (sale is null) return HandleError($"cannot find {nameof(Sale)} with id = {id}");
 
-        var saleVm = sale.Adapt<SaleDetailsViewModel>();
+            var saleVm = sale.Adapt<SaleDetailsViewModel>();
         return View(saleVm);
     }
 

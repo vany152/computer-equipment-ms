@@ -1,0 +1,12 @@
+﻿@model string
+
+@{
+    var errorMessage = Model;
+}
+
+<h1 class="display-4">Ой! Что-то сломалось :(</h1>
+<p style="font-size: 150%">Повторите попытку позднее или обратитесь к администратору</p>
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <p chass="h4" style="color: tomato">@errorMessage</p>
+}
