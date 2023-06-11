@@ -1,7 +1,9 @@
-﻿@model ComputerEquipmentMS.ViewModels.ComponentCategories.ComponentCategoriesViewModel
+﻿@using ComputerEquipmentMS.Constants
+@model ComputerEquipmentMS.ViewModels.ComponentCategories.ComponentCategoriesViewModel
 
 @{
     var categories = Model;
+    var userIsAdmin = User.IsInRole(RoleNames.Admin);
 }
 
 <h6 class="display-4">Категории комплектующих</h6>
@@ -26,8 +28,11 @@
                 <td style="text-align: right;">
                     <form asp-controller="ComponentCategories">
                         <button type="submit" class="btn btn-outline-secondary btn-sm" asp-action="Details" asp-route-id="@category.Id" formmethod="get">Подробнее</button>
-                        <button type="submit" class="btn btn-outline-secondary btn-sm" asp-action="Edit" asp-route-id="@category.Id" formmethod="get">Изменить</button>
-                        <button type="submit" onclick="return confirmDeletion()" class="btn btn-outline-secondary btn-sm" asp-action="Remove" asp-route-id="@category.Id" formmethod="post">Удалить</button>
+                        @if (userIsAdmin)
+                        {
+                            <button type="submit" class="btn btn-outline-secondary btn-sm" asp-action="Edit" asp-route-id="@category.Id" formmethod="get">Изменить</button>
+                            <button type="submit" onclick="return confirmDeletion()" class="btn btn-outline-secondary btn-sm" asp-action="Remove" asp-route-id="@category.Id" formmethod="post">Удалить</button>
+                        }
                     </form>
                 </td>
             </tr>

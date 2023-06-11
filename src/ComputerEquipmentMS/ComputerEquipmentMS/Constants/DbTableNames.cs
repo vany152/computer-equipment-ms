@@ -1,4 +1,4 @@
-﻿namespace ComputerEquipmentMS.DataAccess.Constants;
+﻿namespace ComputerEquipmentMS.Constants;
 
 public static class DbTableNames
 {

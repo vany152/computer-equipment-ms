@@ -1,7 +1,10 @@
-﻿@model ComputerEquipmentMS.ViewModels.Components.ComponentsViewModel
+﻿@using ComputerEquipmentMS.Constants
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model ComputerEquipmentMS.ViewModels.Components.ComponentsViewModel
 
 @{
     var components = Model;
+    var userIsAdmin = User.IsInRole(RoleNames.Admin);
 }
 
 <h6 class="display-6">Компьютерные комплектующие</h6>
@@ -22,6 +25,8 @@
                 <th>Стоимость закупки</th>
                 <th>Гарантия производителя</th>
                 <th/>
+                <th/>
+                <th/>
             </tr>
         </thread>
         @foreach (var component in components)
@@ -35,10 +40,15 @@
                 <td>@component.WarrantyPeriodMonths мес.</td>
                 <td style="text-align: right;">
                     <form asp-controller="Components">
-                        <button type="submit" class="btn btn-outline-secondary btn-sm" asp-action="Edit" asp-route-id="@component.Id" formmethod="get">Изменить</button>
-                        <button type="submit" onclick="return confirmDeletion()" class="btn btn-outline-secondary btn-sm" asp-action="Remove" asp-route-id="@component.Id" formmethod="post">Удалить</button>
+                        @if (userIsAdmin)
+                        {
+                            <button type="submit" class="btn btn-outline-secondary btn-sm" asp-action="Edit" asp-route-id="@component.Id" formmethod="get">Изменить</button>
+                            <button type="submit" onclick="return confirmDeletion()" class="btn btn-outline-secondary btn-sm" asp-action="Remove" asp-route-id="@component.Id" formmethod="post">Удалить</button>
+                        }
                     </form>
                 </td>
+                <td/>
+                <td/>
             </tr>
         }
     </table>

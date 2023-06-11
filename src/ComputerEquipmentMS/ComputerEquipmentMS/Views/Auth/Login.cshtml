@@ -4,7 +4,8 @@
     var errorMessage = Model;
 }
 
-<form id="account" method="post" asp-route-returnUrl="@Url.Action("Index", "Sales")">
+@* <form id="account" method="post" asp-route-returnUrl="@Url.Action("Index", "Sales")"> *@
+<form id="account" method="post">
     <h2 class="display-4">Войти в систему</h2>
     <p/>
     @if (!string.IsNullOrEmpty(errorMessage))

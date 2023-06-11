@@ -15,6 +15,11 @@ public static class AuthConfigurator
         
         services
             .AddAuthentication(options => options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme)
-            .AddCookie(options => options.LoginPath = "/Auth/Login");
+            .AddCookie(options =>
+            {
+                options.ExpireTimeSpan = TimeSpan.FromDays(1);
+                options.SlidingExpiration = true;
+                options.LoginPath = "/Auth/Login";
+            });
     }
 }

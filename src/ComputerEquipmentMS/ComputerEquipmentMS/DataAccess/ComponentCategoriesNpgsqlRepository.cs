@@ -1,6 +1,6 @@
 ﻿using ComputerEquipmentMS.DataAccess.Entities;
 using ComputerEquipmentMS.Models.Domain;
-using static ComputerEquipmentMS.DataAccess.Constants.DbTableNames;
+using static ComputerEquipmentMS.Constants.DbTableNames;
 
 namespace ComputerEquipmentMS.DataAccess;
 

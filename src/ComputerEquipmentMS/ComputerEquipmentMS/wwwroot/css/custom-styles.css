@@ -17,3 +17,9 @@ input:invalid {
 .form-floating > .form-control:not(:focus)::placeholder {
     color: transparent;
 }
+
+
+
+.btn-light:hover {
+    background-color: #e2e6ea;
+}

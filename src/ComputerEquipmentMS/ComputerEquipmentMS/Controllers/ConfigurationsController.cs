@@ -1,8 +1,10 @@
-﻿using ComputerEquipmentMS.DataAccess;
+﻿using ComputerEquipmentMS.Constants;
+using ComputerEquipmentMS.DataAccess;
 using ComputerEquipmentMS.Models.Domain;
 using ComputerEquipmentMS.ViewModels.Components;
 using ComputerEquipmentMS.ViewModels.ComputerConfigurations;
 using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ComputerEquipmentMS.Controllers;
@@ -67,6 +69,7 @@ public class ConfigurationsController : ControllerBase
     
     
     [HttpGet]
+    [Authorize(Roles = RoleNames.Admin)]
     public IActionResult Edit(int id)
     {
         var configuration = _configurationRepository.GetById(id);
@@ -81,6 +84,7 @@ public class ConfigurationsController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = RoleNames.Admin)]
     public IActionResult Edit(EditComputerConfigurationViewModel configViewModel)
     {
         var configuration = configViewModel.Adapt<ComputerConfiguration>();
@@ -92,7 +96,8 @@ public class ConfigurationsController : ControllerBase
     }
 
 
-
+    [HttpPost]
+    [Authorize(Roles = RoleNames.Admin)]
     public IActionResult Remove(int id)
     {
         var removeResult = _configurationRepository.Remove(id);

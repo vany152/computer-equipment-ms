@@ -1,7 +1,10 @@
-﻿@model ComputerEquipmentMS.ViewModels.Customers.CustomersViewModel
+﻿@using ComputerEquipmentMS.Constants
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model ComputerEquipmentMS.ViewModels.Customers.CustomersViewModel
 
 @{
     var customers = Model;
+    var userIsAdmin = User.IsInRole(RoleNames.Admin);
 }
 
 <h1 class="display-4">Покупатели</h1>
@@ -44,7 +47,10 @@
                     <td style="text-align: right;">
                         <button type="submit" class="btn btn-outline-secondary btn-sm" formmethod="get" asp-action="Details" asp-route-id="@customer.Id">Подробнее</button>
                         <button type="submit" class="btn btn-outline-secondary btn-sm" formmethod="get" asp-action="Edit" asp-route-id="@customer.Id">Изменить</button>
-                        <button type="submit" onclick="return confirmDeletion()" class="btn btn-outline-secondary btn-sm" formmethod="post" asp-action="Remove" asp-route-id="@customer.Id">Удалить</button>
+                        @if (userIsAdmin)
+                        {
+                            <button type="submit" onclick="return confirmDeletion()" class="btn btn-outline-secondary btn-sm" formmethod="post" asp-action="Remove" asp-route-id="@customer.Id">Удалить</button>
+                        }
                     </td>
                 </tr>
             </form>

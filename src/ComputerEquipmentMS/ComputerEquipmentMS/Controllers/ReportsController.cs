@@ -1,4 +1,5 @@
-﻿using ComputerEquipmentMS.DataAccess;
+﻿using ComputerEquipmentMS.Constants;
+using ComputerEquipmentMS.DataAccess;
 using ComputerEquipmentMS.Models.Auxiliary;
 using ComputerEquipmentMS.Models.Domain;
 using ComputerEquipmentMS.ViewModels.ComputerConfigurations;
@@ -6,11 +7,13 @@ using ComputerEquipmentMS.ViewModels.Customers;
 using ComputerEquipmentMS.ViewModels.SalePositions;
 using ComputerEquipmentMS.ViewModels.Sales;
 using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NodaTime;
 
 namespace ComputerEquipmentMS.Controllers;
 
+[Authorize(Roles = RoleNames.Admin)]
 public class ReportsController : Controller
 {
     private readonly IRepository<ComputerConfiguration, int> _configurationsRepository;

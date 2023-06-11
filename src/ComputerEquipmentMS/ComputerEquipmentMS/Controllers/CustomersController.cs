@@ -1,8 +1,10 @@
-﻿using ComputerEquipmentMS.DataAccess;
+﻿using ComputerEquipmentMS.Constants;
+using ComputerEquipmentMS.DataAccess;
 using ComputerEquipmentMS.Models.Domain;
 using ComputerEquipmentMS.ViewModels.Customers;
 using ComputerEquipmentMS.ViewModels.Sales;
 using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NodaTime;
 
@@ -97,6 +99,7 @@ public class CustomersController : ControllerBase
     
     
     [HttpPost]
+    [Authorize(Roles = RoleNames.Admin)]
     public IActionResult Remove(int id)
     {
         var result = _customersRepository.Remove(id);

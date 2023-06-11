@@ -1,8 +1,10 @@
-﻿using ComputerEquipmentMS.DataAccess;
+﻿using ComputerEquipmentMS.Constants;
+using ComputerEquipmentMS.DataAccess;
 using ComputerEquipmentMS.Models.Domain;
 using ComputerEquipmentMS.ViewModels.ComponentCategories;
 using ComputerEquipmentMS.ViewModels.Components;
 using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ComputerEquipmentMS.Controllers;
@@ -68,6 +70,7 @@ public class ComponentCategoriesController : ControllerBase
 
 
     [HttpGet]
+    [Authorize(Roles = RoleNames.Admin)]
     public IActionResult Edit(int id)
     {
         var category = _componentCategoriesRepository.GetById(id);
@@ -78,6 +81,7 @@ public class ComponentCategoriesController : ControllerBase
     }
     
     [HttpPost]
+    [Authorize(Roles = RoleNames.Admin)]
     public IActionResult Edit(ComponentCategoryViewModel categoryViewModel)
     {
         var category = categoryViewModel.Adapt<ComponentCategory>();
@@ -90,6 +94,7 @@ public class ComponentCategoriesController : ControllerBase
     
 
     [HttpPost]
+    [Authorize(Roles = RoleNames.Admin)]
     public IActionResult Remove(int id)
     {
         var removeResult = _componentCategoriesRepository.Remove(id);

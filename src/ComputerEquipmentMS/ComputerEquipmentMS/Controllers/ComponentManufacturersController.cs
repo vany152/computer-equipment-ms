@@ -1,9 +1,11 @@
-﻿using ComputerEquipmentMS.DataAccess;
+﻿using ComputerEquipmentMS.Constants;
+using ComputerEquipmentMS.DataAccess;
 using ComputerEquipmentMS.Models.Domain;
 using ComputerEquipmentMS.ViewModels.ComponentCategories;
 using ComputerEquipmentMS.ViewModels.ComponentManufacturers;
 using ComputerEquipmentMS.ViewModels.Components;
 using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ComputerEquipmentMS.Controllers;
@@ -69,6 +71,7 @@ public class ComponentManufacturersController : ControllerBase
 
 
     [HttpGet]
+    [Authorize(Roles = RoleNames.Admin)]
     public IActionResult Edit(int id)
     {
         var manufacturer = _componentManufacturersRepository.GetById(id);
@@ -79,6 +82,7 @@ public class ComponentManufacturersController : ControllerBase
     }
     
     [HttpPost]
+    [Authorize(Roles = RoleNames.Admin)]
     public IActionResult Edit(ComponentManufacturerViewModel manufacturerViewModel)
     {
         var manufacturer = manufacturerViewModel.Adapt<ComponentManufacturer>();
@@ -91,6 +95,7 @@ public class ComponentManufacturersController : ControllerBase
     
 
     [HttpPost]
+    [Authorize(Roles = RoleNames.Admin)]
     public IActionResult Remove(int id)
     {
         var removeResult = _componentManufacturersRepository.Remove(id);
