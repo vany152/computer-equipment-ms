@@ -1,41 +1,52 @@
 ﻿@startuml
 'https://plantuml.com/class-diagram
 
+left to right direction
+
 hide methods
+
+entity "Производитель" as manufacturer {
+    Название
+}
+entity "Категория" as category {
+    Название
+}
 
 entity "Комплектующий" as component {
     Название
     Категория
-    Параметры : json
+    Спецификации
     ..
     Производитель
     Стоимость производителя
     Гарантия производителя
 }
+component }--|| manufacturer
+component }--|| category
 
-entity "Сборка" as configuration {
+entity "Компьютерная комплектация" as configuration {
     Название
     Гарантия магазина
-    Наценка
+    Наценка магазина
 }
 configuration }o--|{ component
 
 entity "Покупатель" as customer {
     Имя
-    Контактные данные : json
+    Контактные данные
     Дата регистрации
 }
 
 entity "Продажа" as sale {
     Дата продажи
-    Скидка
+    Дополнительная скидка
 } 
 sale }|--|| customer
 
 entity "Позиция продажи" as salePosition {
-    Стоимость
-    Скидка
-    Гарантия
+    Начальная стоимость комплектации
+    Скидка на комплектацию
+    Гарантия магазина
 }
 salePosition }|--|| sale
 salePosition }|--|| configuration
