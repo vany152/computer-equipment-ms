@@ -44,7 +44,7 @@ function checkConfigurationsSelection() {
 
     let configurationsSelected = collectorNotEmptyFlag.checked
     if (!configurationsSelected) {
-        alert("Должен быть выбран хотя бы одна конфигурация!");
+        alert("Должна быть выбрана хотя бы одна конфигурация!");
     }
 
     return configurationsSelected;

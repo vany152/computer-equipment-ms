@@ -88,11 +88,9 @@ public class ConfigurationsController : ControllerBase
     public IActionResult Edit(EditComputerConfigurationViewModel configViewModel)
     {
         var configuration = configViewModel.Adapt<ComputerConfiguration>();
-        var editResult = _configurationRepository.Edit(configuration);
+        _configurationRepository.Edit(configuration);
 
-        return editResult
-            ? RedirectToAction(nameof(Index))
-            : HandleError($"error while editing {nameof(ComputerConfiguration)}: element with id {configuration.Id} was not edited");
+        return RedirectToAction(nameof(Index));
     }
 
 

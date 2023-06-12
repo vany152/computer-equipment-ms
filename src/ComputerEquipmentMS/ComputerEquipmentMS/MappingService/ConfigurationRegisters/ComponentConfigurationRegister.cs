@@ -58,7 +58,7 @@ public class ComponentConfigurationRegister : IRegister
         config
             .NewConfig<ComponentViewModel, Component>()
             .Map(c => c.ComponentCategory, vm => CreateComponentCategory(vm.ComponentCategoryId, vm.ComponentCategory))
-            .Map(c => c.ComponentManufacturer, vm => CreateComponentManufacturer(vm.ComponentCategoryId, vm.ComponentManufacturer))
+            .Map(c => c.ComponentManufacturer, vm => CreateComponentManufacturer(vm.ComponentManufacturerId, vm.ComponentManufacturer))
             .Map(c => c.WarrantyPeriod, vm => WarrantyPeriodFromMonths(vm.WarrantyPeriodMonths))
             .Map(c => c.Specifications, vm => DeserializeSpecifications(vm.Specifications));
     }

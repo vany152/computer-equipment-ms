@@ -76,10 +76,10 @@ public class ReportsController : Controller
 
 
     private static TimeInterval CreateTimeInterval(DateOnly from, DateOnly until) =>
-        new (DateOnlyToInstant(from), DateOnlyToInstant(until));
+        new (DateOnlyToInstant(from, new TimeOnly(0, 0)), DateOnlyToInstant(until, new TimeOnly(23, 59)));
 
-    private static Instant DateOnlyToInstant(DateOnly d) => 
-        Instant.FromUtc(d.Year, d.Month, d.Day, 0, 0);
+    private static Instant DateOnlyToInstant(DateOnly d, TimeOnly maxTime) => 
+        Instant.FromUtc(d.Year, d.Month, d.Day, maxTime.Hour, maxTime.Minute);
 
     private static void SetTodayIfDatesAreMinValue(ref DateOnly from, ref DateOnly until)
     {

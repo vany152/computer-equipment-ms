@@ -6,6 +6,7 @@ using ComputerEquipmentMS.ViewModels.Sales;
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using NodaTime;
+using NodaTime.Extensions;
 
 namespace ComputerEquipmentMS.Controllers;
 
@@ -67,7 +68,10 @@ public class SalesController : ControllerBase
     public IActionResult Create(CreateSaleViewModel saleViewModel)
     {
         var sale = saleViewModel.Adapt<Sale>();
-        sale.SaleMoment = Instant.FromDateTimeUtc(DateTime.UtcNow);
+        
+        var currentMomentWithTimeZone = Instant.FromDateTimeUtc(DateTime.UtcNow) + TimeZoneInfo.Local.BaseUtcOffset.ToDuration();
+        sale.SaleMoment = currentMomentWithTimeZone;
+        
         _executor.CreateSale(sale);
             
         return RedirectToAction(nameof(Index));
