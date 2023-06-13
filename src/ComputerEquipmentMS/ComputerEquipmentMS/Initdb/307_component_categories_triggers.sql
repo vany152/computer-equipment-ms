@@ -20,7 +20,7 @@ create trigger delete_component_category
 execute function delete_component_category();
 
 create trigger log_change
-    after insert or update or delete
+    after insert or update or delete or truncate 
     on component_categories
     for each row
 execute function log();

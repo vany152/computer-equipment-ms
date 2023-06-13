@@ -40,7 +40,7 @@ $$ language plpgsql;
 create table customers (
     id                serial,
 
-    name              varchar(75) not null,
+    name              varchar(75),
     contacts          jsonb,
     registration_date date        not null,
 
@@ -76,6 +76,9 @@ create table sale_positions (
 
     constraint sale_positions_pk
         primary key (id),
+
+    constraint positive_cost
+        check ( cost > 0 ),
 
     constraint non_negative_warranty_period
         check ( not is_interval_negative(warranty_period) ),
@@ -115,7 +118,7 @@ create table components (
     component_category_id     integer        not null,
     component_manufacturer_id integer        not null,
 
-    name                      varchar(250)   not null,
+    name                      varchar(250),
     specifications            jsonb          not null,
     cost                      numeric(15, 2) not null,
     warranty_period           interval       not null default '0'::interval,
@@ -129,13 +132,16 @@ create table components (
     constraint non_null_specifications
         check ( specifications <> 'null'::jsonb ),
 
+    constraint positive_cost
+        check ( cost > 0 ),
+
     constraint non_negative_warranty_period
         check ( not is_interval_negative(warranty_period) )
 );
 
 create table component_categories (
     id   serial,
-    name varchar(50) not null not null,
+    name varchar(50),
 
     constraint component_categories_pk
         primary key (id),
@@ -146,7 +152,7 @@ create table component_categories (
 
 create table component_manufacturers (
     id   serial,
-    name varchar(50) not null,
+    name varchar(50),
 
     constraint component_manufacturers_pk
         primary key (id),
@@ -159,14 +165,17 @@ create table change_logs (
     id        bigserial,
     moment    timestamptz not null default current_timestamp,
 
-    username  text        not null default current_user,
+    username  text        default current_user,
     action    text        not null,
     "table"   text        not null,
     old_value text,
     new_value text,
 
     constraint change_logs_pk
-        primary key (id)
+        primary key (id),
+
+    constraint non_empty_name_check
+        check ( not is_string_null_or_empty(username) )
 );
 
 

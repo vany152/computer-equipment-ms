@@ -20,7 +20,7 @@ create trigger delete_sale_positions
 execute function delete_sale_position();
 
 create trigger log_change
-    after insert or update or delete
+    after insert or update or delete or truncate
     on sale_positions
     for each row
 execute function log();
