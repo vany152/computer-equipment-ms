@@ -13,7 +13,6 @@ using NodaTime;
 
 namespace ComputerEquipmentMS.Controllers;
 
-[Authorize(Roles = RoleNames.Admin)]
 public class ReportsController : Controller
 {
     private readonly IRepository<ComputerConfiguration, int> _configurationsRepository;
@@ -35,6 +34,7 @@ public class ReportsController : Controller
         return View();
     }
     
+    [Authorize(Roles = RoleNames.Admin)]
     public IActionResult GetComputerConfigurationsSales(int configurationId, DateOnly from, DateOnly until)
     {
         SetTodayIfDatesAreMinValue(ref from, ref until);        

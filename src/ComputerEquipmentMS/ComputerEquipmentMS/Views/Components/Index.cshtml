@@ -26,7 +26,6 @@
                 <th>Гарантия производителя</th>
                 <th/>
                 <th/>
-                <th/>
             </tr>
         </thread>
         @foreach (var component in components)
@@ -38,6 +37,7 @@
                 <td style="white-space: pre">@component.Specifications</td>
                 <td>@component.Cost</td>
                 <td>@component.WarrantyPeriodMonths мес.</td>
+                <td/>
                 <td style="text-align: right;">
                     <form asp-controller="Components">
                         @if (userIsAdmin)
@@ -47,8 +47,6 @@
                         }
                     </form>
                 </td>
-                <td/>
-                <td/>
             </tr>
         }
     </table>

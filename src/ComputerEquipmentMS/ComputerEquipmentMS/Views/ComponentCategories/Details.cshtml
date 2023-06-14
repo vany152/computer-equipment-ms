@@ -7,7 +7,7 @@
     var components = (ComponentsViewModel) ViewBag.Components;
 }
 
-<h2 class="display-4">@category.Name</h2>
+@* <h2 class="display-4">@category.Name</h2> *@
 
 <div>
     <h2 class="display-6">Компоненты из категории "@category.Name"</h2>
@@ -18,7 +18,7 @@
                 <th>Название</th>
                 <th>Производитель</th>
                 <th>Спецификации</th>
-                <th>Стоимость закупки</th>
+                <th>Стоимость закупки у производителя</th>
                 <th>Гарантия производителя</th>
             </tr>
         </thread>
@@ -33,4 +33,11 @@
             </tr>
         }
     </table>
+</div>
+
+<div>
+    <form method="get" asp-controller="ComponentCategories" asp-action="Index" style="display: flex; width: 100%">
+        <button type="submit" class="btn btn-light" style="flex-grow: 1; flex-basis: 0">Все категории комплектующих</button>
+        <button type="button" onclick="history.back()" class="btn btn-light" style="flex-grow: 1; margin-left: 1%; flex-basis: 0">Назад</button>
+    </form>
 </div>
