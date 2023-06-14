@@ -1,0 +1,47 @@
+﻿@startuml
+'https://plantuml.com/use-case-diagram
+
+left to right direction
+
+:Пользователь: as user
+
+(Взаимодействие с продажами) as salesInteraction
+user -right- salesInteraction
+salesInteraction <|-right- (Просмотр списка всех продаж)
+salesInteraction <|-right- (Просмотр подробностей о\nвыбранной продаже)
+salesInteraction <|-right- (Добавление продажи)
+
+(Взаимодействие с покупателями) as customersInteraction
+user -left- customersInteraction
+customersInteraction <|-left- (Просмотр списка всех покупателей)
+customersInteraction <|-left- (Просмотр подробностей о\nвыбранном покупателе)
+customersInteraction <|-left- (Добавление нового покупателя)
+customersInteraction <|-left- (Редактирование данных\nвыбранного покупателя)
+
+(Взаимодействие с\nкомпьютерными комплектациями) as configurationsInteraction
+user -- configurationsInteraction
+configurationsInteraction <|-- (Просмотр списка всех\nкомпьютерных комплектаций)
+configurationsInteraction <|-- (Просмотр подробностей о\nвыбранной компьютерной комплектации)
+configurationsInteraction <|-- (Добавление новой\nкомпьютерной комплектации)
+
+(Взаимодействие с\nкомпьютерными комплектующими) as componentsInteraction
+user -- componentsInteraction
+componentsInteraction <|-- (Просмотр списка всех\nкомпьютерных комплектующих)
+componentsInteraction <|-- (Просмотр подробностей о\nвыбранном компьютерном\nкомплектацющем)
+componentsInteraction <|-- (Добавление нового\nкомпьютерного комплектующего)
+
+(Взаимодействие с\nкатегориями комплектующих) as categoriesInteraction
+user -- categoriesInteraction
+categoriesInteraction <|-- (Просмотр списка всех\nкатегорий комплектующих)
+categoriesInteraction <|-- (Просмотр подробностей о\nвыбранной категории\nкомплектацющих)
+categoriesInteraction <|-- (Добавление новой\nкатегории комплектующих)
+
+(Взаимодействие с\nпроизводителями комплектующих) as manufacturersInteraction
+user -- manufacturersInteraction
+manufacturersInteraction <|-- (Просмотр списка всех\nпроизводителей комплектующих)
+manufacturersInteraction <|-- (Просмотр подробностей о\nвыбранном производителе\nкомплектацющих)
+manufacturersInteraction <|-- (Добавление нового\nпроизводителя комплектующих)
+
+user -- (Получить отчет о покупках клиента)
+
+@enduml

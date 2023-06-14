@@ -1,0 +1,28 @@
+﻿@startuml
+'https://plantuml.com/deployment-diagram
+
+left to right direction
+
+rectangle "Локальная сеть" {
+    node "Веб сервер" as webServer {
+        artifact "ComputerEquipmentMS.exe" as serverExecutable
+    }
+    
+    node "Сервер база данных" as dbServer {
+        database "База данных\n PostgresSQL" as DB
+    }
+    
+    serverExecutable -down- DB : "tcp/ip"
+}
+
+node "Клиент" as Client{
+    artifact "Веб браузер" as webBrowser
+}
+
+'cloud "Интернет" as internet
+'serverExecutable -left- internet : "https"
+'webBrowser -up- internet : "https"
+
+serverExecutable -left- webBrowser : "https"
+
+@enduml

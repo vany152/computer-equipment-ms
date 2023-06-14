@@ -1,0 +1,39 @@
+﻿@startuml
+'https://plantuml.com/use-case-diagram
+
+left to right direction
+
+:Пользователь: as user
+:Администратор: as admin
+
+user <|-right- admin
+(Управление покупателями) as customersControl
+admin -- customersControl
+customersControl <|-- (Удаление выбранного покупателя)
+
+(Управление компьютерными комплектациями) as configurationsControl
+admin -- configurationsControl
+configurationsControl <|-- (Удаление выбранной\nкомпьютерной комплектации)
+configurationsControl <|-- (Редактирование выбранной\nкомпьютерной комплектации)
+
+(Управление компьютерными комплектующими) as componentsControl
+admin -- componentsControl
+componentsControl <|-- (Удаление выбранного\nкомпьютерного комплектующего)
+componentsControl <|-- (Редактирование выбранного\nкомпьютерного комплектующего)
+
+(Управление категориями комплектующих) as categoriesControl
+admin -- categoriesControl
+categoriesControl <|-- (Удаление выбранной\nкатегории комплектующих)
+categoriesControl <|-- (Редактирование выбранной\nкатегории комплектующих)
+
+(Управление производителями комплектующих) as manufacturersControl
+admin -- manufacturersControl
+manufacturersControl <|-- (Удаление выбранного\nпроизводителя комплектующих)
+manufacturersControl <|-- (Редактирование выбранного\nпроизводителя комплектующих)
+
+admin -- (Получить отчет о продажах комплектации)
+
+(Просмотр журнала базы данных) as logs
+admin -- logs
+
+@enduml

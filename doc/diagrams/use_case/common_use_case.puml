@@ -1,0 +1,79 @@
+﻿@startuml
+'https://plantuml.com/use-case-diagram
+
+left to right direction
+
+:Пользователь: as user
+:Администратор: as admin
+
+(Взаимодействие с продажами) as salesInteraction
+user -- salesInteraction
+salesInteraction <|-- (Просмотр списка всех продаж)
+salesInteraction <|-- (Просмотр подробностей о\nвыбранной продаже)
+salesInteraction <|-- (Добавление продажи)
+
+(Взаимодействие с покупателями) as customersInteraction
+user -- customersInteraction
+customersInteraction <|-- (Просмотр списка всех покупателей)
+customersInteraction <|-- (Просмотр подробностей о\nвыбранном покупателе)
+customersInteraction <|-- (Добавление нового покупателя)
+customersInteraction <|-- (Редактирование данных\nвыбранного покупателя)
+
+(Взаимодействие с\nкомпьютерными комплектациями) as configurationsInteraction
+user -- configurationsInteraction
+configurationsInteraction <|-- (Просмотр списка всех\nкомпьютерных комплектаций)
+configurationsInteraction <|-- (Просмотр подробностей о\nвыбранной компьютерной комплектации)
+configurationsInteraction <|-- (Добавление новой\nкомпьютерной комплектации)
+
+(Взаимодействие с\nкомпьютерными комплектующими) as componentsInteraction
+user -- componentsInteraction
+componentsInteraction <|-- (Просмотр списка всех\nкомпьютерных комплектующих)
+componentsInteraction <|-- (Просмотр подробностей о\nвыбранном компьютерном\nкомплектацющем)
+componentsInteraction <|-- (Добавление нового\nкомпьютерного комплектующего)
+
+(Взаимодействие с\nкатегориями комплектующих) as categoriesInteraction
+user -- categoriesInteraction
+categoriesInteraction <|-- (Просмотр списка всех\nкатегорий комплектующих)
+categoriesInteraction <|-- (Просмотр подробностей о\nвыбранной категории\nкомплектацющих)
+categoriesInteraction <|-- (Добавление новой\nкатегории комплектующих)
+
+(Взаимодействие с\nпроизводителями комплектующих) as manufacturersInteraction
+user -- manufacturersInteraction
+manufacturersInteraction <|-- (Просмотр списка всех\nпроизводителей комплектующих)
+manufacturersInteraction <|-- (Просмотр подробностей о\nвыбранном производителе\nкомплектацющих)
+manufacturersInteraction <|-- (Добавление нового\nпроизводителя комплектующих)
+
+user -- (Получить отчет о покупках клиента)
+
+
+user <|-right- admin
+(Управление покупателями) as customersControl
+admin -- customersControl
+customersControl <|-- (Удаление выбранного покупателя)
+
+(Управление компьютерными комплектациями) as configurationsControl
+admin -- configurationsControl
+configurationsControl <|-- (Удаление выбранной\nкомпьютерной комплектации)
+configurationsControl <|-- (Редактирование выбранной\nкомпьютерной комплектации)
+
+(Управление компьютерными комплектующими) as componentsControl
+admin -- componentsControl
+componentsControl <|-- (Удаление выбранного\nкомпьютерного комплектующего)
+componentsControl <|-- (Редактирование выбранного\nкомпьютерного комплектующего)
+
+(Управление категориями комплектующих) as categoriesControl
+admin -- categoriesControl
+categoriesControl <|-- (Удаление выбранной\nкатегории комплектующих)
+categoriesControl <|-- (Редактирование выбранной\nкатегории комплектующих)
+
+(Управление производителями комплектующих) as manufacturersControl
+admin -- manufacturersControl
+manufacturersControl <|-- (Удаление выбранного\nпроизводителя комплектующих)
+manufacturersControl <|-- (Редактирование выбранного\nпроизводителя комплектующих)
+
+admin -- (Получить отчет о продажах комплектации)
+
+(Просмотр журнала базы данных) as logs
+admin -- logs
+
+@enduml
