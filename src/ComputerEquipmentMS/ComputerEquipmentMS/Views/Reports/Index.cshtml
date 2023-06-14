@@ -1,8 +1,16 @@
-﻿<h1 class="display-4">Отчеты</h1>
+﻿@using ComputerEquipmentMS.Constants
+@{
+    var userIsAdmin = User.IsInRole(RoleNames.Admin);
+}
 
-<h2 class="display-6">
-    <a asp-controller="Reports" asp-action="GetComputerConfigurationsSales">Продажи компьютерных сборок</a>
-</h2>
+<h1 class="display-4">Отчеты</h1>
+
+@if (userIsAdmin)
+{
+    <h2 class="display-6">
+        <a asp-controller="Reports" asp-action="GetComputerConfigurationsSales">Продажи компьютерных сборок</a>
+    </h2>
+}
 <h2 class="display-6">
     <a asp-controller="Reports" asp-action="GetCustomersPurchases">Покупки клиента за временной интервал</a>
 </h2>

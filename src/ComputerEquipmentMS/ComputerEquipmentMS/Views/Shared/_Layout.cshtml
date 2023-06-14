@@ -51,13 +51,10 @@
                         <a class="nav-link text-dark" asp-area="" asp-controller="ComponentManufacturers" asp-action="Index">Производители комплектующих</a>
                     </li>
                     <div class="vr"></div>
-                    @if (userIsAdmin)
-                    {
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="Index">Отчёты</a>
-                        </li>
-                        <div class="vr"></div>
-                    }
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="Index">Отчёты</a>
+                    </li>
+                    <div class="vr"></div>
                 </ul>   
                 <partial name="_LoginPartial"/>
             </div>

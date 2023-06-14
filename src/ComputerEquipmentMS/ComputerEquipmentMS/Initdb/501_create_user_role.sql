@@ -58,6 +58,7 @@ grant execute on function
     get_customers_by_name_pattern(varchar),
     get_customers_by_contact(jsonb),
     get_customers_purchases(integer),
+    get_customers_purchases(integer, timestamptz, timestamptz),
 
     create_component_category(varchar),
     create_component_manufacturer(varchar),

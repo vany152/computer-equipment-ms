@@ -39,7 +39,7 @@
             <input type="text" id="specificationsCollector" asp-for="Specifications" hidden>
             @foreach (var (specificationType, specificationValue) in specifications)
             {
-                <div id="newSpecificationSection-@specificationType" style="display: flex; width: 100%;">
+                <div id="newSpecificationSection-@specificationType" style="display: flex; width: 100%; margin-bottom: 10px">
                     <div class="form-floating" style="flex-grow: 1; flex-basis: 45%">
                         <input type="text" id="specificationTypeInput-@specificationType" class="form-control" placeholder="@specificationType" value="@specificationType" required>
                         <label for="specificationTypeInput-@specificationType">Тип спецификации</label>
@@ -63,7 +63,7 @@
 
         <div class="form-floating" style="margin-top: 20px">
             <input type="number" step="0.01" id="costInput" asp-for="Cost" class="form-control" required>
-            <label for="costInput">Стоимость закупки</label>
+            <label for="costInput">Стоимость закупки у производителя</label>
         </div>
 
         <div class="form-floating" style="margin-top: 20px">

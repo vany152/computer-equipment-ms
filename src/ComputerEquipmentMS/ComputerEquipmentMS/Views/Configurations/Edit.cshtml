@@ -26,16 +26,16 @@
         
         <div class="form-floating" style="margin-top: 20px">
             <input type="number" id="warrantyPeriodInput" asp-for="WarrantyPeriodMonths" class="form-control" required style="flex-grow: 1; flex-basis: 0">
-            <label for="warrantyPeriodInput">Гарантия производителя (в месяцах)</label>
+            <label for="warrantyPeriodInput">Гарантия магазина (в месяцах)</label>
         </div>
         
         <div name="margin" class="form-floating mb-3" style="margin-top: 20px">
             <input type="number" step="0.01" id="marginInput" asp-for="Margin" class="form-control" required>
-            <label for="marginInput">Надбавка</label>
+            <label for="marginInput">Надбавка к стоимости</label>
         </div>
         
         <div id="components">
-            <h4 class="display-6">Компоненты</h4>
+            <h4 class="display-6">Комплектующие</h4>
             <input id="componentIdsJsonCollector" type="text" asp-for="ComponentIdsJson" hidden>
             <input id="componentIdsJsonCollectorNotEmpty" type="checkbox" hidden>
             <table class="table table-hover">
