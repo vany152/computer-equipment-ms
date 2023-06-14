@@ -20,7 +20,7 @@ create trigger delete_component
 execute function delete_component();
 
 create trigger log_change
-    after insert or update or delete or truncate 
+    after insert or update or delete 
     on components
     for each row
 execute function log();

@@ -20,7 +20,7 @@ create trigger delete_computer_configuration
 execute function delete_computer_configuration();
 
 create trigger log_change
-    after insert or update or delete or truncate
+    after insert or update or delete
     on computer_configurations
     for each row
 execute function log();

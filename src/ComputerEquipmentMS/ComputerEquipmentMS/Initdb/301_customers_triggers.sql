@@ -14,7 +14,7 @@ $$ language plpgsql;
 
 ---- create triggers
 create trigger log_change
-    after insert or update or delete or truncate 
+    after insert or update or delete 
     on customers
     for each row
 execute procedure log();
