@@ -13,7 +13,6 @@ public class Component : IIdentifiable<int>
     public required string Name { get; set; }
     public required ComponentSpecifications Specifications { get; set; }
 
-    public required LocalDate PurchaseDate { get; set; }
     public decimal Cost { get; set; }
     public required Period WarrantyPeriod { get; set; }
 }

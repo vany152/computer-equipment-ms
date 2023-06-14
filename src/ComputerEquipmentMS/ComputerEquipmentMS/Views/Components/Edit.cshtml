@@ -5,7 +5,6 @@
 @model ComputerEquipmentMS.ViewModels.Components.ComponentViewModel
 
 @{
-    var component = Model;
     var specifications = (ComponentSpecifications) ViewBag.Specifications;
 
     var componentCategories = (ICollection<ComponentCategoryViewModel>) ViewBag.ComponentCategories;
@@ -17,7 +16,7 @@
     var specificationsShown = 0;
 }
 
-<h2 class="display-4">Добавление комплектующего</h2>
+<h2 class="display-4">Редактирование комплектующего</h2>
 
 <div>
     <form asp-controller="Components" asp-action="Edit" method="post">
