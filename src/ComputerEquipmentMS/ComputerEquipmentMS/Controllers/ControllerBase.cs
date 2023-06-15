@@ -14,7 +14,7 @@ public class ControllerBase : Controller
     protected IActionResult HandleError(string? errorMessage)
     {
         if (!string.IsNullOrEmpty(errorMessage))
-            _logger.LogError(errorMessage);
+            _logger.LogError("{ErrorMessage}", errorMessage);
 
         return RedirectToAction("Error", "Error");
     }

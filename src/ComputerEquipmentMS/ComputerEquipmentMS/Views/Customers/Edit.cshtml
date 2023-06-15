@@ -1,4 +1,5 @@
-﻿@model ComputerEquipmentMS.ViewModels.Customers.CustomerDetailsViewModel
+﻿@using static ComputerEquipmentMS.Views.Common.Constants
+@model ComputerEquipmentMS.ViewModels.Customers.CustomerDetailsViewModel
 
 @{
     var customer = Model;
@@ -9,7 +10,7 @@
 
 <div name="contacts">
     <h6 class="display-6">Контакты</h6>
-    <form asp-controller="Customers" asp-action="Edit" method="post" onsubmit="return validateContacts()">
+    <form asp-controller="Customers" asp-action="Edit" method="post">
         <input type="text" asp-for="Name" value="@customer.Name" hidden>
         <input type="text" asp-for="RegistrationDate" value="@customer.RegistrationDate" hidden>
         <div name="phone" style="width: 100%; margin-right: 10px" class="form-floating mb-3">
@@ -17,7 +18,7 @@
             <label for="phoneInput">Телефон</label>
         </div>
         <div name="email" style="width: 100%" class="form-floating mb-3">
-            <input type="email" id="emailInput" asp-for="Email" class="form-control" placeholder="example@gmail.com" value="@customer.Email">
+            <input type="email" id="emailInput" asp-for="Email" class="form-control" placeholder="example@gmail.com" value="@customer.Email" pattern="@DenyOnlySpacesOrSpaceFramesStringsRegex">
             <label for="emailInput">Email</label>
         </div>
         <div style="display: flex; width: 100%">

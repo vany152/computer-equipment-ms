@@ -1,11 +1,12 @@
-﻿@model ComputerEquipmentMS.ViewModels.ComponentCategories.ComponentCategoryViewModel
+﻿@using static ComputerEquipmentMS.Views.Common.Constants
+@model ComputerEquipmentMS.ViewModels.ComponentCategories.ComponentCategoryViewModel
 
 <h2 class="display-4">Добавление категории комплектующих</h2>
 
 <div>
     <form asp-controller="ComponentCategories" asp-action="Create" method="post">
         <div class="form-floating" style="margin-top: 20px">
-            <input type="text" id="nameInput" asp-for="Name" class="form-control" required>
+            <input type="text" id="nameInput" asp-for="Name" class="form-control" required pattern="@DenyOnlySpacesOrSpaceFramesStringsRegex">
             <label for="nameInput">Название</label>
         </div>
 

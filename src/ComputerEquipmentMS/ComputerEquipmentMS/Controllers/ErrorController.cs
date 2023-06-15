@@ -6,7 +6,7 @@ namespace ComputerEquipmentMS.Controllers;
 [AllowAnonymous]
 public class ErrorController : Controller
 {
-    [HttpGet, Route("Error")]
+    [Route("Error")]
     public IActionResult Error(string? errorMessage)
     {
         return View(errorMessage);

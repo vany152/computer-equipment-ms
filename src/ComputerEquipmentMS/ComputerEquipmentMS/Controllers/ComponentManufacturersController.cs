@@ -75,7 +75,7 @@ public class ComponentManufacturersController : ControllerBase
     public IActionResult Edit(int id)
     {
         var manufacturer = _componentManufacturersRepository.GetById(id);
-        if (manufacturer is null) return NotFound();
+        if (manufacturer is null) return HandleError($"cannot find {nameof(ComponentManufacturer)} with id = {id}");
 
         var manufacturerVm = manufacturer.Adapt<ComponentManufacturerViewModel>();
         return View(manufacturerVm);

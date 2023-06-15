@@ -60,7 +60,7 @@ public class ConfigurationsController : ControllerBase
     public IActionResult Details(int id)
     {
         var config = _configurationRepository.GetById(id);
-        if (config is null) return HandleError($"cannot find {nameof(ComputerConfiguration)} category with id = {id}");
+        if (config is null) return HandleError($"cannot find {nameof(ComputerConfiguration)} with id = {id}");
         
         var configViewModel = config.Adapt<ComputerConfigurationDetailsViewModel>();
         return View(configViewModel);
@@ -73,7 +73,7 @@ public class ConfigurationsController : ControllerBase
     public IActionResult Edit(int id)
     {
         var configuration = _configurationRepository.GetById(id);
-        if (configuration is null) return HandleError($"error while updating {nameof(ComputerConfiguration)}: element with id {id} was not updated");
+        if (configuration is null) return HandleError($"cannot find {nameof(ComputerConfiguration)} with id = {id}");
 
         var components = _componentRepository.GetAll();
         var componentVms = components.Adapt<ComponentsViewModel>();

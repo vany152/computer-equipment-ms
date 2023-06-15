@@ -76,8 +76,7 @@ public class CustomersController : ControllerBase
     public IActionResult Edit(int id)
     {
         var customer = _customersRepository.GetById(id);
-        if (customer is null)
-            return NotFound();
+        if (customer is null) return HandleError($"cannot find {nameof(Customer)} with id = {id}");
 
         var customerVm = customer.Adapt<CustomerDetailsViewModel>();
         return View(customerVm);
@@ -93,7 +92,7 @@ public class CustomersController : ControllerBase
 
         return result
             ? RedirectToAction(nameof(Index))
-            : HandleError($"error while editing customer: customer with id {customer.Id} was not edited");
+            : HandleError($"error while editing {nameof(Customer)}: element with id {customer.Id} was not edited");
     }
     
     
@@ -105,6 +104,6 @@ public class CustomersController : ControllerBase
         var result = _customersRepository.Remove(id);
         return result 
             ? RedirectToAction(nameof(Index)) 
-            : HandleError($"error while removing customer: customer with id {id}d}} was not removed");
+            : HandleError($"error while removing {nameof(Customer)}: element with id {id} was not removed");
     }
 }

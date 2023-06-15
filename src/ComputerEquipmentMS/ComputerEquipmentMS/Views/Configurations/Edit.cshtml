@@ -1,4 +1,5 @@
-﻿@using ComputerEquipmentMS.ViewModels.Components
+﻿@using static ComputerEquipmentMS.Views.Common.Constants
+@using ComputerEquipmentMS.ViewModels.Components
 @using System.Text.Json
 @model ComputerEquipmentMS.ViewModels.ComputerConfigurations.EditComputerConfigurationViewModel
 
@@ -20,7 +21,7 @@
 <div>
     <form asp-controller="Configurations" asp-action="Edit" method="post" onsubmit="return checkComponentsSelection();">
         <div class="form-floating" style="margin-top: 20px">
-            <input type="text" id="nameInput" asp-for="Name" class="form-control" required>
+            <input type="text" id="nameInput" asp-for="Name" class="form-control" required pattern="@DenyOnlySpacesOrSpaceFramesStringsRegex">
             <label for="nameInput">Название</label>
         </div>
         

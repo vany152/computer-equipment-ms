@@ -1,4 +1,5 @@
-﻿@using ComputerEquipmentMS.Models.Auxiliary
+﻿@using static ComputerEquipmentMS.Views.Common.Constants
+@using ComputerEquipmentMS.Models.Auxiliary
 @using ComputerEquipmentMS.ViewModels.ComponentCategories
 @using ComputerEquipmentMS.ViewModels.ComponentManufacturers
 @using Microsoft.AspNetCore.Mvc.TagHelpers
@@ -31,7 +32,7 @@
         </div>
 
         <div class="form-floating" style="margin-top: 20px">
-            <input type="text" id="nameInput" asp-for="Name" class="form-control" required>
+            <input type="text" id="nameInput" asp-for="Name" class="form-control" required pattern="@DenyOnlySpacesOrSpaceFramesStringsRegex">
             <label for="nameInput">Название</label>
         </div>
 
@@ -41,11 +42,11 @@
             {
                 <div id="newSpecificationSection-@specificationType" style="display: flex; width: 100%; margin-bottom: 10px">
                     <div class="form-floating" style="flex-grow: 1; flex-basis: 45%">
-                        <input type="text" id="specificationTypeInput-@specificationType" class="form-control" placeholder="@specificationType" value="@specificationType" required>
+                        <input type="text" id="specificationTypeInput-@specificationType" class="form-control" placeholder="@specificationType" value="@specificationType" required pattern="@DenyOnlySpacesOrSpaceFramesStringsRegex">
                         <label for="specificationTypeInput-@specificationType">Тип спецификации</label>
                     </div>
                     <div class="form-floating" style="flex-grow: 1; flex-basis: 45%; margin-left: 10px">
-                        <input type="text" id="specificationValueInput-@specificationType" class="form-control" placeholder="@specificationValue" value="@specificationValue" required>
+                        <input type="text" id="specificationValueInput-@specificationType" class="form-control" placeholder="@specificationValue" value="@specificationValue" required pattern="@DenyOnlySpacesOrSpaceFramesStringsRegex">
                         <label for="specificationValueInput-@specificationType">Значение</label>
                     </div>
                     @if (specificationsShown < 1)

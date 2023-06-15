@@ -2,7 +2,7 @@
 using System.Text;
 using NodaTime;
 
-namespace ComputerEquipmentMS.Views.CommonFuncs;
+namespace ComputerEquipmentMS.Views.Common;
 
 public static class Formatter
 {
