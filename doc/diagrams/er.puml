@@ -1,0 +1,54 @@
+﻿@startuml
+'https://plantuml.com/class-diagram
+
+left to right direction
+
+hide methods
+
+entity "Производитель" as manufacturer {
+    Название
+}
+entity "Категория" as category {
+    Название
+}
+
+entity "Комплектующий" as component {
+    Название
+    Категория
+    Спецификации
+    ..
+    Производитель
+    Стоимость производителя
+    Гарантия производителя
+}
+component }--|| manufacturer
+component }--|| category
+
+entity "Компьютерная комплектация" as configuration {
+    Название
+    Гарантия магазина
+    Наценка магазина
+}
+configuration }o--|{ component
+
+entity "Покупатель" as customer {
+    Имя
+    Контактные данные
+    Дата регистрации
+}
+
+entity "Продажа" as sale {
+    Дата продажи
+    Дополнительная скидка
+} 
+sale }|--|| customer
+
+entity "Позиция продажи" as salePosition {
+    Начальная стоимость комплектации
+    Скидка на комплектацию
+    Гарантия магазина
+}
+salePosition }|--|| sale
+salePosition }|--|| configuration
+
+@enduml
