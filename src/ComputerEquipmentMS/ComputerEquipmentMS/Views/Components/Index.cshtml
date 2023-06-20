@@ -1,0 +1,55 @@
+﻿@using ComputerEquipmentMS.Constants
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model ComputerEquipmentMS.ViewModels.Components.ComponentsViewModel
+
+@{
+    var components = Model;
+    var userIsAdmin = User.IsInRole(RoleNames.Admin);
+}
+
+<h6 class="display-4">Компьютерные комплектующие</h6>
+
+<div name="components">
+    <div style="text-align: right;">
+        <form method="get" asp-controller="Components" asp-action="Create">
+            <button type="submit" class="btn btn-outline-dark">Добавить</button>
+        </form>
+    </div>
+    <table class="table table-hover">
+        <thread>
+            <tr>
+                <th>Название</th>
+                <th>Категория</th>
+                <th>Производитель</th>
+                <th>Спецификации</th>
+                <th>Стоимость закупки</th>
+                <th>Гарантия производителя</th>
+                <th/>
+                <th/>
+            </tr>
+        </thread>
+        @foreach (var component in components)
+        {
+            <tr>
+                <td>@component.Name</td>
+                <td>@component.ComponentCategory</td>
+                <td>@component.ComponentManufacturer</td>
+                <td style="white-space: pre">@component.Specifications</td>
+                <td>@component.Cost</td>
+                <td>@component.WarrantyPeriodMonths мес.</td>
+                <td/>
+                <td style="text-align: right;">
+                    <form asp-controller="Components">
+                        @if (userIsAdmin)
+                        {
+                            <button type="submit" class="btn btn-outline-secondary btn-sm" asp-action="Edit" asp-route-id="@component.Id" formmethod="get">Изменить</button>
+                            <button type="submit" onclick="return confirmDeletion()" class="btn btn-outline-secondary btn-sm" asp-action="Remove" asp-route-id="@component.Id" formmethod="post">Удалить</button>
+                        }
+                    </form>
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+
+<script src="~/js/components/index.js"></script>

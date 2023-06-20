@@ -1,0 +1,29 @@
+﻿@model string
+
+@{
+    var errorMessage = Model;
+}
+
+@* <form id="account" method="post" asp-route-returnUrl="@Url.Action("Index", "Sales")"> *@
+<form id="account" method="post">
+    <h2 class="display-4">Войти в систему</h2>
+    <p/>
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <label style="color: tomato">@errorMessage</label>
+    }
+    <div style="width: 50%;">
+        <div class="form-floating">
+            <input type="text" id="userNameInput" name="userName" class="form-control" placeholder="Имя пользователя" required/>
+            <label for="userNameInput" class="form-label">Имя пользователя</label>
+        </div>
+
+        <div class="form-floating" style="margin-top: 10px">
+            <input type="password" id="passwordInput" name="password" class="form-control" placeholder="Пароль" required/>
+            <label for="passwordInput" class="form-label">Пароль</label>
+        </div>
+        <div style="margin-top: 10px">
+            <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Войти</button>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,85 @@
+﻿@using static ComputerEquipmentMS.Views.Common.Constants
+@using ComputerEquipmentMS.ViewModels.Components
+@using System.Text.Json
+@model ComputerEquipmentMS.ViewModels.ComputerConfigurations.EditComputerConfigurationViewModel
+
+@{
+    var configuration = Model;
+    
+    var components = (ComponentsViewModel) ViewBag.Components;
+    var configurationComponentIds = GetConfigurationComponentIdsFromJson(configuration.ComponentIdsJson);
+    
+    ICollection<int> GetConfigurationComponentIdsFromJson(string json) =>
+        JsonSerializer.Deserialize<List<int>>(json) ?? new List<int>();
+
+    bool DoesComponentBelongToConfiguration(ComponentViewModel component) =>
+        configurationComponentIds.Contains(component.Id);
+}
+
+<h2 class="display-4">Редактирование компьютерной сборки</h2>
+
+<div>
+    <form asp-controller="Configurations" asp-action="Edit" method="post" onsubmit="return checkComponentsSelection();">
+        <div class="form-floating" style="margin-top: 20px">
+            <input type="text" id="nameInput" asp-for="Name" class="form-control" required pattern="@DenyOnlySpacesOrSpaceFramesStringsRegex">
+            <label for="nameInput">Название</label>
+        </div>
+        
+        <div class="form-floating" style="margin-top: 20px">
+            <input type="number" id="warrantyPeriodInput" asp-for="WarrantyPeriodMonths" class="form-control" required style="flex-grow: 1; flex-basis: 0">
+            <label for="warrantyPeriodInput">Гарантия магазина (в месяцах)</label>
+        </div>
+        
+        <div name="margin" class="form-floating mb-3" style="margin-top: 20px">
+            <input type="number" step="0.01" id="marginInput" asp-for="Margin" class="form-control" required>
+            <label for="marginInput">Надбавка к стоимости</label>
+        </div>
+        
+        <div id="components">
+            <h4 class="display-6">Комплектующие</h4>
+            <input id="componentIdsJsonCollector" type="text" asp-for="ComponentIdsJson" hidden>
+            <input id="componentIdsJsonCollectorNotEmpty" type="checkbox" hidden>
+            <table class="table table-hover">
+                <thread>
+                    <tr>
+                        <th/>
+                        <th>Название</th>
+                        <th>Категория</th>
+                        <th>Производитель</th>
+                        <th>Спецификации</th>
+                        <th>Стоимость закупки</th>
+                        <th>Гарантия производителя</th>
+                    </tr>
+                </thread>
+                @foreach (var component in components)
+                {
+                    <tr>
+                        <td>
+                            @if(DoesComponentBelongToConfiguration(component))
+                            {
+                                <input type="checkbox" id="checkboxComponent-@component.Id" class="form-check-input" style="height: 25px; width: 25px" checked>
+                            }
+                            else
+                            {
+                                <input type="checkbox" id="checkboxComponent-@component.Id" class="form-check-input" style="height: 25px; width: 25px">
+                            }
+                        </td>
+                        <td>@component.Name</td>
+                        <td>@component.ComponentCategory</td>
+                        <td>@component.ComponentManufacturer</td>
+                        <td style="white-space: pre">@component.Specifications</td>
+                        <td>@component.Cost</td>
+                        <td>@component.WarrantyPeriodMonths мес.</td>
+                    </tr>
+                }
+            </table>
+        </div>
+    
+        <div style="display: flex; width: 100%; margin-top: 20px">
+            <button type="submit" onclick="collectComponentIdsIntoCollector()" class="btn btn-light" style="flex-grow: 1; flex-basis: 0">Сохранить</button>
+            <button type="button" onclick="history.back()" class="btn btn-light" style="flex-grow: 1; flex-basis: 0; margin-left: 10px">Отменить</button>
+        </div>
+    </form>
+</div>
+
+<script src="~/js/computerConfigurations/edit.js"></script>

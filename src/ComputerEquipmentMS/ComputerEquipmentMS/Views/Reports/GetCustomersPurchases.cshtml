@@ -1,0 +1,89 @@
+﻿@using static ComputerEquipmentMS.Views.Common.Formatter
+@using static ComputerEquipmentMS.Views.Common.Converter
+@using ComputerEquipmentMS.ViewModels.Customers
+@model ComputerEquipmentMS.ViewModels.Sales.SalesViewModel;
+
+@{
+    var sales = Model;
+
+    var fromDate = (DateOnly)ViewBag.From;
+    var untilDate = (DateOnly)ViewBag.Until;
+    var currentCustomerId = (int)ViewBag.CurrentCustomerId;
+    if (currentCustomerId == 0) currentCustomerId = 1; 
+
+    var customers = (CustomersViewModel) ViewBag.Customers;
+
+}
+
+<h2 class="display-4">Покупки клиента</h2>
+
+<div id="sales">
+    <form asp-controller="Reports" asp-action="GetCustomersPurchases" method="get" style="display: flex; width: 100%; margin-top: 20px">
+        <div class="form-floating" style="flex-grow: 1; flex-basis: 40%">
+            <select id="configurationIdSelect" name="customerId" class="form-select">
+                @foreach (var customer in customers)
+                {
+                    if (customer.Id == currentCustomerId)
+                    {
+                        <option value="@customer.Id" selected>@customer.Name</option>    
+                    }
+                    else
+                    {
+                        <option value="@customer.Id">@customer.Name</option>
+                    }
+                }
+            </select>
+            <label for="configurationIdSelect">Клиент</label>
+        </div>
+        <div class="form-floating" style="flex-grow: 1; flex-basis: 25%; margin-left: 5px">
+            <input id="fromDateInput" name="from" type="date" class="form-control" value="@fromDate.ToString("yyyy-MM-dd")">
+            <label for="fromDateInput">Начало периода</label>
+        </div>
+        <div class="form-floating" style="flex-grow: 1; flex-basis: 25%; margin-left: 5px">
+            <input id="untilDateInput" name="until" type="date" class="form-control" value="@untilDate.ToString("yyyy-MM-dd")">
+            <label for="untilDateInput">Конец периода</label>
+        </div>
+        <button type="submit" class="btn btn-outline-dark" style="flex-grow: 1; flex-basis: 10%; margin-left: 5px">Показать</button>
+    </form>
+    
+    @if (sales.Any())
+    {
+        <table class="table table-hover" style="margin-top: 20px;">
+            <thread>
+                <tr>
+                    <th>Дата продажи</th>
+                    <th>Время продажи</th>
+                    <th>Начальная цена</th>
+                    <th>Скидка, %</th>
+                    <th>Конечная цена</th>
+                    <th/>
+                </tr>
+            </thread>
+            @foreach (var sale in sales)
+            {
+                <tr>
+                    <td>@LocalDateFromInstant(sale.SaleMoment)</td>
+                    <td>@FormatInstantToTime(sale.SaleMoment)</td>
+                    <td>@sale.StartingCost.ToString("F")</td>
+                    <td>@sale.DiscountPercentage</td>
+                    <td>@sale.FinalCost.ToString("F")</td>
+                    <td>
+                        <form asp-controller="Sales" asp-action="Details" asp-route-id="@sale.Id" method="get" style="text-align: right">
+                            <button type="submit" class="btn btn-outline-secondary btn-sm">Подробнее</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </table>
+    }
+    else
+    {
+        <h2 class="display-6" style="margin-top: 20px">Ни одной покупки не найдено</h2>
+    }
+    
+    <form asp-controller="Reports" asp-action="Index" method="post">
+        <button type="submit" class="btn btn-light" style="display: inline-block; width: 100%; margin-top: 20px">К списку отчетов</button>
+    </form>
+</div>
+
+

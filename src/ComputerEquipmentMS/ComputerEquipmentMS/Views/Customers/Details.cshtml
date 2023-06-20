@@ -1,0 +1,73 @@
+﻿@using static ComputerEquipmentMS.Views.Common.Formatter
+@using static ComputerEquipmentMS.Views.Common.Converter
+@model ComputerEquipmentMS.ViewModels.Customers.CustomerWithPurchasesViewModel
+
+@{
+    var customer = Model;
+    var purchases = customer.Purchases;
+}
+
+<h1 class="display-5">@customer.Name</h1>
+
+<div>
+    @if (customer.Phone is not null)
+    {
+        <div name="phone" class="form-floating mb-3">
+            <input type="tel" id="phoneInput" placeholder="@customer.Phone" value="@customer.Phone" class="form-control">
+            <label for="phoneInput">Телефон</label>
+        </div>
+    }
+    @if (customer.Email is not null)
+    {
+        <div name="email" class="form-floating mb-3">
+            <input type="email" id="emailInput" placeholder="@customer.Email" value="@customer.Email" class="form-control">
+            <label for="emailInput">Email</label>
+        </div>
+    }
+    <div name="registrationDate" class="form-floating mb-3">
+        <input type="text" id="registrationDateInput" placeholder="@customer.RegistrationDate" value="@customer.RegistrationDate" class="form-control">
+        <label for="registrationDateInput">Дата регистрации</label>
+    </div>
+
+    @if (purchases.Any())
+    {
+        <div>
+            <table class="table table-hover">
+                <thread>
+                    <tr>
+                        <th hidden>Id</th>
+                        <th>Дата продажи</th>
+                        <th>Время продажи</th>
+                        <th>Начальная цена</th>
+                        <th>Скидка, %</th>
+                        <th>Конечная цена</th>
+                        <th/>
+                    </tr>
+                </thread>
+                @foreach (var purchase in purchases)
+                {
+                    <tr>
+                        <td hidden>@purchase.Id</td>
+                        <td>@LocalDateFromInstant(purchase.SaleMoment)</td>
+                        <td>@FormatInstantToTime(purchase.SaleMoment)</td>
+                        <td>@purchase.StartingCost</td>
+                        <td>@purchase.DiscountPercentage</td>
+                        <td>@purchase.FinalCost</td>
+                        <td>
+                            <form asp-controller="Sales" asp-action="Details" asp-route-id="@purchase.Id">
+                                <button type="submit" class="btn btn-outline-secondary btn-sm" formmethod="get">Подробнее</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    }
+</div>
+
+<div>
+    <form method="get" asp-controller="Customers" asp-action="Index" style="display: flex; width: 100%">
+        <button type="submit" class="btn btn-light" style="flex-grow: 1; flex-basis: 0">Все покупатели</button>
+        <button type="button" onclick="history.back()" class="btn btn-light" style="flex-grow: 1; margin-left: 1%; flex-basis: 0">Назад</button>
+    </form>
+</div>

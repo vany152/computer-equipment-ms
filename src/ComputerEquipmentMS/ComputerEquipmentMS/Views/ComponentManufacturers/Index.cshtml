@@ -1,0 +1,43 @@
+﻿@using ComputerEquipmentMS.Constants
+@model ComputerEquipmentMS.ViewModels.ComponentManufacturers.ComponentManufacturersViewModel
+
+@{
+    var manufacturers = Model;
+    var userIsAdmin = User.IsInRole(RoleNames.Admin);
+}
+
+<h6 class="display-4">Производители комплектующих</h6>
+
+<div name="components">
+    <div style="text-align: right;">
+        <form method="get" asp-controller="ComponentManufacturers" asp-action="Create">
+            <button type="submit" class="btn btn-outline-dark">Добавить</button>
+        </form>
+    </div>
+    <table class="table table-hover">
+        <thread>
+            <tr>
+                <th>Название</th>
+                <th/>
+            </tr>
+        </thread>
+        @foreach (var manufacturer in manufacturers)
+        {
+            <tr>
+                <td>@manufacturer.Name</td>
+                <td style="text-align: right;">
+                    <form asp-controller="ComponentManufacturers">
+                        <button type="submit" class="btn btn-outline-secondary btn-sm" asp-action="Details" asp-route-id="@manufacturer.Id" formmethod="get">Подробнее</button>
+                        @if (userIsAdmin)
+                        {
+                            <button type="submit" class="btn btn-outline-secondary btn-sm" asp-action="Edit" asp-route-id="@manufacturer.Id" formmethod="get">Изменить</button>
+                            <button type="submit" onclick="return confirmDeletion()" class="btn btn-outline-secondary btn-sm" asp-action="Remove" asp-route-id="@manufacturer.Id" formmethod="post">Удалить</button>
+                        }
+                    </form>
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+
+<script src="~/js/componentManufacturers/index.js"></script>

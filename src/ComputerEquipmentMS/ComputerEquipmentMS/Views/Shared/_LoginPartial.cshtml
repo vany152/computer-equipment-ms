@@ -1,0 +1,32 @@
+@using ComputerEquipmentMS.Constants
+@{
+    var userIdentity = User.Identity;
+    
+    string authorizedUserRole = string.Empty; 
+    if (User.IsInRole(RoleNames.Admin))
+        authorizedUserRole = "Администратор";
+    else if (User.IsInRole(RoleNames.User))
+        authorizedUserRole = "Пользователь";
+}
+
+<ul class="navbar-nav">
+    <div class="vr"></div>
+    @if (userIdentity is not null && userIdentity.IsAuthenticated)
+    {
+        <li class="nav-item">
+            <a  class="nav-link text-dark">@authorizedUserRole</a>
+        </li>
+        <div class="vr"></div>
+        <li class="nav-item">
+            <form id="logoutForm" class="form-inline" asp-controller="Auth" asp-action="Logout" asp-route-returnUrl="@Url.Action("Login", "Auth")">
+                <button id="logout" type="submit" class="nav-link btn btn-link text-dark border-0">Выйти</button>
+            </form>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" id="login" asp-controller="Auth" asp-action="Login" asp-route-returnUrl="@Url.Action("Index", "Sales")">Войти</a>
+        </li>
+    }
+</ul>

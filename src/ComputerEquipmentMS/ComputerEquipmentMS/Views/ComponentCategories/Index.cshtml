@@ -1,0 +1,43 @@
+﻿@using ComputerEquipmentMS.Constants
+@model ComputerEquipmentMS.ViewModels.ComponentCategories.ComponentCategoriesViewModel
+
+@{
+    var categories = Model;
+    var userIsAdmin = User.IsInRole(RoleNames.Admin);
+}
+
+<h6 class="display-4">Категории комплектующих</h6>
+
+<div name="components">
+    <div style="text-align: right;">
+        <form method="get" asp-controller="ComponentCategories" asp-action="Create">
+            <button type="submit" class="btn btn-outline-dark">Добавить</button>
+        </form>
+    </div>
+    <table class="table table-hover">
+        <thread>
+            <tr>
+                <th>Название</th>
+                <th/>
+            </tr>
+        </thread>
+        @foreach (var category in categories)
+        {
+            <tr>
+                <td>@category.Name</td>
+                <td style="text-align: right;">
+                    <form asp-controller="ComponentCategories">
+                        <button type="submit" class="btn btn-outline-secondary btn-sm" asp-action="Details" asp-route-id="@category.Id" formmethod="get">Подробнее</button>
+                        @if (userIsAdmin)
+                        {
+                            <button type="submit" class="btn btn-outline-secondary btn-sm" asp-action="Edit" asp-route-id="@category.Id" formmethod="get">Изменить</button>
+                            <button type="submit" onclick="return confirmDeletion()" class="btn btn-outline-secondary btn-sm" asp-action="Remove" asp-route-id="@category.Id" formmethod="post">Удалить</button>
+                        }
+                    </form>
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+
+<script src="~/js/componentCategories/index.js"></script>

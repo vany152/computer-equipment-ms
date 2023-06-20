@@ -1,0 +1,64 @@
+﻿@using ComputerEquipmentMS.ViewModels.ComputerConfigurations
+@using ComputerEquipmentMS.ViewModels.Customers
+@model ComputerEquipmentMS.ViewModels.Sales.CreateSaleViewModel
+
+@{
+    var configurations = (ICollection<ComputerConfigurationInfoViewModel>) ViewBag.ComputerConfigurations;
+    var customers = (CustomersViewModel) ViewBag.Customers;
+    
+    var customersSelectList = new SelectList(customers, nameof(CustomerDetailsViewModel.Id), nameof(CustomerDetailsViewModel.Name));
+}
+
+<h2 class="display-4">Создание продажи</h2>
+
+<div>
+    <form asp-controller="Sales" asp-action="Create" method="post" onsubmit="return checkConfigurationsSelection()">
+        <div class="form-floating" style="margin-top: 20px">
+            <input type="number" min="0" max="100" id="discountPercentage" asp-for="DiscountPercentage" class="form-control" required>
+            <label for="discountPercentage">Общая скидка в процентах</label>
+        </div>
+        
+        <div class="form-floating" style="margin-top: 20px">
+            <select id="customerIdSelect" asp-for="CustomerId" asp-items="@customersSelectList" class="form-select"></select>
+            <label for="customerIdSelect">Покупатель</label>
+        </div>
+
+        <div id="components">
+            <h2 class="display-6">Компьютерные сборки</h2>
+            <input id="configurationIdsWithDiscountsJsonCollector" type="text" asp-for="ComputerConfigurationIdsWithDiscountsJson" hidden>
+            <input id="configurationIdsWithDiscountsJsonCollectorNotEmpty" type="checkbox" hidden>
+            <table class="table table-hover">
+                <thread>
+                    <tr>
+                        <th/>
+                        <th>Название</th>
+                        <th>Гарантия</th>
+                        <th>Выручка</th>
+                        <th>Скидка при продаже</th>
+                    </tr>
+                </thread>
+                @foreach (var configuration in configurations)
+                {
+                    <tr>
+                        <td><input type="checkbox" id="checkboxConfiguration-@configuration.Id" class="form-check-input" style="height: 25px; width: 25px"></td>
+                        <td>
+                            <a asp-controller="Configurations" asp-action="Details" asp-route-id="@configuration.Id">@configuration.Name</a>
+                        </td>
+                        <td>@configuration.WarrantyPeriodMonths мес.</td>
+                        <td>@configuration.Margin</td>
+                        <td>
+                            <input id="discountInput-@configuration.Id" type="number" min="0" max="100" value="0" class="form-control" required>
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>    
+        
+        <div style="display: flex; width: 100%; margin-top: 20px">
+            <button type="submit" onclick="collectConfigurationIdsWithDiscountsIntoCollector()" class="btn btn-light" style="flex-grow: 1; flex-basis: 0">Сохранить</button>
+            <button type="button" onclick="history.back()" class="btn btn-light" style="flex-grow: 1; flex-basis: 0; margin-left: 10px">Отменить</button>
+        </div>
+    </form>
+</div>
+
+<script src="~/js/sales/create.js"></script>

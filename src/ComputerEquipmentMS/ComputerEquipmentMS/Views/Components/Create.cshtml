@@ -1,0 +1,66 @@
+﻿@using static ComputerEquipmentMS.Views.Common.Constants
+@using ComputerEquipmentMS.ViewModels.ComponentCategories
+@using ComputerEquipmentMS.ViewModels.ComponentManufacturers
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model ComputerEquipmentMS.ViewModels.Components.ComponentViewModel
+
+@{
+    var componentCategories = (ICollection<ComponentCategoryViewModel>) ViewBag.ComponentCategories;
+    var componentManufacturers = (ICollection<ComponentManufacturerViewModel>) ViewBag.ComponentManufacturers;
+    
+    var componentCategoriesSelectList = new SelectList(componentCategories, nameof(ComponentCategoryViewModel.Id), nameof(ComponentCategoryViewModel.Name));
+    var componentManufacturersSelectList = new SelectList(componentManufacturers, nameof(ComponentManufacturerViewModel.Id), nameof(ComponentManufacturerViewModel.Name));
+}
+
+<h2 class="display-4">Добавление комплектующего</h2>
+
+<div>
+    <form asp-controller="Components" asp-action="Create" method="post">
+        <div class="form-floating" style="margin-top: 20px">
+            <select class="form-select" id="categorySelect" asp-for="ComponentCategoryId" asp-items="@componentCategoriesSelectList"></select>
+            <label for="categorySelect">Категория</label>
+        </div>
+        
+        <div class="form-floating" style="margin-top: 20px">
+            <select class="form-select" id="manufacturerSelect" asp-for="ComponentManufacturerId" asp-items="@componentManufacturersSelectList"></select>
+            <label for="manufacturerSelect">Производитель</label>
+        </div>
+
+        <div class="form-floating" style="margin-top: 20px">
+            <input type="text" id="nameInput" asp-for="Name" class="form-control" required pattern="@DenyOnlySpacesOrSpaceFramesStringsRegex">
+            <label for="nameInput">Название</label>
+        </div>
+
+        <div id="specificationsSection">
+            <input type="text" id="specificationsCollector" asp-for="Specifications" hidden required>
+            <div id="newSpecificationSection-0" style="display: flex; width: 100%; margin-top: 20px">
+                <div class="form-floating" style="flex-grow: 1; flex-basis: 45%;">
+                    <input type="text" id="specificationTypeInput-0" class="form-control" required pattern="@DenyOnlySpacesOrSpaceFramesStringsRegex">
+                    <label for="specificationTypeInput-0">Тип спецификации</label>
+                </div>
+                <div class="form-floating" style="flex-grow: 1; flex-basis: 45%; margin-left: 10px">
+                    <input type="text" id="specificationValueInput-0" class="form-control" required pattern="@DenyOnlySpacesOrSpaceFramesStringsRegex">
+                    <label for="specificationValueInput-0">Значение</label>
+                </div>
+                <button type="button" class="btn btn-outline-dark btn-sm" onclick="addSpecificationSection()" style="flex-grow: 1; flex-basis: 10%; margin-left: 10px">Добавить</button>
+            </div>
+        </div>
+
+        <div class="form-floating" style="margin-top: 20px">
+            <input type="number" step="0.01" id="costInput" asp-for="Cost" class="form-control" required>
+            <label for="costInput">Стоимость закупки у производителя</label>
+        </div>
+
+        <div class="form-floating" style="margin-top: 20px">
+            <input type="number" id="warrantyPeriodInput" asp-for="WarrantyPeriodMonths" class="form-control" required style="flex-grow: 1; flex-basis: 0">
+            <label for="warrantyPeriodInput">Гарантия производителя (в месяцах)</label>
+        </div>
+        
+        <div style="display: flex; width: 100%; margin-top: 20px">
+            <button type="submit" onclick="collectSpecificationsIntoCollector()" class="btn btn-light" style="flex-grow: 1; flex-basis: 0">Сохранить</button>
+            <button type="button" onclick="history.back()" class="btn btn-light" style="flex-grow: 1; flex-basis: 0; margin-left: 10px">Отменить</button>
+        </div>
+    </form>
+</div>
+
+<script lang="js" src="~/js/components/common.js"></script>

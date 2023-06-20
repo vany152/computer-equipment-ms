@@ -1,0 +1,48 @@
+﻿@using ComputerEquipmentMS.Constants
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model ComputerEquipmentMS.ViewModels.ComputerConfigurations.ComputerConfigurationsViewModel
+
+@{
+    var configurations = Model;
+    var userIsAdmin = User.IsInRole(RoleNames.Admin);
+}
+
+<h1 class="display-4">Компьютерные сборки</h1>
+
+<div name="computerConfigurations">
+    <div style="text-align: right;">
+        <form method="get" asp-controller="Configurations" asp-action="Create">
+            <button type="submit" class="btn btn-outline-dark">Добавить</button>
+        </form>
+    </div>
+    <table class="table table-hover">
+        <thread>
+            <tr>
+                <th>Название</th>
+                <th>Гарантийный период</th>
+                <th>Выручка</th>
+                <th/>
+            </tr>
+        </thread>
+        @foreach (var configuration in configurations)
+        {
+            <tr>
+                <td>@configuration.Name</td>
+                <td>@configuration.WarrantyPeriodMonths мес.</td>
+                <td>@configuration.Margin</td>
+                <td style="text-align: right;">
+                    <form asp-controller="Configurations">
+                        <button type="submit" class="btn btn-outline-secondary btn-sm" formmethod="get" asp-action="Details" asp-route-id="@configuration.Id">Подробнее</button>
+                        @if (userIsAdmin)
+                        {
+                            <button type="submit" class="btn btn-outline-secondary btn-sm" formmethod="get" asp-action="Edit" asp-route-id="@configuration.Id">Изменить</button>
+                            <button type="submit" onclick="return confirmDeletion()" class="btn btn-outline-secondary btn-sm" formmethod="post" asp-action="Remove" asp-route-id="@configuration.Id">Удалить</button>
+                        }
+                    </form>
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+
+<script src="~/js/computerConfigurations/index.js"></script>
